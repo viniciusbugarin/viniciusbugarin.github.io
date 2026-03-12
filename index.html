@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- =============================================
+       SEO META TAGS — Edit these for your info
+       ============================================= -->
+  <title>Vinicius Bugarin | Desarrollador Web</title>
+  <meta name="description" content="Portfolio de Vinicius Bugarin — Desarrollador Web y Técnico Informático especializado en PHP, JavaScript y bases de datos." />
+  <meta name="keywords" content="desarrollador web junior, programador php, desarrollador javascript, técnico informático" />
+  <meta name="author" content="Vinicius Bugarin" />
+
+  <!-- Open Graph (for social sharing previews) -->
+  <meta property="og:title" content="Vinicius Bugarin | Desarrollador Web" />
+  <meta property="og:description" content="Portfolio profesional de Vinicius Bugarin." />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicon as inline SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236366f1'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='700' font-size='26' fill='white'%3EVB%3C/text%3E%3C/svg%3E" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- =============================================
+       NAVIGATION
+       ============================================= -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <!-- Logo — change text to your initials or name -->
+      <a href="#hero" class="nav-logo">VB</a>
+
+      <!-- Desktop menu links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero"     class="nav-link">Inicio</a></li>
+        <li><a href="#about"    class="nav-link">Sobre mí</a></li>
+        <li><a href="#projects" class="nav-link">Proyectos</a></li>
+        <li><a href="#contact"  class="nav-link">Contacto</a></li>
+      </ul>
+
+      <!-- Mobile hamburger button -->
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+
+  <!-- =============================================
+       HERO SECTION
+       ============================================= -->
+  <section id="hero" class="hero">
+    <div class="hero-content">
+
+      <!-- Profile photo — replace "images/profile.jpg" with your photo path -->
+      <div class="avatar-wrapper">
+        <img
+          src="images/profile.jpg"
+          alt="Foto de Vinicius Bugarin"
+          class="avatar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Fallback initials shown if the image is missing -->
+        <div class="avatar-initials" style="display:none;">VB</div>
+      </div>
+
+      <!-- ── Change the text below to your own ── -->
+      <p class="hero-greeting">Hola, soy</p>
+      <h1 class="hero-name">Vinicius Bugarin</h1>
+      <h2 class="hero-title">Desarrollador Web <span class="separator">|</span> Técnico Informático</h2>
+      <p class="hero-description">
+        Especializado en desarrollo web con PHP, JavaScript y bases de datos,
+        además de administración de sistemas y redes.
+      </p>
+
+      <!-- CTA buttons -->
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contact"  class="btn btn-outline">Contactar</a>
+        <!-- Replace "#" with your actual CV file path, e.g. "files/cv.pdf" -->
+        <a href="Files/curriculum-VINICIUS.pdf" class="btn btn-ghost" download>Descargar CV</a>
+      </div>
+
+    </div>
+
+    <!-- Animated background blob -->
+    <div class="hero-blob" aria-hidden="true"></div>
+  </section>
+
+
+  <!-- =============================================
+       ABOUT SECTION
+       ============================================= -->
+  <section id="about" class="section about">
+    <div class="container">
+      <h2 class="section-title">Sobre <span class="accent">mí</span></h2>
+      <p class="section-subtitle">Un poco de mi historia y habilidades</p>
+
+      <div class="about-grid">
+
+        <!-- Bio text — edit freely -->
+        <div class="about-text">
+          <p>
+            Soy desarrollador web con formación en <strong>Desarrollo de Aplicaciones Web</strong>
+            y <strong>Sistemas Microinformáticos y Redes</strong>. Tengo experiencia en
+            desarrollo web, administración de sistemas, bases de datos y mantenimiento de
+            equipos informáticos.
+          </p>
+          <p>
+            Me apasiona crear soluciones digitales eficientes y aprender nuevas tecnologías.
+            Busco mi primera oportunidad estable en el sector tecnológico donde pueda seguir
+            creciendo y aportar valor.
+          </p>
+        </div>
+
+        <!-- Skills grid — add or remove items freely -->
+        <div class="skills-grid">
+
+          <!-- Each skill card: change icon (emoji) and label -->
+          <div class="skill-card">
+            <span class="skill-icon">🌐</span>
+            <span class="skill-label">Desarrollo Web</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon">💻</span>
+            <span class="skill-label">Programación</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon">🖥️</span>
+            <span class="skill-label">Sistemas</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon">🔌</span>
+            <span class="skill-label">Redes</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon">🛠️</span>
+            <span class="skill-label">Soporte técnico</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon">🗄️</span>
+            <span class="skill-label">Bases de datos</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Technology pills — add / remove freely -->
+      <div class="tech-section">
+        <h3 class="tech-title">Tecnologías</h3>
+        <div class="tech-pills">
+          <span class="pill">PHP</span>
+          <span class="pill">JavaScript</span>
+          <span class="pill">HTML</span>
+          <span class="pill">CSS</span>
+          <span class="pill">SQL</span>
+          <span class="pill">MySQL</span>
+          <span class="pill">Windows</span>
+          <span class="pill">Linux</span>
+          <span class="pill">VirtualBox</span>
+          <span class="pill">Google Workspace</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       PROJECTS SECTION
+       Projects are loaded dynamically from script.js
+       Edit the `projects` array in script.js to add yours
+       ============================================= -->
+  <section id="projects" class="section projects">
+    <div class="container">
+      <h2 class="section-title">Mis <span class="accent">Proyectos</span></h2>
+      <p class="section-subtitle">Algunas cosas que he construido</p>
+
+      <!-- Cards are injected here by script.js -->
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       CONTACT SECTION
+       ============================================= -->
+  <section id="contact" class="section contact">
+    <div class="container">
+      <h2 class="section-title">¿Hablamos? <span class="accent">Contacto</span></h2>
+      <p class="section-subtitle">Estoy disponible para nuevas oportunidades</p>
+
+      <div class="contact-grid">
+
+        <!-- Contact info links — replace hrefs with your real links -->
+        <div class="contact-info">
+
+          <a href="mailto:viniciusbugarin@gmail.com" class="contact-item">
+            <span class="contact-icon">✉️</span>
+            <div>
+              <p class="contact-label">Email</p>
+              <p class="contact-value">viniciusbugarin@gmail.com</p>
+            </div>
+          </a>
+
+          <!-- Replace "#" with your real LinkedIn URL -->
+          <a href="#" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <span class="contact-icon">💼</span>
+            <div>
+              <p class="contact-label">LinkedIn</p>
+              <p class="contact-value">linkedin.com/in/vinicius-bugarin</p>
+            </div>
+          </a>
+
+          <!-- Replace "#" with your real GitHub URL -->
+          <a href="#" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <span class="contact-icon">🐙</span>
+            <div>
+              <p class="contact-label">GitHub</p>
+              <p class="contact-value">github.com/vinicius-bugarin</p>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- modify this form HTML and place wherever you want your form -->
+      <form action="https://formspree.io/f/mlgpbzre"  class="contact-form" id="contactForm"  method="POST" novalidate>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+              </div>
+
+              <div class="form-group">
+                <label for="message">Mensaje</label>
+                <textarea id="message" name="message" rows="5" placeholder="Cuéntame en qué puedo ayudarte..." required></textarea>
+              </div>
+          <!-- your other form fields go here -->
+          <button type="submit" class="btn btn-primary btn-full">Enviar mensaje</button>
+        </div>
+      </form>
+        
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       FOOTER
+       ============================================= -->
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> Vinicius Bugarin. Hecho con ❤️ y mucho café.</p>
+    </div>
+  </footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
