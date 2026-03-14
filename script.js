@@ -34,7 +34,7 @@ const projects = [
     description:
       "Aplicación que calcula automáticamente cuánto pagar a Hacienda subiendo la nómina. Incluye IRPF, cuotas a la Seguridad Social y tramos actualizados.",
     tech: ["JavaScript", "HTML", "CSS"],
-    link: "#",
+    link: "https://viniciusbugarin.github.io/tax-calculator-spain/",
     emoji: "🧮",
     color: "linear-gradient(135deg, #1e293b 0%, #312e81 100%)",
   },
