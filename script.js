@@ -39,13 +39,12 @@ const projects = [
     color: "linear-gradient(135deg, #1e293b 0%, #312e81 100%)",
   },
   {
-    title: "Portfolio Personal",
-    description:
-      "Sitio web portfolio profesional para mostrar proyectos y habilidades técnicas. Diseño moderno, responsive y optimizado para SEO.",
-    tech: ["HTML", "CSS", "JavaScript"],
-    link: "#",
-    emoji: "🌐",
-    color: "linear-gradient(135deg, #1e293b 0%, #4c1d95 100%)",
+   title: "RG Noir Website",
+   description: "Página web oficial de RG Noir, mostrando la identidad de marca, productos y colecciones en WordPress con estilo premium minimalista.",
+   tech: ["WordPress", "HTML", "CSS", "JavaScript"],
+   link: "https://rgnoir.wordpress.com/",
+   emoji: "🌐",
+   color: "linear-gradient(135deg, #111111 0%, #444444 100%)"
   },
   {
     title: "Gestor de Tareas",
