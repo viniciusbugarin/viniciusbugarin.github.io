@@ -113,3 +113,10 @@ button {
   color: white;
   border-radius: 8px;
 }
+.card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid #334155;
+}
+.button:hover {
+  transform: scale(1.05);
+}
