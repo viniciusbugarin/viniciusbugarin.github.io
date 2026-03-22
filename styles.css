@@ -120,3 +120,27 @@ button {
 .button:hover {
   transform: scale(1.05);
 }
+/* SECCIÓN DESTACADA */
+.highlight {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+}
+
+/* PROCESO */
+.process .steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+}
+
+/* HERO MÁS POTENTE */
+.hero h1 {
+  font-size: 52px;
+  max-width: 800px;
+  margin: auto;
+}
