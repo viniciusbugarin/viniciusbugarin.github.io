@@ -28,7 +28,7 @@ form.addEventListener("submit", async function(e) {
       body: data,
       headers: { 'Accept': 'application/json' }
     });
-
+        status.innerHTML = "⏳ Enviando...";
     if (response.ok) {
       status.innerHTML = "✅ Mensaje enviado";
       form.reset();
