@@ -7,7 +7,7 @@ const projects = [
   },
   {
   title: "Calculadora Autónomos España",
-  description: "Calcula cuota, impuestos y beneficio real como autónomo",
+  description: "Calcula cuota, impuestos y beneficio real como autónomo.",
   tech: "JavaScript, HTML, CSS",
   link: "https://viniciusbugarin.github.io/autonomos-calculator/"
   }
