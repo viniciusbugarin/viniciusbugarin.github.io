@@ -51,3 +51,25 @@ window.addEventListener("scroll", () => {
     }
   });
 });
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("mousemove", e => {
+    const rect = card.getBoundingClientRect();
+    card.style.background = `
+      radial-gradient(circle at 
+      ${e.clientX - rect.left}px 
+      ${e.clientY - rect.top}px,
+      rgba(59,130,246,0.15),
+      #1e293b
+      )
+    `;
+  });
+});
+window.addEventListener("load", () => {
+  document.getElementById("loader").style.display = "none";
+});
+window.addEventListener("scroll", () => {
+  const nav = document.querySelector(".navbar");
+  nav.style.background = window.scrollY > 50 
+    ? "rgba(15,23,42,0.95)" 
+    : "transparent";
+});
