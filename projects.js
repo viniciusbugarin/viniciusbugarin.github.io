@@ -5,4 +5,10 @@ const projects = [
     tech: "JavaScript, HTML, CSS",
     link: "https://viniciusbugarin.github.io/tax-calculator-spain/"
   }
+  {
+  title: "Calculadora Autónomos España",
+  description: "Calcula cuota, impuestos y beneficio real como autónomo",
+  tech: "JavaScript, HTML, CSS",
+  link: "https://viniciusbugarin.github.io/autonomos-calculator/"
+  }
 ];
