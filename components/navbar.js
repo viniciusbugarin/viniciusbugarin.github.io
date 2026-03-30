@@ -8,9 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
             <img src="images/VB.png" alt="Vinicius Bugarin" width="50">
           </a>
         </div>
-          <a class="nav-links" href="index.html">Inicio</a>
-          <a class="nav-links" href="desarrollador-web-barcelona.html">Barcelona</a>
-          <a class="nav-links" href="desarrollador-web-freelance.html">Freelance</a>
+
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="desarrollador-web-barcelona.html">Barcelona</a></li>
+          <li><a href="desarrollador-web-freelance.html">Freelance</a></li>
+        </ul>
 
       </div>
     </nav>
