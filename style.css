@@ -121,7 +121,7 @@ button {
 }
 /* MENU */
 .navbar {
-  justify-content: center;
+  position: sticky;
   top: 0;
   background: #0f172a;
   padding: 15px 20px;
@@ -131,14 +131,9 @@ button {
 
 .nav-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 40px;
-}
-
-.logo {
-  position: absolute;
-  left: 20px;
+  justify-content: center;
+  position: relative;
 }
 
 .nav-links a {
