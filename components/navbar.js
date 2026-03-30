@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="nav-container">
 
         <div class="logo">
-          <a href="/index.html">VB</a>
+          <a href="/index.html"><img src="../../images/VB.png" alt="Vinicius Bugarin" width="75" height="75" ></a>
         </div>
 
         <ul class="nav-links">
