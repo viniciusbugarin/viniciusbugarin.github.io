@@ -122,7 +122,6 @@ button {
 /* MENU */
 .navbar {
   justify-content: center;
-  position: sticky;
   top: 0;
   background: #0f172a;
   padding: 15px 20px;
