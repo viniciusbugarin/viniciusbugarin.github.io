@@ -9,7 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
           </a>
         </div>
 
-        <ul class="nav-links">
+        <div class="menu-toggle" id="menu-toggle">
+          ☰
+        </div>
+
+        <ul class="nav-links" id="nav-links">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="desarrollador-web-barcelona.html">Barcelona</a></li>
           <li><a href="desarrollador-web-freelance.html">Freelance</a></li>
@@ -21,4 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
 
   document.getElementById("navbar").innerHTML = navbar;
+
+  // TOGGLE MENÚ
+  const toggle = document.getElementById("menu-toggle");
+  const links = document.getElementById("nav-links");
+
+  toggle.addEventListener("click", () => {
+    links.classList.toggle("active");
+  });
 });
