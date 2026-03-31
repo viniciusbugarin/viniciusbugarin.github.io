@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div class="logo">
           <a href="index.html">
-            <img src="images/VB.png" alt="Vinicius Bugarin" width="50">
+            <img src="images/VB.png" alt="VB">
           </a>
         </div>
 
@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <li><a href="index.html">Inicio</a></li>
           <li><a href="desarrollador-web-barcelona.html">Barcelona</a></li>
           <li><a href="desarrollador-web-freelance.html">Freelance</a></li>
+          <li><a href="#contact" class="cta">Contacto</a></li>
         </ul>
 
       </div>
