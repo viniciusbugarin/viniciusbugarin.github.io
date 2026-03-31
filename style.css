@@ -151,6 +151,17 @@ button {
   transition: 0.3s;
 }
 
-.nav-links a:hover::after {
-  width: 100%;
+.nav-links {
+  align-items: center;
+} 
+
+ul.nav-links {
+  list-style: none !important;
+  display: flex !important;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+.nav-links li {
+  list-style: none;
 }
