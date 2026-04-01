@@ -1,1 +1,144 @@
+/* NAVBAR BASE */
+.navbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 1000;
+  background: transparent;
+  transition: all 0.3s ease;
+}
 
+/* SCROLL EFECTO */
+.navbar.scrolled {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* CONTENEDOR */
+.nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* LOGO */
+.logo {
+  position: absolute;
+  left: 20px;
+}
+
+.logo img {
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.08);
+}
+
+/* LINKS */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+/* LINKS */
+.nav-links a {
+  color: #cbd5f5;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: 0.3s;
+}
+
+/* HOVER */
+.nav-links a:hover {
+  color: white;
+}
+
+/* UNDERLINE */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #3b82f6;
+  left: 0;
+  bottom: -5px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ACTIVE LINK */
+.active-link {
+  color: white;
+}
+
+.active-link::after {
+  width: 100%;
+}
+
+/* CTA */
+.nav-links .cta {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+/* HAMBURGUESA */
+.menu-toggle {
+  display: none;
+  position: absolute;
+  right: 20px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.95);
+
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+
+    padding: 30px 0;
+
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+
+    transition: all 0.3s ease;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
