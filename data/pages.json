@@ -14,5 +14,13 @@
     "h1": "Página web para autónomos",
     "content": "Si eres autónomo, tener una página web es clave para conseguir clientes.",
     "cta": "Crear mi web"
-  }
+  },
+  {
+  "slug": "desarrollador-web-seo",
+  "title": "Desarrollador web SEO",
+  "description": "Webs optimizadas para posicionar en Google",
+  "h1": "Desarrollador web especializado en SEO",
+  "content": "Creo páginas web optimizadas para posicionarse en Google desde el inicio.",
+  "cta": "Solicitar web"
+}
 ]
