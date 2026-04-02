@@ -23,3 +23,12 @@
 .footer-links a:hover {
   color: white;
 }
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+}
