@@ -1,3 +1,6 @@
+// ==========================
+// SCROLL ANIMATION
+// ==========================
 function revealOnScroll() {
   const elements = document.querySelectorAll(".reveal");
 
@@ -12,37 +15,96 @@ function revealOnScroll() {
 
 window.addEventListener("scroll", revealOnScroll);
 
+// ==========================
 // CHAT UI
+// ==========================
 const toggleBtn = document.getElementById("toggleChat");
 const chatBox = document.getElementById("chatBox");
+const messages = document.getElementById("messages");
 
-if (toggleBtn) {
+if (toggleBtn && chatBox) {
   toggleBtn.onclick = () => {
     chatBox.classList.toggle("hidden");
   };
 }
 
+// ==========================
+// SEND MESSAGE
+// ==========================
 async function send() {
   const input = document.getElementById("input");
-  const message = input.value;
+  const message = input.value.trim();
 
-  const res = await fetch("https://TU-API.vercel.app/api/chat", { // 👈 IMPORTANTE
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ message })
-  });
+  // ❌ Evitar mensajes vacíos
+  if (!message) return;
 
-  const data = await res.json();
-
-  document.getElementById("messages").innerHTML += `
-    <p><b>Tú:</b> ${message}</p>
-    <p><b>Asistente:</b> ${data.reply}</p>
-  `;
+  // 🧑 Mensaje usuario
+  addMessage(message, "user");
 
   input.value = "";
+
+  // 🤖 Mensaje temporal (typing)
+  const typing = addMessage("Escribiendo...", "bot");
+
+  try {
+    const res = await fetch("https://TU-API.vercel.app/api/chat", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message })
+    });
+
+    const data = await res.json();
+
+    // reemplazar "Escribiendo..."
+    typing.remove();
+
+    addMessage(data.reply, "bot");
+
+  } catch (error) {
+    typing.remove();
+
+    addMessage("Error al conectar con el asistente. Inténtalo de nuevo.", "bot");
+
+    console.error(error);
+  }
+
+  scrollToBottom();
 }
 
+// ==========================
+// QUICK BUTTONS
+// ==========================
 function quick(text) {
-  document.getElementById("input").value = text;
+  const input = document.getElementById("input");
+  input.value = text;
   send();
 }
+
+// ==========================
+// ADD MESSAGE (UI PRO)
+// ==========================
+function addMessage(text, type) {
+  const div = document.createElement("div");
+  div.classList.add(type === "user" ? "user" : "bot");
+  div.innerText = text;
+
+  messages.appendChild(div);
+
+  return div;
+}
+
+// ==========================
+// AUTO SCROLL
+// ==========================
+function scrollToBottom() {
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// ==========================
+// ENTER PARA ENVIAR
+// ==========================
+document.getElementById("input")?.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    send();
+  }
+});
