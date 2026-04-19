@@ -30,3 +30,34 @@ app.post("/api/chat", async (req, res) => {
 });
 
 app.listen(3000, () => console.log("Server running"));
+const toggleBtn = document.getElementById("toggleChat");
+const chatBox = document.getElementById("chatBox");
+
+toggleBtn.onclick = () => {
+  chatBox.classList.toggle("hidden");
+};
+
+async function send() {
+  const input = document.getElementById("input");
+  const message = input.value;
+
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ message })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("messages").innerHTML += `
+    <p><b>Tú:</b> ${message}</p>
+    <p><b>Asistente:</b> ${data.reply}</p>
+  `;
+
+  input.value = "";
+}
+
+function quick(text) {
+  document.getElementById("input").value = text;
+  send();
+}
