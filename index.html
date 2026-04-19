@@ -139,6 +139,24 @@
 <script src="script.js"></script>
 <script src="components/footer.js" defer></script>
 <script src="components/navbar.js"></script>
+<!-- ASISTENTE IA -->
+<div id="assistant">
+  <button id="toggleChat">💬 Asistente experto</button>
 
+  <div id="chatBox" class="hidden">
+    <div id="messages"></div>
+
+    <div id="quickOptions">
+      <button onclick="quick('¿Qué proyectos has hecho?')">Proyectos</button>
+      <button onclick="quick('¿Cuánto cuesta una web?')">Precios</button>
+      <button onclick="quick('¿Qué tecnologías usas?')">Tecnologías</button>
+    </div>
+
+    <div class="inputArea">
+      <input id="input" placeholder="Pregúntame lo que quieras..." />
+      <button onclick="send()">Enviar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
