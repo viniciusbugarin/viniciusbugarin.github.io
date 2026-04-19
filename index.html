@@ -2,29 +2,45 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Vinicius Bugarin | Desarrollador Web</title>
-  <meta name="google-site-verification" content="bAlqdvbUufpVv4TSD66mwPh3DlQoYIo7Fcsg5K-h46s" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Vinicius Bugarin | Desarrollador Web en Barcelona</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Desarrollador web en Barcelona especializado en herramientas digitales, automatización y SEO técnico. Creo aplicaciones web que resuelven problemas reales.">
+  <meta name="author" content="Vinicius Bugarin">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://viniciusbugarin.github.io">
+
+  <!-- Responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Open Graph (redes sociales) -->
+  <meta property="og:title" content="Vinicius Bugarin | Desarrollador Web">
+  <meta property="og:description" content="Desarrollador web especializado en herramientas digitales y automatización.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://viniciusbugarin.github.io">
+  <meta property="og:image" content="https://viniciusbugarin.github.io/images/VB.png">
+
+  <!-- Favicon -->
   <link rel="icon" href="images/VB.png" type="image/png">
-<meta name="description" content="Desarrollador web en Barcelona especializado en páginas web, apps y herramientas online. Portfolio profesional.">
-  <meta name="description" content="Desarrollador web especializado en herramientas digitales, simuladores y automatización.">
-  <meta name="author" content="Vinicius Bugarin">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/navbar.css">
   <link rel="stylesheet" href="styles/footer.css">
-</head>
- <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0P79L2048Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-0P79L2048Z');
-</script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0P79L2048Z"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0P79L2048Z');
+  </script>
+</head>
+
 <body>
+
 <div id="navbar"></div>
 
 <!-- HERO -->
@@ -32,11 +48,11 @@
 
   <h2 class="name">Vinicius Bugarin</h2>
 
-  <h1>Creo herramientas web que automatizan procesos y resuelven problemas reales</h1>
+  <h1>Desarrollador Web en Barcelona especializado en herramientas digitales y automatización</h1>
 
   <p>
-    He desarrollado simuladores de hipoteca, calculadoras fiscales y herramientas 
-    que simplifican cálculos complejos para usuarios y negocios.
+    Desarrollo aplicaciones web, simuladores y herramientas que automatizan procesos
+    y simplifican cálculos complejos para usuarios y negocios.
   </p>
 
   <p class="highlight">+3 aplicaciones reales desarrolladas</p>
@@ -59,7 +75,7 @@
         Herramienta que permite calcular impuestos en segundos de forma automatizada,
         pensada para usuarios sin conocimientos fiscales.
       </p>
-      <a href="https://viniciusbugarin.github.io/tax-calculator-spain/" target="_blank"  class="btn">Ver proyecto</a>
+      <a href="https://viniciusbugarin.github.io/tax-calculator-spain/" target="_blank" class="btn">Ver proyecto</a>
     </div>
 
     <div class="card">
@@ -68,7 +84,7 @@
         Simula cuota, impuestos y beneficio real para autónomos,
         mostrando resultados claros y fáciles de entender.
       </p>
-      <a href="https://viniciusbugarin.github.io/autonomos-calculator/" target="_blank"  class="btn">Ver proyecto</a>
+      <a href="https://viniciusbugarin.github.io/autonomos-calculator/" target="_blank" class="btn">Ver proyecto</a>
     </div>
 
     <div class="card">
@@ -77,7 +93,7 @@
         Calcula cuota mensual, intereses y coste total de una hipoteca
         utilizando fórmulas financieras reales.
       </p>
-      <a href="https://viniciusbugarin.github.io/hipoteca-calculator/" target="_blank"  class="btn">Ver proyecto</a>
+      <a href="https://viniciusbugarin.github.io/hipoteca-calculator/" target="_blank" class="btn">Ver proyecto</a>
     </div>
 
   </div>
@@ -135,16 +151,18 @@
   </p>
 
 </section>
+
 <div id="footer"></div>
-<script src="script.js"></script>
-<script src="components/footer.js" defer></script>
-<script src="components/navbar.js"></script>
+
 <!-- ASISTENTE IA -->
 <div id="assistant">
-  <button id="toggleChat">💬 Asistente experto</button>
+  <button id="toggleChat">💬 Pregunta sobre mis proyectos</button>
 
   <div id="chatBox" class="hidden">
-    <div id="messages"></div>
+    
+    <div id="messages">
+      <p><b>Asistente:</b> Hola 👋 puedo ayudarte a entender mis proyectos o recomendarte una solución para tu negocio.</p>
+    </div>
 
     <div id="quickOptions">
       <button onclick="quick('¿Qué proyectos has hecho?')">Proyectos</button>
@@ -156,7 +174,14 @@
       <input id="input" placeholder="Pregúntame lo que quieras..." />
       <button onclick="send()">Enviar</button>
     </div>
+
   </div>
 </div>
+
+<!-- SCRIPTS -->
+<script src="components/navbar.js" defer></script>
+<script src="components/footer.js" defer></script>
+<script src="script.js" defer></script>
+
 </body>
 </html>
