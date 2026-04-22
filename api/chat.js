@@ -1,17 +1,16 @@
 export default async function handler(req, res) {
 
-  // ✅ CORS (MUY IMPORTANTE)
+  // ✅ CORS HEADERS
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // ✅ Preflight (necesario para fetch)
+  // ✅ RESPUESTA AL PREFLIGHT
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
   try {
-    // Solo permitir POST
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Método no permitido" });
     }
@@ -31,10 +30,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          {
-            role: "system",
-            content: "Eres un asistente experto en desarrollo web que ayuda a clientes y recomienda soluciones."
-          },
+          { role: "system", content: "Eres un asistente experto en desarrollo web." },
           { role: "user", content: message }
         ]
       })
@@ -42,28 +38,12 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      console.error("Error OpenAI:", data);
-      return res.status(500).json({
-        error: "Error en OpenAI"
-      });
-    }
-
     const reply = data?.choices?.[0]?.message?.content;
-
-    if (!reply) {
-      return res.status(500).json({
-        error: "Respuesta inválida"
-      });
-    }
 
     return res.status(200).json({ reply });
 
   } catch (error) {
-    console.error("Error servidor:", error);
-
-    return res.status(500).json({
-      error: "Error interno"
-    });
+    console.error(error);
+    return res.status(500).json({ error: "Error interno" });
   }
 }
