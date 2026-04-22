@@ -47,7 +47,7 @@ async function send() {
   const typing = addMessage("Escribiendo...", "bot");
 
   try {
-    const res = await fetch("https://TU-API.vercel.app/api/chat", {
+    const res = await fetch("https://viniciusbugarin-githu-git-87eea9-viniciusbugarin-9060s-projects.vercel.app/api/chat", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ message })
