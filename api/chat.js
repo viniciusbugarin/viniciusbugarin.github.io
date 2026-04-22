@@ -1,4 +1,15 @@
 export default async function handler(req, res) {
+
+  // ✅ CORS (MUY IMPORTANTE)
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // ✅ Preflight (necesario para fetch)
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   try {
     // Solo permitir POST
     if (req.method !== "POST") {
@@ -31,21 +42,18 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // 🔥 Control de errores de OpenAI
     if (!response.ok) {
       console.error("Error OpenAI:", data);
       return res.status(500).json({
-        error: "Error en OpenAI",
-        details: data
+        error: "Error en OpenAI"
       });
     }
 
-    // 🔥 Seguridad extra
     const reply = data?.choices?.[0]?.message?.content;
 
     if (!reply) {
       return res.status(500).json({
-        error: "Respuesta inválida de OpenAI"
+        error: "Respuesta inválida"
       });
     }
 
@@ -55,7 +63,7 @@ export default async function handler(req, res) {
     console.error("Error servidor:", error);
 
     return res.status(500).json({
-      error: "Error interno del servidor"
+      error: "Error interno"
     });
   }
 }
