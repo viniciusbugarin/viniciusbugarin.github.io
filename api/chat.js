@@ -20,7 +20,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Mensaje vacío" });
     }
 
-    // 🔥 CONTEXTO PRO (VENDE POR TI)
+    // 🔍 DEBUG CLAVE (MUY IMPORTANTE)
+    console.log("GROQ KEY:", process.env.GROQ_API_KEY ? "OK" : "NO KEY");
+    console.log("OPENAI KEY:", process.env.OPENAI_API_KEY ? "OK" : "NO KEY");
+
+    // 🔥 CONTEXTO PRO
     const messages = [
       {
         role: "system",
@@ -28,7 +32,7 @@ export default async function handler(req, res) {
 Eres Vinicius Bugarin, desarrollador web profesional.
 Tu objetivo es ayudar y convertir visitantes en clientes.
 
-Responde de forma clara, profesional y orientada a negocio.
+Responde claro, directo y orientado a negocio.
 
 Servicios:
 - Desarrollo web
@@ -44,8 +48,11 @@ Si el usuario muestra interés:
       { role: "user", content: message }
     ];
 
-    // 🟢 1. INTENTAR CON GROQ (GRATIS)
+    // 🟢 1. GROQ (PRIORIDAD)
     try {
+
+      console.log("Intentando con GROQ...");
+
       const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -60,53 +67,74 @@ Si el usuario muestra interés:
 
       const groqData = await groqRes.json();
 
+      console.log("Respuesta GROQ:", groqData);
+
       if (groqRes.ok) {
         const reply = groqData?.choices?.[0]?.message?.content;
+
         if (reply) {
+          console.log("✅ Respuesta desde GROQ");
           return res.status(200).json({ reply });
         }
       }
 
-      console.log("Groq falló, usando OpenAI...");
+      console.log("⚠️ Groq no devolvió respuesta válida");
 
     } catch (err) {
-      console.log("Error Groq:", err);
+      console.log("❌ Error GROQ:", err);
     }
 
-    // 🔁 2. FALLBACK A OPENAI
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages
-      })
+    // 🔁 2. FALLBACK OPENAI
+    try {
+
+      console.log("Usando OpenAI...");
+
+      const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages
+        })
+      });
+
+      const openaiData = await openaiRes.json();
+
+      console.log("Respuesta OpenAI:", openaiData);
+
+      if (!openaiRes.ok) {
+        return res.status(500).json({
+          error: "Error en IA",
+          details: openaiData
+        });
+      }
+
+      const reply = openaiData?.choices?.[0]?.message?.content;
+
+      if (!reply) {
+        return res.status(500).json({
+          error: "Respuesta vacía"
+        });
+      }
+
+      console.log("✅ Respuesta desde OpenAI");
+
+      return res.status(200).json({ reply });
+
+    } catch (err) {
+      console.log("❌ Error OpenAI:", err);
+    }
+
+    // 🚨 SI TODO FALLA
+    return res.status(500).json({
+      error: "Ninguna IA respondió"
     });
 
-    const openaiData = await openaiRes.json();
-
-    if (!openaiRes.ok) {
-      return res.status(500).json({
-        error: "Error en IA",
-        details: openaiData
-      });
-    }
-
-    const reply = openaiData?.choices?.[0]?.message?.content;
-
-    if (!reply) {
-      return res.status(500).json({
-        error: "Respuesta vacía"
-      });
-    }
-
-    return res.status(200).json({ reply });
-
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("❌ Server error:", error);
     return res.status(500).json({ error: "Error interno" });
   }
 }
