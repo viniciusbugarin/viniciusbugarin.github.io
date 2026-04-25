@@ -20,38 +20,46 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Mensaje vacío" });
     }
 
-    // 🔍 DEBUG CLAVE (MUY IMPORTANTE)
+    // 🔍 DEBUG
     console.log("GROQ KEY:", process.env.GROQ_API_KEY ? "OK" : "NO KEY");
     console.log("OPENAI KEY:", process.env.OPENAI_API_KEY ? "OK" : "NO KEY");
 
-    // 🔥 CONTEXTO PRO
+    // 🔥 CONTEXTO OPTIMIZADO (VENDE)
     const messages = [
       {
         role: "system",
         content: `
-Eres Vinicius Bugarin, desarrollador web profesional.
-Tu objetivo es ayudar y convertir visitantes en clientes.
+Eres Vinicius Bugarin, desarrollador web freelance.
 
-Responde claro, directo y orientado a negocio.
+Tu objetivo es:
+- ayudar al usuario
+- detectar necesidades
+- proponer soluciones
+- convertir en cliente
+
+Responde:
+- claro
+- directo
+- profesional
+- sin rodeos
 
 Servicios:
-- Desarrollo web
-- Automatización
-- Calculadoras y simuladores
+- páginas web
+- automatización
+- calculadoras y herramientas
 
 Si el usuario muestra interés:
-- ofrece ayuda
 - sugiere proyecto
+- menciona beneficios
 - invita a contactar
 `
       },
       { role: "user", content: message }
     ];
 
-    // 🟢 1. GROQ (PRIORIDAD)
+    // 🟢 GROQ (PRIORIDAD)
     try {
-
-      console.log("Intentando con GROQ...");
+      console.log("🚀 Intentando GROQ...");
 
       const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
@@ -60,34 +68,33 @@ Si el usuario muestra interés:
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "llama3-8b-8192",
-          messages
+          model: "llama3-70b-8192", // ✅ FIX
+          messages,
+          temperature: 0.7
         })
       });
 
       const groqData = await groqRes.json();
-
-      console.log("Respuesta GROQ:", groqData);
+      console.log("📦 GROQ:", groqData);
 
       if (groqRes.ok) {
         const reply = groqData?.choices?.[0]?.message?.content;
 
         if (reply) {
-          console.log("✅ Respuesta desde GROQ");
+          console.log("✅ Respuesta GROQ");
           return res.status(200).json({ reply });
         }
       }
 
-      console.log("⚠️ Groq no devolvió respuesta válida");
+      console.log("⚠️ Groq sin respuesta válida");
 
     } catch (err) {
       console.log("❌ Error GROQ:", err);
     }
 
-    // 🔁 2. FALLBACK OPENAI
+    // 🔁 OPENAI (FALLBACK)
     try {
-
-      console.log("Usando OpenAI...");
+      console.log("🔁 Usando OpenAI...");
 
       const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -97,13 +104,13 @@ Si el usuario muestra interés:
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
-          messages
+          messages,
+          temperature: 0.7
         })
       });
 
       const openaiData = await openaiRes.json();
-
-      console.log("Respuesta OpenAI:", openaiData);
+      console.log("📦 OpenAI:", openaiData);
 
       if (!openaiRes.ok) {
         return res.status(500).json({
@@ -120,17 +127,16 @@ Si el usuario muestra interés:
         });
       }
 
-      console.log("✅ Respuesta desde OpenAI");
-
+      console.log("✅ Respuesta OpenAI");
       return res.status(200).json({ reply });
 
     } catch (err) {
       console.log("❌ Error OpenAI:", err);
     }
 
-    // 🚨 SI TODO FALLA
-    return res.status(500).json({
-      error: "Ninguna IA respondió"
+    // 🚨 FALLBACK FINAL (UX IMPORTANTE)
+    return res.status(200).json({
+      reply: "Ahora mismo no puedo responder, pero puedes escribirme directamente y te ayudo con tu proyecto."
     });
 
   } catch (error) {
