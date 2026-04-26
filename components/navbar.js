@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <!-- LINKS -->
         <ul class="nav-links" id="nav-links">
           <li><a href="/" data-link>Inicio</a></li>
-          <li><a href="/desarrollador-web-barcelona.html" data-link>Barcelona</a></li>
-          <li><a href="/desarrollador-web-freelance.html" data-link>Freelance</a></li>
+          <li><a href="pages/desarrollador-web-barcelona.html" data-link>Barcelona</a></li>
+          <li><a href="pages/desarrollador-web-freelance.html" data-link>Freelance</a></li>
           <li><a href="#contact" class="cta">Contacto</a></li>
         </ul>
 
