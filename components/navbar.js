@@ -1,22 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   const navbar = `
     <nav class="navbar" id="navbar">
       <div class="nav-container">
 
+        <!-- LOGO -->
         <div class="logo">
-          <a href="index.html">
-            <img src="images/VB.png" alt="VB">
+          <a href="/" aria-label="Inicio">
+            <img src="/images/VB.png" alt="Vinicius Bugarin Logo">
           </a>
         </div>
 
-        <div class="menu-toggle" id="menu-toggle">
+        <!-- HAMBURGUESA -->
+        <div class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
           ☰
         </div>
 
+        <!-- LINKS -->
         <ul class="nav-links" id="nav-links">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="desarrollador-web-barcelona.html">Barcelona</a></li>
-          <li><a href="desarrollador-web-freelance.html">Freelance</a></li>
+          <li><a href="/" data-link>Inicio</a></li>
+          <li><a href="/desarrollador-web-barcelona.html" data-link>Barcelona</a></li>
+          <li><a href="/desarrollador-web-freelance.html" data-link>Freelance</a></li>
           <li><a href="#contact" class="cta">Contacto</a></li>
         </ul>
 
@@ -30,26 +34,71 @@ document.addEventListener("DOMContentLoaded", () => {
   const links = document.getElementById("nav-links");
   const navbarEl = document.getElementById("navbar");
 
-  // Toggle menú móvil
+  // ==========================
+  // 📱 TOGGLE MOBILE
+  // ==========================
   toggle.addEventListener("click", () => {
     links.classList.toggle("active");
   });
 
-  // Navbar scroll efecto
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-      navbarEl.classList.add("scrolled");
-    } else {
-      navbarEl.classList.remove("scrolled");
-    }
+  // 🔒 CERRAR MENÚ AL HACER CLICK
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      links.classList.remove("active");
+    });
   });
 
-  // Link activo automático
-  const currentPage = window.location.pathname.split("/").pop();
+  // ==========================
+  // 🎯 SCROLL NAVBAR
+  // ==========================
+  window.addEventListener("scroll", () => {
+    navbarEl.classList.toggle("scrolled", window.scrollY > 50);
+  });
+
+  // ==========================
+  // 🔥 LINK ACTIVO PRO
+  // ==========================
+  const currentPath = window.location.pathname.replace("/", "") || "index.html";
 
   document.querySelectorAll(".nav-links a").forEach(link => {
-    if (link.getAttribute("href") === currentPage) {
+
+    const href = link.getAttribute("href").replace("/", "");
+
+    if (href === currentPath || 
+        (currentPath === "index.html" && href === "")) {
       link.classList.add("active-link");
     }
   });
+
+  // ==========================
+  // 🚀 SCROLL SUAVE
+  // ==========================
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+      const target = document.querySelector(this.getAttribute("href"));
+
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({
+          behavior: "smooth"
+        });
+      }
+    });
+  });
+
+  // ==========================
+  // ⚡ PREFETCH LINKS (SEO + SPEED)
+  // ==========================
+  document.querySelectorAll("a[data-link]").forEach(link => {
+    link.addEventListener("mouseover", () => {
+      const href = link.getAttribute("href");
+
+      const prefetch = document.createElement("link");
+      prefetch.rel = "prefetch";
+      prefetch.href = href;
+
+      document.head.appendChild(prefetch);
+    });
+  });
+
 });

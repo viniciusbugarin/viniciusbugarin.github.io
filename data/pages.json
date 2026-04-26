@@ -1,26 +1,35 @@
 [
   {
     "slug": "precio-pagina-web",
-    "title": "Precio de una página web en España",
-    "description": "Descubre cuánto cuesta crear una página web profesional en España.",
-    "h1": "Precio de una página web en España",
-    "content": "El precio de una página web en España depende de varios factores como diseño, funcionalidades y SEO.",
-    "cta": "Solicitar presupuesto"
+    "title": "Precio de una página web en España (2026) | Cuánto cuesta",
+    "description": "Descubre cuánto cuesta una página web en España. Precios reales según tipo de web, funcionalidades y SEO.",
+    "h1": "¿Cuánto cuesta una página web en España?",
+    "content": "<p>El precio de una página web en España varía dependiendo de varios factores clave como el diseño, las funcionalidades y la optimización SEO.</p><h2>Factores que influyen en el precio</h2><ul><li>Tipo de web (corporativa, ecommerce, landing)</li><li>Diseño personalizado</li><li>Optimización SEO</li><li>Velocidad y rendimiento</li></ul><h2>Precios aproximados</h2><p>Una web básica puede costar desde 300€, mientras que una web profesional optimizada puede superar los 1000€.</p><p>Si buscas una web que genere clientes, es clave invertir en SEO y conversión.</p>",
+    "cta": "Solicitar presupuesto",
+    "keywords": ["precio pagina web", "cuanto cuesta una web", "precio web españa"],
+    "category": "seo",
+    "intent": "informacional"
   },
   {
     "slug": "web-para-autonomos",
-    "title": "Crear página web para autónomos",
-    "description": "Crea una web profesional para tu negocio como autónomo.",
+    "title": "Página web para autónomos | Consigue clientes online",
+    "description": "Crea una web profesional como autónomo y empieza a conseguir clientes online.",
     "h1": "Página web para autónomos",
-    "content": "Si eres autónomo, tener una página web es clave para conseguir clientes.",
-    "cta": "Crear mi web"
+    "content": "<p>Si eres autónomo, tener una página web profesional es clave para conseguir clientes y diferenciarte de la competencia.</p><h2>Ventajas de tener una web</h2><ul><li>Captar clientes 24/7</li><li>Mejorar tu imagen profesional</li><li>Posicionarte en Google</li></ul><h2>Qué debe tener tu web</h2><ul><li>Diseño profesional</li><li>SEO optimizado</li><li>Formulario de contacto</li></ul><p>Una web bien hecha puede convertirse en tu mejor herramienta de ventas.</p>",
+    "cta": "Crear mi web",
+    "keywords": ["web para autonomos", "pagina web autonomo", "crear web negocio"],
+    "category": "negocio",
+    "intent": "comercial"
   },
   {
-  "slug": "desarrollador-web-seo",
-  "title": "Desarrollador web SEO",
-  "description": "Webs optimizadas para posicionar en Google",
-  "h1": "Desarrollador web especializado en SEO",
-  "content": "Creo páginas web optimizadas para posicionarse en Google desde el inicio.",
-  "cta": "Solicitar web"
-}
+    "slug": "desarrollador-web-seo",
+    "title": "Desarrollador web SEO | Webs que posicionan en Google",
+    "description": "Desarrollador web especializado en SEO. Creo webs optimizadas para posicionar y generar clientes.",
+    "h1": "Desarrollador web especializado en SEO",
+    "content": "<p>Un desarrollador web SEO no solo crea páginas, sino que las optimiza para posicionarse en Google y generar tráfico.</p><h2>Qué incluye el SEO</h2><ul><li>Optimización técnica</li><li>Velocidad de carga</li><li>Estructura SEO</li></ul><h2>Resultados</h2><p>Una web optimizada puede atraer tráfico constante y convertir visitas en clientes.</p>",
+    "cta": "Solicitar web",
+    "keywords": ["desarrollador web seo", "web posicionamiento google", "seo tecnico web"],
+    "category": "seo",
+    "intent": "transaccional"
+  }
 ]

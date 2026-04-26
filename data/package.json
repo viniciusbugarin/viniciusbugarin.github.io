@@ -1,5 +1,29 @@
 {
   "name": "vinicius-ai-assistant",
   "version": "1.0.0",
-  "private": true
+  "description": "Portfolio profesional + chatbot IA para captación de clientes",
+  "private": true,
+  "type": "module",
+
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build needed'",
+    "start": "vercel dev",
+    "lint": "echo 'No lint configured'"
+  },
+
+  "keywords": [
+    "portfolio",
+    "desarrollador web",
+    "chatbot",
+    "seo",
+    "vercel"
+  ],
+
+  "author": "Vinicius Bugarin",
+  "license": "MIT",
+
+  "engines": {
+    "node": ">=18"
+  }
 }
