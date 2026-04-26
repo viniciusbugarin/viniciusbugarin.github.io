@@ -1,5 +1,10 @@
 // ==========================
-// SCROLL ANIMATION
+// CONFIG
+// ==========================
+const API_URL = "https://viniciusbugarin-github-io.vercel.app/api/chat";
+
+// ==========================
+// SCROLL ANIMATION (MEJORADO)
 // ==========================
 function revealOnScroll() {
   const elements = document.querySelectorAll(".reveal");
@@ -7,13 +12,14 @@ function revealOnScroll() {
   elements.forEach(el => {
     const top = el.getBoundingClientRect().top;
 
-    if (top < window.innerHeight - 50) {
+    if (top < window.innerHeight - 80) {
       el.classList.add("active");
     }
   });
 }
 
 window.addEventListener("scroll", revealOnScroll);
+window.addEventListener("load", revealOnScroll); // 👈 importante
 
 // ==========================
 // CHAT UI
@@ -21,6 +27,7 @@ window.addEventListener("scroll", revealOnScroll);
 const toggleBtn = document.getElementById("toggleChat");
 const chatBox = document.getElementById("chatBox");
 const messages = document.getElementById("messages");
+const input = document.getElementById("input");
 
 if (toggleBtn && chatBox) {
   toggleBtn.onclick = () => {
@@ -29,53 +36,70 @@ if (toggleBtn && chatBox) {
 }
 
 // ==========================
+// GUARDAR CHAT (UX PRO)
+// ==========================
+function saveChat() {
+  localStorage.setItem("chat_history", messages.innerHTML);
+}
+
+function loadChat() {
+  const saved = localStorage.getItem("chat_history");
+  if (saved) messages.innerHTML = saved;
+}
+
+window.addEventListener("load", loadChat);
+
+// ==========================
 // SEND MESSAGE
 // ==========================
 async function send() {
-  const input = document.getElementById("input");
   const message = input.value.trim();
 
-  // ❌ Evitar mensajes vacíos
   if (!message) return;
 
-  // 🧑 Mensaje usuario
   addMessage(message, "user");
-
   input.value = "";
 
-  // 🤖 Mensaje temporal (typing)
-  const typing = addMessage("Escribiendo...", "bot");
+  const typing = addTyping();
 
   try {
-    const res = await fetch("https://viniciusbugarin-githu-git-87eea9-viniciusbugarin-9060s-projects.vercel.app/api/chat", {
+    const res = await fetch(API_URL, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message })
     });
 
+    // 🔥 error backend
+    if (!res.ok) {
+      throw new Error("Error servidor");
+    }
+
     const data = await res.json();
 
-    // reemplazar "Escribiendo..."
-    typing.remove();
+    removeTyping(typing);
+
+    if (!data.reply) {
+      addMessage("No he podido responder correctamente.", "bot");
+      return;
+    }
 
     addMessage(data.reply, "bot");
 
   } catch (error) {
-    typing.remove();
+    removeTyping(typing);
 
-    addMessage("Error al conectar con el asistente. Inténtalo de nuevo.", "bot");
-
+    addMessage("⚠️ Error de conexión. Inténtalo de nuevo.", "bot");
     console.error(error);
   }
 
   scrollToBottom();
+  saveChat(); // 💾 guardar conversación
 }
 
 // ==========================
 // QUICK BUTTONS
 // ==========================
 function quick(text) {
-  const input = document.getElementById("input");
   input.value = text;
   send();
 }
@@ -85,12 +109,42 @@ function quick(text) {
 // ==========================
 function addMessage(text, type) {
   const div = document.createElement("div");
-  div.classList.add(type === "user" ? "user" : "bot");
-  div.innerText = text;
+
+  div.classList.add("message", type);
+
+  // 🔥 formato tipo chat real
+  div.innerHTML = `
+    <span class="bubble">${text}</span>
+  `;
 
   messages.appendChild(div);
+  scrollToBottom();
 
   return div;
+}
+
+// ==========================
+// TYPING EFECTO PRO
+// ==========================
+function addTyping() {
+  const div = document.createElement("div");
+  div.classList.add("message", "bot");
+  div.id = "typing";
+
+  div.innerHTML = `
+    <span class="bubble typing">
+      <span></span><span></span><span></span>
+    </span>
+  `;
+
+  messages.appendChild(div);
+  scrollToBottom();
+
+  return div;
+}
+
+function removeTyping(el) {
+  if (el) el.remove();
 }
 
 // ==========================
@@ -103,8 +157,16 @@ function scrollToBottom() {
 // ==========================
 // ENTER PARA ENVIAR
 // ==========================
-document.getElementById("input")?.addEventListener("keypress", function(e) {
+input?.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
+    e.preventDefault();
     send();
   }
+});
+
+// ==========================
+// AUTOFOCUS (UX PRO)
+// ==========================
+window.addEventListener("load", () => {
+  input?.focus();
 });
