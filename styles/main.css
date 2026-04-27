@@ -1,23 +1,31 @@
 /* ==========================
-   VARIABLES (CONSISTENCIA)
+   VARIABLES AVANZADAS
 ========================== */
 :root {
   --bg-main: #020617;
   --bg-secondary: #0f172a;
-  --card-bg: rgba(30, 41, 59, 0.6);
+  --bg-glass: rgba(15, 23, 42, 0.6);
 
   --primary: #3b82f6;
   --secondary: #22c55e;
+  --accent: #06b6d4;
 
   --text-main: #ffffff;
   --text-secondary: #94a3b8;
 
   --border: rgba(255,255,255,0.08);
+
+  --radius: 14px;
+  --transition: 0.3s ease;
 }
 
 /* ==========================
-   BASE
+   RESET + BASE
 ========================== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -26,14 +34,32 @@ body {
   scroll-behavior: smooth;
 }
 
+/* SCROLLBAR PRO */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
 /* ==========================
    SECCIONES
 ========================== */
 .section {
   padding: 100px 20px;
-  text-align: center;
   max-width: 1100px;
   margin: auto;
+  text-align: center;
+}
+
+.section.dark {
+  background: linear-gradient(180deg, #020617, #020617);
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 40px;
 }
 
 h1, h2, h3 {
@@ -41,56 +67,85 @@ h1, h2, h3 {
 }
 
 /* ==========================
-   HERO (TOP IMPACT)
+   HERO ULTRA PRO
 ========================== */
 .hero {
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
   text-align: center;
+  flex-direction: column;
+  gap: 25px;
+  position: relative;
+}
+
+/* Glow background */
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.25), transparent);
+  top: 10%;
+  filter: blur(100px);
+  z-index: 0;
 }
 
 .hero h1 {
-  font-size: 48px;
+  font-size: 52px;
+  max-width: 900px;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  z-index: 1;
 }
 
 .hero h2 {
+  font-size: 22px;
   color: var(--text-secondary);
-  font-size: 20px;
+  max-width: 700px;
+  z-index: 1;
 }
 
 .hero p {
   max-width: 600px;
-  margin: auto;
   color: var(--text-secondary);
+  z-index: 1;
 }
 
-.highlight {
-  color: var(--secondary);
-  font-weight: bold;
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+.hero-proof {
+  color: var(--text-secondary);
+  font-size: 14px;
+  z-index: 1;
 }
 
 /* ==========================
-   BOTONES (CONVERSIÓN)
+   BOTONES (CONVERSIÓN PRO)
 ========================== */
 .btn {
-  padding: 12px 26px;
-  border-radius: 10px;
+  padding: 14px 28px;
+  border-radius: var(--radius);
   text-decoration: none;
+  font-weight: 600;
   display: inline-block;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn.primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 .btn.secondary {
@@ -99,39 +154,80 @@ h1, h2, h3 {
 }
 
 .btn:hover {
-  transform: translateY(-3px) scale(1.05);
+  transform: translateY(-4px) scale(1.05);
 }
 
 /* ==========================
-   PROYECTOS
+   GRID PROYECTOS
 ========================== */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 30px;
 }
 
+/* ==========================
+   CARD ULTRA PRO
+========================== */
 .card {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
   padding: 25px;
-  border-radius: 14px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  transition: 0.3s;
+  transition: var(--transition);
   text-align: left;
+  position: relative;
+  overflow: hidden;
 }
 
-.card h3 {
-  margin-top: 0;
+/* Glow effect */
+.card::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(59,130,246,0.2), transparent);
+  top: -50%;
+  left: -50%;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .card:hover {
   transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
 }
 
 /* ==========================
-   SERVICIOS
+   VALUE GRID (SERVICIOS)
+========================== */
+.value-grid {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.value-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  padding: 25px;
+  border-radius: var(--radius);
+  width: 300px;
+  transition: var(--transition);
+}
+
+.value-card:hover {
+  transform: translateY(-8px);
+}
+
+/* ==========================
+   LISTAS
 ========================== */
 .services {
   list-style: none;
@@ -144,7 +240,7 @@ h1, h2, h3 {
 }
 
 /* ==========================
-   FORMULARIO
+   FORMULARIO PRO
 ========================== */
 form {
   max-width: 420px;
@@ -153,27 +249,33 @@ form {
 
 input, textarea {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin-bottom: 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: #020617;
   color: white;
+  outline: none;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--primary);
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  background: var(--primary);
+  padding: 14px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   border: none;
   color: white;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: bold;
+  transition: var(--transition);
 }
 
 button:hover {
-  background: var(--secondary);
+  transform: scale(1.03);
 }
 
 /* ==========================
@@ -189,8 +291,8 @@ button:hover {
 ========================== */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: 0.6s ease;
+  transform: translateY(40px);
+  transition: 0.7s ease;
 }
 
 .reveal.active {
@@ -201,15 +303,14 @@ button:hover {
 /* ==========================
    CHATBOT ULTRA PRO
 ========================== */
-#assistant {
+#chatbot {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 9999;
 }
 
-/* BOTÓN */
-#toggleChat {
+#chatToggle {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   border: none;
   padding: 14px 18px;
@@ -220,11 +321,10 @@ button:hover {
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* CAJA */
-#chatBox {
+#chatContainer {
   width: 340px;
-  height: 450px;
-  background: #020617;
+  height: 460px;
+  background: var(--bg-main);
   border-radius: 15px;
   padding: 15px;
   display: flex;
@@ -234,16 +334,14 @@ button:hover {
 }
 
 /* MENSAJES */
-#messages {
+#chatMessages {
   flex: 1;
   overflow-y: auto;
-  font-size: 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* BURBUJAS */
 .user {
   align-self: flex-end;
   background: var(--primary);
@@ -260,43 +358,25 @@ button:hover {
   max-width: 80%;
 }
 
-/* INPUT */
-.inputArea {
+/* INPUT CHAT */
+.chat-input {
   display: flex;
   gap: 5px;
 }
 
-.inputArea input {
+.chat-input input {
   flex: 1;
   border-radius: 8px;
   border: none;
   padding: 10px;
 }
 
-.inputArea button {
+.chat-input button {
   background: var(--primary);
   border: none;
   padding: 10px;
   border-radius: 8px;
   color: white;
-}
-
-/* QUICK BUTTONS */
-#quickOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-#quickOptions button {
-  background: #1e293b;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  font-size: 12px;
 }
 
 /* ==========================
@@ -308,9 +388,13 @@ button:hover {
     font-size: 32px;
   }
 
-  #chatBox {
+  .value-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #chatContainer {
     width: 90vw;
-    right: 5vw;
   }
 
 }
