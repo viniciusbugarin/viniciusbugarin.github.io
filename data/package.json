@@ -1,29 +1,47 @@
 {
-  "name": "vinicius-ai-assistant",
-  "version": "1.0.0",
-  "description": "Portfolio profesional + chatbot IA para captación de clientes",
+  "name": "vinicius-portfolio-ai",
+  "version": "2.0.0",
+  "description": "Portfolio profesional con sistema SEO dinámico + chatbot IA para captación de clientes",
   "private": true,
   "type": "module",
 
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'No build needed'",
     "start": "vercel dev",
-    "lint": "echo 'No lint configured'"
+    "build": "echo 'Static site - no build step required'",
+    "preview": "vercel dev",
+    "deploy": "vercel --prod",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write ."
   },
 
   "keywords": [
-    "portfolio",
-    "desarrollador web",
-    "chatbot",
-    "seo",
-    "vercel"
+    "portfolio developer",
+    "desarrollador web barcelona",
+    "seo tecnico",
+    "chatbot ia",
+    "automatizacion",
+    "web conversion",
+    "vercel app"
   ],
 
-  "author": "Vinicius Bugarin",
+  "author": {
+    "name": "Vinicius Bugarin",
+    "url": "https://viniciusbugarin.github.io"
+  },
+
   "license": "MIT",
 
   "engines": {
     "node": ">=18"
+  },
+
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
   }
 }
