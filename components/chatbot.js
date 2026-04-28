@@ -1,192 +1,201 @@
 const API_URL = "https://viniciusbugarin-github-io.vercel.app/api/chat";
 
-// ==========================
-// ELEMENTOS
-// ==========================
-const toggle = document.getElementById("chatToggle");
-const container = document.getElementById("chatContainer");
-const messages = document.getElementById("chatMessages");
-const input = document.getElementById("chatInput");
+document.addEventListener("DOMContentLoaded", () => {
 
-// ==========================
-// ESTADO
-// ==========================
-let isOpen = false;
+  // ==========================
+  // 🔥 INYECTAR HTML (COMO NAVBAR)
+  // ==========================
+  const chatbotHTML = `
+    <div id="vb-chatbot">
 
-// ==========================
-// TOGGLE CHAT PRO
-// ==========================
-toggle?.addEventListener("click", () => {
-  isOpen = !isOpen;
-  container.classList.toggle("hidden");
+      <button id="chatToggle">💬</button>
 
-  if (isOpen) {
-    input?.focus();
-  }
-});
+      <div id="chatContainer" class="hidden">
 
-// ==========================
-// GUARDADO LOCAL (UX PRO)
-// ==========================
-function saveChat() {
-  localStorage.setItem("vb_chat_history", messages.innerHTML);
-}
+        <div id="chatMessages"></div>
 
-function loadChat() {
-  const saved = localStorage.getItem("vb_chat_history");
-  if (saved) messages.innerHTML = saved;
-}
+        <div class="chat-input">
+          <input id="chatInput" placeholder="Escribe aquí..." />
+          <button id="sendBtn">➤</button>
+        </div>
 
-// ==========================
-// MENSAJES UI PRO
-// ==========================
-function addMessage(text, type) {
-  const div = document.createElement("div");
-  div.className = `msg ${type}`;
+      </div>
 
-  div.innerHTML = `
-    <div class="bubble">
-      ${text}
-      <span class="time">${getTime()}</span>
     </div>
   `;
 
-  messages.appendChild(div);
-  scrollBottom();
-  return div;
-}
+  document.body.insertAdjacentHTML("beforeend", chatbotHTML);
 
-// ==========================
-// TYPING INDICATOR PRO
-// ==========================
-function addTyping() {
-  const div = document.createElement("div");
-  div.className = "msg bot typing";
+  // ==========================
+  // ELEMENTOS
+  // ==========================
+  const toggle = document.getElementById("chatToggle");
+  const container = document.getElementById("chatContainer");
+  const messages = document.getElementById("chatMessages");
+  const input = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-  div.innerHTML = `
-    <div class="bubble">
-      <span></span><span></span><span></span>
-    </div>
-  `;
+  let isOpen = false;
 
-  messages.appendChild(div);
-  scrollBottom();
-  return div;
-}
+  // ==========================
+  // TOGGLE
+  // ==========================
+  toggle.addEventListener("click", () => {
+    isOpen = !isOpen;
+    container.classList.toggle("hidden");
 
-// ==========================
-// ENVIAR MENSAJE (ULTRA PRO)
-// ==========================
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage(text, "user");
-  input.value = "";
-
-  const typing = addTyping();
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message: text })
-    });
-
-    if (!res.ok) throw new Error("Error servidor");
-
-    const data = await res.json();
-
-    typing.remove();
-
-    addMessage(
-      data.reply || "No he podido responder correctamente.",
-      "bot"
-    );
-
-  } catch (err) {
-    typing.remove();
-
-    addMessage(
-      "⚠️ Error de conexión. Inténtalo de nuevo.",
-      "bot"
-    );
-
-    console.error(err);
-  }
-
-  saveChat();
-}
-
-// ==========================
-// QUICK RESPONSES (CONVERSIÓN)
-// ==========================
-function addQuickOptions() {
-  const wrapper = document.createElement("div");
-  wrapper.className = "quick-options";
-
-  const options = [
-    "Quiero una web",
-    "Necesito automatizar un proceso",
-    "Precio de una página web",
-    "Ver proyectos"
-  ];
-
-  wrapper.innerHTML = options
-    .map(opt => `<button>${opt}</button>`)
-    .join("");
-
-  wrapper.querySelectorAll("button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      input.value = btn.innerText;
-      sendMessage();
-    });
+    if (isOpen) {
+      setTimeout(() => input.focus(), 200);
+    }
   });
 
-  messages.appendChild(wrapper);
-}
-
-// ==========================
-// SCROLL AUTO
-// ==========================
-function scrollBottom() {
-  messages.scrollTop = messages.scrollHeight;
-}
-
-// ==========================
-// ENTER PARA ENVIAR
-// ==========================
-input?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
+  // ==========================
+  // LOCAL STORAGE
+  // ==========================
+  function saveChat() {
+    localStorage.setItem("vb_chat_history", messages.innerHTML);
   }
-});
 
-// ==========================
-// TIEMPO MENSAJE
-// ==========================
-function getTime() {
-  const now = new Date();
-  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
+  function loadChat() {
+    const saved = localStorage.getItem("vb_chat_history");
+    if (saved) messages.innerHTML = saved;
+  }
 
-// ==========================
-// TRACKING (🔥 NEGOCIO REAL)
-// ==========================
-function trackEvent(event) {
-  console.log("📊 Evento:", event);
+  // ==========================
+  // MENSAJES
+  // ==========================
+  function addMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = `msg ${type}`;
 
-  // Aquí puedes conectar con analytics
-  // ejemplo: window.gtag(...)
-}
+    div.innerHTML = `
+      <div class="bubble">
+        ${text}
+        <span class="time">${getTime()}</span>
+      </div>
+    `;
 
-// ==========================
-// INIT
-// ==========================
-window.addEventListener("load", () => {
+    messages.appendChild(div);
+    scrollBottom();
+    return div;
+  }
+
+  // ==========================
+  // TYPING
+  // ==========================
+  function addTyping() {
+    const div = document.createElement("div");
+    div.className = "msg bot typing";
+
+    div.innerHTML = `
+      <div class="bubble">
+        <span></span><span></span><span></span>
+      </div>
+    `;
+
+    messages.appendChild(div);
+    scrollBottom();
+    return div;
+  }
+
+  // ==========================
+  // SEND
+  // ==========================
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    const typing = addTyping();
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
+
+      if (!res.ok) throw new Error("Error servidor");
+
+      const data = await res.json();
+
+      typing.remove();
+
+      addMessage(
+        data.reply || "No he podido responder correctamente.",
+        "bot"
+      );
+
+    } catch (err) {
+      typing.remove();
+
+      addMessage("⚠️ Error de conexión.", "bot");
+      console.error(err);
+    }
+
+    saveChat();
+  }
+
+  // ==========================
+  // QUICK OPTIONS (CONVERSIÓN)
+  // ==========================
+  function addQuickOptions() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "quick-options";
+
+    const options = [
+      "Quiero una web",
+      "Precio página web",
+      "Necesito automatización",
+      "Ver proyectos"
+    ];
+
+    wrapper.innerHTML = options
+      .map(opt => `<button>${opt}</button>`)
+      .join("");
+
+    wrapper.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        input.value = btn.innerText;
+        sendMessage();
+      });
+    });
+
+    messages.appendChild(wrapper);
+  }
+
+  // ==========================
+  // SCROLL
+  // ==========================
+  function scrollBottom() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // ==========================
+  // TIME
+  // ==========================
+  function getTime() {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  }
+
+  // ==========================
+  // EVENTS
+  // ==========================
+  sendBtn.addEventListener("click", sendMessage);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // ==========================
+  // INIT
+  // ==========================
   loadChat();
 
   if (!messages.innerHTML) {
@@ -194,11 +203,7 @@ window.addEventListener("load", () => {
       "Hola 👋 Soy el asistente de Vinicius.\n¿Quieres crear una web o automatizar algo?",
       "bot"
     );
-
     addQuickOptions();
   }
 
-  input?.focus();
-
-  trackEvent("chat_loaded");
 });
