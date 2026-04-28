@@ -306,33 +306,49 @@ textarea:focus {
   z-index: 9999;
 }
 
-/* BUTTON */
-#chatToggle {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border: none;
-  padding: 14px;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  box-shadow: var(--shadow);
+/* CONTENEDOR GLOBAL */
+#chatbot-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
 }
 
-/* CONTAINER */
+/* BOTÓN */
+#chatToggle {
+  background: linear-gradient(135deg, #3b82f6, #22c55e);
+  border: none;
+  padding: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* CONTENEDOR CHAT */
 #chatContainer {
-  width: 350px;
-  height: 480px;
-  background: var(--bg-main);
-  border-radius: var(--radius);
+  width: 340px;
+  height: 460px;
+  background: #020617;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.1);
   overflow: hidden;
 }
 
-/* HIDDEN FIX */
+/* HEADER */
+#chatHeader {
+  padding: 10px;
+  background: #0f172a;
+  display: flex;
+  justify-content: space-between;
+}
+/* OCULTO */
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 /* MESSAGES */
