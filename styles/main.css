@@ -430,7 +430,12 @@ textarea:focus {
   }
 
   #chatContainer {
-    width: 92vw;
-    right: 4vw;
+    width: 90vw;
+    height: 70vh;
+  }
+
+  #chatbot-widget {
+    right: 10px;
+    bottom: 10px;
   }
 }
