@@ -1,62 +1,68 @@
 export default async function handler(req, res) {
 
   // ==========================
-  // 🌐 CORS (PRO)
+  // 🌐 CORS (CONTROLADO)
   // ==========================
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
+  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido" });
+
+  // ==========================
+  // 🛡️ RATE LIMIT (BÁSICO)
+  // ==========================
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
+  if (!global.rateLimit) global.rateLimit = new Map();
+
+  const now = Date.now();
+  const windowTime = 60 * 1000; // 1 min
+  const limit = 20;
+
+  const userData = global.rateLimit.get(ip) || { count: 0, time: now };
+
+  if (now - userData.time < windowTime) {
+    userData.count++;
+    if (userData.count > limit) {
+      return res.status(429).json({
+        reply: "⚠️ Demasiadas peticiones. Espera unos segundos."
+      });
+    }
+  } else {
+    userData.count = 1;
+    userData.time = now;
   }
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método no permitido" });
-  }
+  global.rateLimit.set(ip, userData);
 
   try {
 
-    const { message } = req.body || {};
+    // ==========================
+    // INPUT
+    // ==========================
+    let { message } = req.body || {};
 
-    if (!message || message.trim().length < 2) {
+    if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Mensaje inválido" });
     }
 
+    message = sanitize(message);
+
+    if (message.length < 2) {
+      return res.status(400).json({ error: "Mensaje demasiado corto" });
+    }
+
     // ==========================
-    // 🧠 DETECCIÓN INTENCIÓN (🔥 CLAVE NEGOCIO)
+    // 🧠 INTENT
     // ==========================
     const intent = detectIntent(message);
 
     // ==========================
-    // 🧠 SYSTEM PROMPT ULTRA PRO
+    // 🧠 PROMPT DINÁMICO (CLAVE)
     // ==========================
-    const systemPrompt = `
-Eres Vinicius Bugarin, desarrollador web especializado en:
-
-- Automatización de procesos
-- Desarrollo de herramientas digitales
-- Webs orientadas a conversión
-- SEO técnico
-
-OBJETIVO PRINCIPAL:
-Convertir visitantes en clientes.
-
-REGLAS:
-- Respuestas claras, cortas y profesionales
-- No dar respuestas genéricas
-- Siempre orientar a solución
-- Si detectas interés → invita a contacto
-
-ESTILO:
-- Directo
-- Cercano
-- Experto
-
-CTA:
-- Si el usuario muestra interés, invítale a trabajar contigo
-- Puedes sugerir: "Cuéntame tu proyecto y te ayudo"
-`;
+    const systemPrompt = buildPrompt(intent);
 
     const messages = [
       { role: "system", content: systemPrompt },
@@ -64,8 +70,11 @@ CTA:
     ];
 
     // ==========================
-    // ⚡ GROQ API (OPTIMIZADO)
+    // ⚡ REQUEST A GROQ (ROBUSTO)
     // ==========================
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
     const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -75,16 +84,20 @@ CTA:
       body: JSON.stringify({
         model: "llama-3.1-8b-instant",
         messages,
-        temperature: 0.7,
-        max_tokens: 500
-      })
+        temperature: 0.6,
+        max_tokens: 400
+      }),
+      signal: controller.signal
     });
 
-    const data = await groqRes.json();
+    clearTimeout(timeout);
 
     if (!groqRes.ok) {
-      throw new Error("Error en Groq API");
+      const err = await groqRes.text();
+      throw new Error(`Groq error: ${err}`);
     }
+
+    const data = await groqRes.json();
 
     let reply = data?.choices?.[0]?.message?.content;
 
@@ -93,61 +106,105 @@ CTA:
     // ==========================
     reply = optimizeForConversion(reply, intent);
 
+    // ==========================
+    // LOGS PRO
+    // ==========================
+    console.log("CHAT:", {
+      ip,
+      intent,
+      message,
+      reply: reply?.slice(0, 80)
+    });
+
     return res.status(200).json({ reply });
 
   } catch (error) {
 
-    console.error("❌ ERROR:", error);
+    console.error("❌ ERROR CHAT:", error);
 
     return res.status(500).json({
-      reply: "⚠️ Ha habido un problema. Si quieres, cuéntame tu proyecto y te respondo manualmente."
+      reply: "⚠️ Algo ha fallado. Si quieres, cuéntame tu proyecto y te respondo personalmente."
     });
   }
 }
 
 
 // ==========================
-// 🧠 DETECTAR INTENCIÓN
+// 🧠 PROMPT DINÁMICO
+// ==========================
+function buildPrompt(intent) {
+
+  const base = `
+Eres Vinicius Bugarin, desarrollador web especializado en:
+
+- Automatización de procesos
+- Herramientas digitales
+- SEO técnico
+- Webs orientadas a conversión
+
+OBJETIVO:
+Convertir visitantes en clientes.
+
+REGLAS:
+- Respuestas claras y directas
+- Nada genérico
+- Orientado a negocio
+- Máximo 5 líneas
+`;
+
+  const intentPrompts = {
+    price: "El usuario quiere precio. Sé claro pero invita a explicar su proyecto.",
+    web: "El usuario quiere una web. Explica valor + invita a contacto.",
+    automation: "El usuario quiere automatizar. Destaca ahorro de tiempo.",
+    seo: "El usuario quiere posicionar. Explica impacto en negocio.",
+    lead: "El usuario está interesado. Cierra conversación hacia contacto.",
+    general: "Responde útil y lleva a conversación."
+  };
+
+  return base + "\n" + (intentPrompts[intent] || intentPrompts.general);
+}
+
+
+// ==========================
+// 🧠 DETECTAR INTENCIÓN (MEJORADO)
 // ==========================
 function detectIntent(text) {
 
   const t = text.toLowerCase();
 
-  if (t.includes("precio") || t.includes("cuánto cuesta")) return "price";
-  if (t.includes("web") || t.includes("pagina")) return "web";
-  if (t.includes("automat")) return "automation";
-  if (t.includes("seo")) return "seo";
-  if (t.includes("proyecto") || t.includes("trabajar")) return "lead";
+  if (/precio|cu[aá]nto cuesta|coste/.test(t)) return "price";
+  if (/web|p[aá]gina|sitio/.test(t)) return "web";
+  if (/automat|bot|proceso/.test(t)) return "automation";
+  if (/seo|google|posicionar/.test(t)) return "seo";
+  if (/proyecto|trabajar|contratar/.test(t)) return "lead";
 
   return "general";
 }
 
 
 // ==========================
-// 💰 MEJORAR RESPUESTA PARA CONVERSIÓN
+// 🛡️ SANITIZE (SEGURIDAD)
+// ==========================
+function sanitize(text) {
+  return text.replace(/[<>]/g, "").trim();
+}
+
+
+// ==========================
+// 💰 CONVERSIÓN (MEJORADO)
 // ==========================
 function optimizeForConversion(reply, intent) {
 
-  if (!reply) return "Cuéntame un poco más sobre lo que necesitas.";
+  if (!reply) return "Cuéntame qué necesitas y te ayudo.";
 
-  switch (intent) {
+  const ctas = {
+    price: "💡 Cuéntame tu idea y te doy un presupuesto real.",
+    web: "🚀 Puedo ayudarte a crearla. ¿Qué necesitas exactamente?",
+    automation: "⚙️ Dime tu proceso y te propongo automatización.",
+    seo: "📈 Si quieres posicionar, puedo ayudarte. ¿Qué buscas?",
+    lead: "👉 Cuéntame tu proyecto y vemos cómo hacerlo.",
+    general: "👉 Si quieres, cuéntame tu idea y lo vemos."
+  };
 
-    case "price":
-      return reply + "\n\n💡 Si quieres, dime qué tipo de web necesitas y te doy un presupuesto aproximado.";
-
-    case "web":
-      return reply + "\n\n🚀 Puedo ayudarte a crear una web optimizada para clientes. ¿Qué tipo de proyecto tienes en mente?";
-
-    case "automation":
-      return reply + "\n\n⚙️ La automatización puede ahorrarte mucho tiempo. Cuéntame tu caso y te propongo solución.";
-
-    case "seo":
-      return reply + "\n\n📈 Si quieres posicionar en Google, puedo ayudarte desde el desarrollo. ¿Qué objetivo tienes?";
-
-    case "lead":
-      return reply + "\n\n👉 Cuéntame tu proyecto y te digo cómo lo haría.";
-
-    default:
-      return reply + "\n\n👉 Si quieres, cuéntame tu idea y te ayudo a convertirla en algo real.";
-  }
+  return `${reply}\n\n${ctas[intent] || ctas.general}`;
 }

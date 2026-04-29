@@ -7,11 +7,9 @@
 
 <title>Desarrollador Web en Barcelona | Automatización y Apps | Vinicius Bugarin</title>
 
-<meta name="description" content="Desarrollador web en Barcelona especializado en automatización, herramientas digitales y aplicaciones web que generan clientes.">
-<meta name="keywords" content="desarrollador web Barcelona, automatización procesos, aplicaciones web, simuladores online">
-<meta name="author" content="Vinicius Bugarin">
+<!-- SEO CORE -->
+<meta name="description" content="Desarrollador web en Barcelona especializado en automatización, aplicaciones web y herramientas digitales que generan clientes.">
 <meta name="robots" content="index, follow">
-
 <link rel="canonical" href="https://viniciusbugarin.github.io">
 
 <!-- BRAND -->
@@ -42,9 +40,9 @@
 <link rel="stylesheet" href="styles/main.css">
 <link rel="stylesheet" href="styles/navbar.css">
 <link rel="stylesheet" href="styles/footer.css">
-<link rel="stylesheet" href="styles/chatbot.css">
+<link rel="stylesheet" href="styles/animations.css">
 
-<!-- SCHEMA ULTRA PRO -->
+<!-- 🔥 SCHEMA PRO (MUY IMPORTANTE PARA SEO) -->
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -52,16 +50,13 @@
  "name": "Vinicius Bugarin",
  "url": "https://viniciusbugarin.github.io",
  "image": "https://viniciusbugarin.github.io/images/VB.png",
- "description": "Desarrollador web en Barcelona especializado en automatización, SEO y herramientas digitales.",
+ "description": "Desarrollador web en Barcelona especializado en automatización, SEO y aplicaciones web.",
  "areaServed": {
    "@type": "Place",
    "name": "Barcelona"
  },
- "knowsAbout": [
-   "Desarrollo Web",
-   "SEO Técnico",
-   "Automatización",
-   "Aplicaciones Web"
+ "sameAs": [
+   "https://github.com/viniciusbugarin"
  ]
 }
 </script>
@@ -76,8 +71,8 @@
 
 <main>
 
-<!-- HERO -->
-<section class="hero">
+<!-- HERO (CONVERSIÓN PRO) -->
+<section class="hero reveal">
 
   <div class="hero-content">
 
@@ -107,7 +102,7 @@
 </section>
 
 <!-- PROYECTOS -->
-<section id="projects" class="section">
+<section id="projects" class="section reveal">
 
   <h2>Proyectos desarrollados</h2>
 
@@ -115,24 +110,24 @@
     Herramientas digitales diseñadas para resolver problemas reales
   </p>
 
-  <div class="projects-grid"></div>
+  <div class="projects-grid stagger"></div>
 
 </section>
 
-<!-- SERVICIOS (SEO INTERNO) -->
-<section class="section">
+<!-- SERVICIOS SEO -->
+<section class="section reveal">
 
   <h2>Servicios de desarrollo web</h2>
 
-  <div class="projects-grid">
+  <div class="projects-grid stagger">
 
-    <div class="card">
+    <div class="card hover-lift">
       <h3>Desarrollador web en Barcelona</h3>
       <p>Webs optimizadas para posicionar y generar clientes.</p>
       <a href="pages/desarrollador-web-barcelona.html" class="btn secondary">Ver servicio</a>
     </div>
 
-    <div class="card">
+    <div class="card hover-lift">
       <h3>Desarrollador web freelance</h3>
       <p>Soluciones digitales a medida para negocios.</p>
       <a href="pages/desarrollador-web-freelance.html" class="btn secondary">Ver servicio</a>
@@ -142,12 +137,12 @@
 
 </section>
 
-<!-- RESULTADOS (CLAVE CONVERSIÓN) -->
-<section class="section dark">
+<!-- RESULTADOS (MUY IMPORTANTE PARA CONVERSIÓN) -->
+<section class="section dark reveal">
 
   <h2>Resultados reales</h2>
 
-  <div class="value-grid">
+  <div class="value-grid stagger">
 
     <div class="value-card">
       <h3>+100 usuarios</h3>
@@ -169,7 +164,7 @@
 </section>
 
 <!-- SOBRE MI -->
-<section class="section">
+<section class="section reveal">
 
   <h2>Sobre mí</h2>
 
@@ -180,8 +175,8 @@
 
 </section>
 
-<!-- CTA -->
-<section class="section">
+<!-- CTA FINAL -->
+<section class="section reveal">
 
   <h2>¿Tienes un proyecto?</h2>
   <p>Transformo ideas en herramientas digitales funcionales.</p>
@@ -191,7 +186,7 @@
 </section>
 
 <!-- CONTACTO -->
-<section id="contact" class="section">
+<section id="contact" class="section reveal">
 
   <h2>Cuéntame tu proyecto</h2>
 
@@ -211,14 +206,25 @@
 
 <div id="footer"></div>
 
-<!-- CHATBOT -->
-<div id="chatbot"></div>
-
 <!-- JS -->
 <script src="components/navbar.js" defer></script>
 <script src="components/footer.js" defer></script>
 <script src="js/projects.js" defer></script>
 <script src="components/chatbot.js" defer></script>
+
+<!-- 🔥 SCROLL ANIMATIONS -->
+<script>
+const reveals = document.querySelectorAll(".reveal");
+
+window.addEventListener("scroll", () => {
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) {
+      el.classList.add("active");
+    }
+  });
+});
+</script>
 
 </body>
 </html>
