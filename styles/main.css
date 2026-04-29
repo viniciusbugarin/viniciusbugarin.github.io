@@ -435,7 +435,9 @@ textarea:focus {
   }
 
   #chatbot-widget {
-    right: 10px;
-    bottom: 10px;
-  }
+  position: fixed !important;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+}
 }
