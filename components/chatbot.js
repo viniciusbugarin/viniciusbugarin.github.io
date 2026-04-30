@@ -4,9 +4,43 @@
 const CHAT_CONFIG = {
   API_URL: "https://viniciusbugarin-github-io.vercel.app/api/chat",
   STORAGE_KEY: "vb_chat_ultra",
-  TIMEOUT: 10000,
   AUTO_OPEN_DELAY: 5000
 };
+
+// ==========================
+// LOCALE + €
+// ==========================
+const USER_LOCALE = navigator.language || "es-ES";
+
+function formatPrice(amount) {
+  return new Intl.NumberFormat(USER_LOCALE, {
+    style: "currency",
+    currency: "EUR"
+  }).format(amount);
+}
+
+// ==========================
+// LEAD SYSTEM (🔥 CLAVE)
+// ==========================
+let lead = {
+  need: null,
+  budget: 0,
+  urgency: null,
+  contact: null,
+  score: 0
+};
+
+function scoreLead() {
+  let score = 0;
+
+  if (lead.budget >= 1500) score += 3;
+  if (lead.need === "web") score += 2;
+  if (lead.urgency === "urgente") score += 2;
+  if (lead.contact) score += 3;
+
+  lead.score = score;
+  console.log("LEAD SCORE:", score);
+}
 
 // ==========================
 // INIT SAFE
@@ -18,16 +52,11 @@ if (!window.__VB_CHAT_INIT__) {
 
 function initChatbot() {
 
-  // ==========================
-  // INJECT HTML
-  // ==========================
   if (document.getElementById("vb-chatbot")) return;
 
   document.body.insertAdjacentHTML("beforeend", `
     <div id="vb-chatbot">
-
-      <div id="chatContainer" >
-
+      <div id="chatContainer">
         <div id="chatHeader">
           <div class="chat-user">
             <span class="avatar">VB</span>
@@ -46,16 +75,12 @@ function initChatbot() {
           <input id="chatInput" placeholder="Escribe tu mensaje..." />
           <button id="sendBtn">➤</button>
         </div>
-
       </div>
 
       <button id="chatToggle">💬</button>
     </div>
   `);
 
-  // ==========================
-  // ELEMENTOS
-  // ==========================
   const el = {
     toggle: document.getElementById("chatToggle"),
     close: document.getElementById("chatClose"),
@@ -68,42 +93,23 @@ function initChatbot() {
 
   let isOpen = false;
 
-  // ==========================
-  // TOGGLE FIX REAL
-  // ==========================
- function openChat() {
-  isOpen = true;
+  function openChat() {
+    isOpen = true;
+    el.container.classList.add("active");
+    el.toggle.textContent = "✕";
+    document.body.style.overflow = "hidden";
+    focusInput();
+  }
 
-  el.container.classList.add("active");   // 🔥 clave
-  el.toggle.textContent = "✕";
-
-  document.body.style.overflow = "hidden";
-  focusInput();
-}
-
-function closeChat() {
-  isOpen = false;
-
-  el.container.classList.remove("active"); // 🔥 clave
-  el.toggle.textContent = "💬";
-
-  document.body.style.overflow = "";
-}
+  function closeChat() {
+    isOpen = false;
+    el.container.classList.remove("active");
+    el.toggle.textContent = "💬";
+    document.body.style.overflow = "";
+  }
 
   el.toggle.onclick = () => isOpen ? closeChat() : openChat();
   el.close.onclick = closeChat;
-
-  // ==========================
-  // STORAGE
-  // ==========================
-  function saveChat() {
-    localStorage.setItem(CHAT_CONFIG.STORAGE_KEY, el.messages.innerHTML);
-  }
-
-  function loadChat() {
-    const saved = localStorage.getItem(CHAT_CONFIG.STORAGE_KEY);
-    if (saved) el.messages.innerHTML = saved;
-  }
 
   // ==========================
   // MENSAJES
@@ -121,26 +127,6 @@ function closeChat() {
 
     el.messages.appendChild(div);
     scrollBottom();
-    saveChat();
-  }
-
-  // ==========================
-  // DETECT EMAIL (🔥 NEGOCIO)
-  // ==========================
-  function detectEmail(text) {
-    const emailRegex = /\S+@\S+\.\S+/;
-    return emailRegex.test(text);
-  }
-
-  function handleLead(text) {
-    if (detectEmail(text)) {
-      addMessage("🔥 Perfecto. Te contacto en breve.", "bot");
-
-      console.log("LEAD CAPTURADO:", text);
-
-      // Aquí puedes enviar a:
-      // webhook / email / CRM
-    }
   }
 
   // ==========================
@@ -164,53 +150,80 @@ function closeChat() {
   }
 
   // ==========================
-  // FLOW CONVERSIÓN
+  // FLOW PRO (VENTAS 🔥)
+// ==========================
+function startFlow() {
+  addMessage("👋 Soy Vinicius.\n\nTe ayudo a conseguir clientes con webs y automatización.");
+
+  showOptions([
+    { label: "Quiero más clientes", action: () => stepNeed("web") },
+    { label: "Automatizar negocio", action: () => stepNeed("automation") },
+    { label: "Mejorar SEO", action: () => stepNeed("seo") }
+  ]);
+}
+
+function stepNeed(type) {
+  lead.need = type;
+
+  addMessage("¿Qué presupuesto tienes?");
+
+  showOptions([
+    { label: `Menos de ${formatPrice(500)}`, action: () => stepBudget(500) },
+    { label: `${formatPrice(500)} - ${formatPrice(1500)}`, action: () => stepBudget(1500) },
+    { label: `Más de ${formatPrice(1500)}`, action: () => stepBudget(2000) }
+  ]);
+}
+
+function stepBudget(amount) {
+  lead.budget = amount;
+
+  addMessage("¿Para cuándo lo necesitas?");
+
+  showOptions([
+    { label: "Urgente", action: () => stepUrgency("urgente") },
+    { label: "Este mes", action: () => stepUrgency("media") },
+    { label: "Sin prisa", action: () => stepUrgency("baja") }
+  ]);
+}
+
+function stepUrgency(u) {
+  lead.urgency = u;
+
+  scoreLead();
+  closeSale();
+}
+
+function closeSale() {
+
+  if (lead.score >= 6) {
+    addMessage(
+      "🔥 Esto tiene muy buena pinta.\n\n👉 Déjame tu email o WhatsApp y te explico cómo lo haría paso a paso."
+    );
+  } else {
+    addMessage(
+      "👌 Cuéntame tu caso y te doy una solución clara."
+    );
+  }
+}
+
   // ==========================
-  function startFlow() {
-    addMessage("Hola 👋 Soy Vinicius.\n\n¿Quieres conseguir más clientes o automatizar tu negocio?");
+  // LEADS
+  // ==========================
+  function handleLead(text) {
+    const emailRegex = /\S+@\S+\.\S+/;
+    const phoneRegex = /[0-9]{9}/;
 
-    showOptions([
-      { label: "Quiero clientes", action: stepWeb },
-      { label: "Automatizar procesos", action: stepAutomation },
-      { label: "Mejorar SEO", action: stepSEO }
-    ]);
-  }
+    if (emailRegex.test(text) || phoneRegex.test(text)) {
 
-  function stepWeb() {
-    addMessage("Perfecto. ¿Qué necesitas?");
-    showOptions([
-      { label: "Web para negocio", action: askBudget },
-      { label: "Landing page", action: askBudget }
-    ]);
-  }
+      lead.contact = text;
+      scoreLead();
 
-  function stepAutomation() {
-    addMessage("Genial. ¿Qué quieres automatizar?");
-    showOptions([
-      { label: "Procesos", action: askBudget },
-      { label: "Clientes", action: askBudget }
-    ]);
-  }
+      addMessage("🔥 Perfecto. Te contacto en breve.");
 
-  function stepSEO() {
-    addMessage("Perfecto. ¿Qué quieres mejorar?");
-    showOptions([
-      { label: "Google", action: askBudget },
-      { label: "Clientes", action: askBudget }
-    ]);
-  }
+      console.log("LEAD REAL:", lead);
 
-  function askBudget() {
-    addMessage("¿Qué presupuesto tienes?");
-    showOptions([
-      { label: "< 500€", action: finalCTA },
-      { label: "500€ - 1500€", action: finalCTA },
-      { label: "+1500€", action: finalCTA }
-    ]);
-  }
-
-  function finalCTA() {
-    addMessage("👉 Déjame tu email y te digo exactamente cómo lo haría.");
+      // 👉 aquí conectas webhook si quieres
+    }
   }
 
   // ==========================
@@ -233,7 +246,6 @@ function closeChat() {
       });
 
       const data = await res.json();
-
       addMessage(data.reply || "No he podido responder.");
 
     } catch {
@@ -251,7 +263,7 @@ function closeChat() {
   });
 
   // ==========================
-  // AUTO OPEN (VENTAS)
+  // AUTO OPEN
   // ==========================
   setTimeout(() => {
     if (!localStorage.getItem("vb_seen")) {
@@ -279,9 +291,5 @@ function closeChat() {
   // ==========================
   // INIT
   // ==========================
-  loadChat();
-
-  if (!el.messages.innerHTML) {
-    startFlow();
-  }
+  startFlow();
 }
