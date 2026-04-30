@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <!-- CONTACTO -->
         <div class="footer-contact">
           <h4>Contacto</h4>
-          <p>Email: contacto@viniciusbugarin.com</p>
+          <p>Email: viniciusbugarin@gmail.com</p>
           <p>Barcelona, España</p>
 
           <a href="#contact" class="btn primary small">
