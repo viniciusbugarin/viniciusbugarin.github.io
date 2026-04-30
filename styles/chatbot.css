@@ -28,14 +28,21 @@
   margin-bottom: 10px;
   border: 1px solid rgba(255,255,255,0.1);
   overflow: hidden;
-} 
 
-#chatContainer:not(.hidden) {
+  /* 🔥 estado oculto */
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+
+  transition: all 0.3s ease;
+}
+
+/* 🔥 estado visible */
+#chatContainer.active {
   transform: translateY(0) scale(1);
   opacity: 1;
   pointer-events: auto;
 }
-
 /* HEADER */
 #chatHeader {
   display: flex;

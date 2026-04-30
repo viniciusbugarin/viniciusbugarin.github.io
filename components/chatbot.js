@@ -91,19 +91,14 @@ function toggleChat() {
 }
 
 function openChat() {
-  el.container.classList.remove("hidden");
-  el.toggle.classList.add("active");
-
+  el.container.classList.add("active");
+  el.toggle.textContent = "✕";
   document.body.style.overflow = "hidden";
-  focusInput();
-
-  trackEvent("chat_open");
 }
 
 function closeChat() {
-  el.container.classList.add("hidden");
-  el.toggle.classList.remove("active");
-
+  el.container.classList.remove("active");
+  el.toggle.textContent = "💬";
   document.body.style.overflow = "";
 }
   // ==========================
