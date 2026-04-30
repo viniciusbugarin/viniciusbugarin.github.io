@@ -1,10 +1,18 @@
 // ==========================
-// CONFIG PRO
+// CONFIG
 // ==========================
 const CHAT_CONFIG = {
   API_URL: "https://viniciusbugarin-github-io.vercel.app/api/chat",
-  STORAGE_KEY: "vb_chat_v3",
+  STORAGE_KEY: "vb_chat_pro",
   TIMEOUT: 10000
+};
+
+// ==========================
+// STATE (CLAVE PRO)
+// ==========================
+let chatState = {
+  step: "start",
+  data: {}
 };
 
 // ==========================
@@ -14,29 +22,31 @@ document.addEventListener("DOMContentLoaded", initChatbot);
 
 function initChatbot() {
 
-  // evitar duplicados
-  if (document.getElementById("chatbot-widget")) return;
-
   // ==========================
-  // HTML PRO (CON QUICK ACTIONS)
+  // HTML (FLOAT REAL)
   // ==========================
   const html = `
-    <div id="chatbot-widget">
+    <div id="vb-chatbot">
 
       <div id="chatContainer" class="hidden">
 
         <div id="chatHeader">
-          <span>Asistente experto</span>
+          <div class="chat-user">
+            <span class="avatar">VB</span>
+            <div>
+              <strong>Vinicius</strong>
+              <span class="status">Online</span>
+            </div>
+          </div>
           <button id="chatClose">✕</button>
         </div>
 
         <div id="chatMessages"></div>
 
-        <!-- QUICK ACTIONS -->
-        <div id="quickActions" class="quick-actions"></div>
+        <div id="chatOptions" class="chat-options"></div>
 
         <div class="chat-input">
-          <input id="chatInput" placeholder="Cuéntame tu proyecto..." />
+          <input id="chatInput" placeholder="Escribe tu mensaje..." />
           <button id="sendBtn">➤</button>
         </div>
 
@@ -59,46 +69,33 @@ function initChatbot() {
     messages: document.getElementById("chatMessages"),
     input: document.getElementById("chatInput"),
     send: document.getElementById("sendBtn"),
-    quick: document.getElementById("quickActions")
+    options: document.getElementById("chatOptions")
   };
-
-  let isOpen = false;
 
   // ==========================
   // TOGGLE
   // ==========================
-  el.toggle.onclick = () => {
-    isOpen = true;
+  el.toggle.onclick = () => openChat();
+  el.close.onclick = () => closeChat();
+
+  function openChat() {
     el.container.classList.remove("hidden");
     el.toggle.style.display = "none";
+    document.body.style.overflow = "hidden";
     focusInput();
-  };
+    trackEvent("chat_open");
+  }
 
-  el.close.onclick = () => {
-    isOpen = false;
+  function closeChat() {
     el.container.classList.add("hidden");
     el.toggle.style.display = "block";
-  };
-
-  // ==========================
-  // QUICK ACTIONS (CLAVE VENTAS)
-  // ==========================
-  function renderQuickActions(options = []) {
-    el.quick.innerHTML = "";
-
-    options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.className = "quick-btn";
-      btn.textContent = opt;
-      btn.onclick = () => sendMessage(opt);
-      el.quick.appendChild(btn);
-    });
+    document.body.style.overflow = "";
   }
 
   // ==========================
-  // MENSAJE
+  // MENSAJES
   // ==========================
-  function addMessage(text, type) {
+  function addMessage(text, type = "bot") {
     const div = document.createElement("div");
     div.className = `msg ${type}`;
 
@@ -111,135 +108,122 @@ function initChatbot() {
 
     el.messages.appendChild(div);
     scrollBottom();
-    return div;
   }
 
   // ==========================
-  // TYPING
+  // OPCIONES (VENTAS 🔥)
   // ==========================
-  function addTyping() {
-    const div = document.createElement("div");
-    div.className = "msg bot typing";
+  function showOptions(options) {
+    el.options.innerHTML = "";
 
-    div.innerHTML = `
-      <div class="bubble">
-        <span></span><span></span><span></span>
-      </div>
-    `;
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.textContent = opt.label;
 
-    el.messages.appendChild(div);
-    scrollBottom();
-    return div;
+      btn.onclick = () => {
+        addMessage(opt.label, "user");
+        el.options.innerHTML = "";
+        opt.action();
+      };
+
+      el.options.appendChild(btn);
+    });
   }
 
   // ==========================
-  // SEND (ULTRA PRO)
+  // FLUJO CONVERSACIONAL
   // ==========================
-  async function sendMessage(customText = null) {
+  function startFlow() {
+    addMessage("Hola 👋 Soy Vinicius.\n\n¿En qué puedo ayudarte?");
+    
+    showOptions([
+      { label: "Crear una web", action: () => stepWeb() },
+      { label: "Automatizar procesos", action: () => stepAutomation() },
+      { label: "Mejorar SEO", action: () => stepSEO() }
+    ]);
+  }
 
-    const text = customText || el.input.value.trim();
+  function stepWeb() {
+    chatState.step = "web";
+
+    addMessage("Perfecto. ¿Qué tipo de web necesitas?");
+
+    showOptions([
+      { label: "Web para negocio", action: () => askBudget() },
+      { label: "Landing page", action: () => askBudget() },
+      { label: "Aplicación web", action: () => askBudget() }
+    ]);
+  }
+
+  function stepAutomation() {
+    chatState.step = "automation";
+
+    addMessage("Genial. La automatización puede ahorrarte mucho tiempo.\n\n¿Qué quieres automatizar?");
+
+    showOptions([
+      { label: "Procesos internos", action: () => askBudget() },
+      { label: "Captación de clientes", action: () => askBudget() },
+      { label: "Otro", action: () => askBudget() }
+    ]);
+  }
+
+  function stepSEO() {
+    chatState.step = "seo";
+
+    addMessage("Perfecto. ¿Qué buscas mejorar?");
+
+    showOptions([
+      { label: "Posicionamiento en Google", action: () => askBudget() },
+      { label: "Más clientes", action: () => askBudget() }
+    ]);
+  }
+
+  function askBudget() {
+    chatState.step = "budget";
+
+    addMessage("Para orientarte mejor, ¿qué presupuesto tienes en mente?");
+
+    showOptions([
+      { label: "Menos de 500€", action: () => finalCTA() },
+      { label: "500€ - 1500€", action: () => finalCTA() },
+      { label: "+1500€", action: () => finalCTA() }
+    ]);
+  }
+
+  function finalCTA() {
+    chatState.step = "end";
+
+    addMessage("Perfecto 👌\n\nPuedo ayudarte a crear una solución adaptada a lo que necesitas.\n\n👉 Cuéntame tu proyecto y te digo exactamente cómo lo haría.");
+
+    trackEvent("chat_lead");
+  }
+
+  // ==========================
+  // SEND (IA OPCIONAL)
+  // ==========================
+  async function sendMessage() {
+    const text = el.input.value.trim();
     if (!text) return;
 
     addMessage(text, "user");
     el.input.value = "";
 
-    const typing = addTyping();
+    trackEvent("chat_message");
 
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), CHAT_CONFIG.TIMEOUT);
-
       const res = await fetch(CHAT_CONFIG.API_URL, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ message: text }),
-        signal: controller.signal
+        body: JSON.stringify({ message: text })
       });
 
-      clearTimeout(timeout);
-
       const data = await res.json();
-      typing.remove();
 
-      await simulateTyping(data.reply);
-
-      // 🔥 lógica vendedor
-      handleSalesFlow(text);
+      addMessage(data.reply || "No he podido responder.");
 
     } catch {
-      typing.remove();
-      addMessage("⚠️ Error de conexión.", "bot");
+      addMessage("⚠️ Error de conexión.");
     }
-
-    saveChat();
-  }
-
-  // ==========================
-  // SALES FLOW (🔥 CLAVE)
-  // ==========================
-  function handleSalesFlow(text) {
-    const t = text.toLowerCase();
-
-    if (t.includes("precio") || t.includes("cuánto")) {
-      renderQuickActions([
-        "Web básica",
-        "Tienda online",
-        "Automatización"
-      ]);
-    }
-
-    else if (t.includes("web")) {
-      renderQuickActions([
-        "Landing page",
-        "Web empresa",
-        "Aplicación web"
-      ]);
-    }
-
-    else if (t.includes("automat")) {
-      renderQuickActions([
-        "Automatizar clientes",
-        "Automatizar tareas",
-        "Integrar sistemas"
-      ]);
-    }
-
-    else {
-      renderQuickActions([
-        "Quiero una web",
-        "Necesito automatizar",
-        "Ver precios"
-      ]);
-    }
-  }
-
-  // ==========================
-  // TYPING REALISTA
-  // ==========================
-  async function simulateTyping(text) {
-    const div = addMessage("", "bot");
-    const bubble = div.querySelector(".bubble");
-
-    for (let i = 0; i < text.length; i++) {
-      bubble.innerHTML =
-        text.substring(0, i + 1) +
-        `<span class="time">${getTime()}</span>`;
-      await delay(10 + Math.random() * 20);
-    }
-  }
-
-  const delay = ms => new Promise(r => setTimeout(r, ms));
-
-  // ==========================
-  // STORAGE
-  // ==========================
-  function saveChat() {
-    localStorage.setItem(CHAT_CONFIG.STORAGE_KEY, el.messages.innerHTML);
-  }
-
-  function loadChat() {
-    const saved = localStorage.getItem(CHAT_CONFIG.STORAGE_KEY);
-    if (saved) el.messages.innerHTML = saved;
   }
 
   // ==========================
@@ -254,39 +238,27 @@ function initChatbot() {
   }
 
   function getTime() {
-    return new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+    return new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+  }
+
+  function trackEvent(name) {
+    console.log("EVENT:", name);
   }
 
   // ==========================
   // EVENTS
   // ==========================
-  el.send.onclick = () => sendMessage();
+  el.send.onclick = sendMessage;
 
   el.input.addEventListener("keydown", e => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
     }
   });
 
   // ==========================
-  // INIT
+  // INIT FLOW
   // ==========================
-  loadChat();
-
-  if (!el.messages.innerHTML) {
-    addMessage(
-      "Hola 👋 ¿Quieres una web o automatizar tu negocio?",
-      "bot"
-    );
-
-    renderQuickActions([
-      "Quiero una web",
-      "Necesito automatizar",
-      "Ver precios"
-    ]);
-  }
+  startFlow();
 }
