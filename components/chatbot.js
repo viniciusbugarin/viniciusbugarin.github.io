@@ -3,29 +3,27 @@
 // ==========================
 const CHAT_CONFIG = {
   API_URL: "https://viniciusbugarin-github-io.vercel.app/api/chat",
-  STORAGE_KEY: "vb_chat_pro",
-  TIMEOUT: 10000
+  STORAGE_KEY: "vb_chat_ultra",
+  TIMEOUT: 10000,
+  AUTO_OPEN_DELAY: 5000
 };
 
 // ==========================
-// STATE (CLAVE PRO)
+// INIT SAFE
 // ==========================
-let chatState = {
-  step: "start",
-  data: {}
-};
-
-// ==========================
-// INIT
-// ==========================
-document.addEventListener("DOMContentLoaded", initChatbot);
+if (!window.__VB_CHAT_INIT__) {
+  window.__VB_CHAT_INIT__ = true;
+  document.addEventListener("DOMContentLoaded", initChatbot);
+}
 
 function initChatbot() {
 
   // ==========================
-  // HTML (FLOAT REAL)
+  // INJECT HTML
   // ==========================
-  const html = `
+  if (document.getElementById("vb-chatbot")) return;
+
+  document.body.insertAdjacentHTML("beforeend", `
     <div id="vb-chatbot">
 
       <div id="chatContainer" class="hidden">
@@ -42,7 +40,6 @@ function initChatbot() {
         </div>
 
         <div id="chatMessages"></div>
-
         <div id="chatOptions" class="chat-options"></div>
 
         <div class="chat-input">
@@ -53,11 +50,8 @@ function initChatbot() {
       </div>
 
       <button id="chatToggle">💬</button>
-
     </div>
-  `;
-
-  document.body.insertAdjacentHTML("beforeend", html);
+  `);
 
   // ==========================
   // ELEMENTOS
@@ -72,35 +66,41 @@ function initChatbot() {
     options: document.getElementById("chatOptions")
   };
 
-  // ==========================
-  // TOGGLE
-  // ==========================
   let isOpen = false;
 
-el.toggle.addEventListener("click", toggleChat);
-el.close.addEventListener("click", toggleChat);
-
-function toggleChat() {
-  isOpen = !isOpen;
-
-  if (isOpen) {
-    openChat();
-  } else {
-    closeChat();
+  // ==========================
+  // TOGGLE FIX REAL
+  // ==========================
+  function openChat() {
+    isOpen = true;
+    el.container.classList.remove("hidden");
+    el.toggle.textContent = "✕";
+    document.body.style.overflow = "hidden";
+    focusInput();
   }
-}
 
-function openChat() {
-  el.container.classList.add("active");
-  el.toggle.textContent = "✕";
-  document.body.style.overflow = "hidden";
-}
+  function closeChat() {
+    isOpen = false;
+    el.container.classList.add("hidden");
+    el.toggle.textContent = "💬";
+    document.body.style.overflow = "";
+  }
 
-function closeChat() {
-  el.container.classList.remove("active");
-  el.toggle.textContent = "💬";
-  document.body.style.overflow = "";
-}
+  el.toggle.onclick = () => isOpen ? closeChat() : openChat();
+  el.close.onclick = closeChat;
+
+  // ==========================
+  // STORAGE
+  // ==========================
+  function saveChat() {
+    localStorage.setItem(CHAT_CONFIG.STORAGE_KEY, el.messages.innerHTML);
+  }
+
+  function loadChat() {
+    const saved = localStorage.getItem(CHAT_CONFIG.STORAGE_KEY);
+    if (saved) el.messages.innerHTML = saved;
+  }
+
   // ==========================
   // MENSAJES
   // ==========================
@@ -117,10 +117,30 @@ function closeChat() {
 
     el.messages.appendChild(div);
     scrollBottom();
+    saveChat();
   }
 
   // ==========================
-  // OPCIONES (VENTAS 🔥)
+  // DETECT EMAIL (🔥 NEGOCIO)
+  // ==========================
+  function detectEmail(text) {
+    const emailRegex = /\S+@\S+\.\S+/;
+    return emailRegex.test(text);
+  }
+
+  function handleLead(text) {
+    if (detectEmail(text)) {
+      addMessage("🔥 Perfecto. Te contacto en breve.", "bot");
+
+      console.log("LEAD CAPTURADO:", text);
+
+      // Aquí puedes enviar a:
+      // webhook / email / CRM
+    }
+  }
+
+  // ==========================
+  // OPCIONES
   // ==========================
   function showOptions(options) {
     el.options.innerHTML = "";
@@ -140,75 +160,57 @@ function closeChat() {
   }
 
   // ==========================
-  // FLUJO CONVERSACIONAL
+  // FLOW CONVERSIÓN
   // ==========================
   function startFlow() {
-    addMessage("Hola 👋 Soy Vinicius.\n\n¿En qué puedo ayudarte?");
-    
+    addMessage("Hola 👋 Soy Vinicius.\n\n¿Quieres conseguir más clientes o automatizar tu negocio?");
+
     showOptions([
-      { label: "Crear una web", action: () => stepWeb() },
-      { label: "Automatizar procesos", action: () => stepAutomation() },
-      { label: "Mejorar SEO", action: () => stepSEO() }
+      { label: "Quiero clientes", action: stepWeb },
+      { label: "Automatizar procesos", action: stepAutomation },
+      { label: "Mejorar SEO", action: stepSEO }
     ]);
   }
 
   function stepWeb() {
-    chatState.step = "web";
-
-    addMessage("Perfecto. ¿Qué tipo de web necesitas?");
-
+    addMessage("Perfecto. ¿Qué necesitas?");
     showOptions([
-      { label: "Web para negocio", action: () => askBudget() },
-      { label: "Landing page", action: () => askBudget() },
-      { label: "Aplicación web", action: () => askBudget() }
+      { label: "Web para negocio", action: askBudget },
+      { label: "Landing page", action: askBudget }
     ]);
   }
 
   function stepAutomation() {
-    chatState.step = "automation";
-
-    addMessage("Genial. La automatización puede ahorrarte mucho tiempo.\n\n¿Qué quieres automatizar?");
-
+    addMessage("Genial. ¿Qué quieres automatizar?");
     showOptions([
-      { label: "Procesos internos", action: () => askBudget() },
-      { label: "Captación de clientes", action: () => askBudget() },
-      { label: "Otro", action: () => askBudget() }
+      { label: "Procesos", action: askBudget },
+      { label: "Clientes", action: askBudget }
     ]);
   }
 
   function stepSEO() {
-    chatState.step = "seo";
-
-    addMessage("Perfecto. ¿Qué buscas mejorar?");
-
+    addMessage("Perfecto. ¿Qué quieres mejorar?");
     showOptions([
-      { label: "Posicionamiento en Google", action: () => askBudget() },
-      { label: "Más clientes", action: () => askBudget() }
+      { label: "Google", action: askBudget },
+      { label: "Clientes", action: askBudget }
     ]);
   }
 
   function askBudget() {
-    chatState.step = "budget";
-
-    addMessage("Para orientarte mejor, ¿qué presupuesto tienes en mente?");
-
+    addMessage("¿Qué presupuesto tienes?");
     showOptions([
-      { label: "Menos de 500€", action: () => finalCTA() },
-      { label: "500€ - 1500€", action: () => finalCTA() },
-      { label: "+1500€", action: () => finalCTA() }
+      { label: "< 500€", action: finalCTA },
+      { label: "500€ - 1500€", action: finalCTA },
+      { label: "+1500€", action: finalCTA }
     ]);
   }
 
   function finalCTA() {
-    chatState.step = "end";
-
-    addMessage("Perfecto 👌\n\nPuedo ayudarte a crear una solución adaptada a lo que necesitas.\n\n👉 Cuéntame tu proyecto y te digo exactamente cómo lo haría.");
-
-    trackEvent("chat_lead");
+    addMessage("👉 Déjame tu email y te digo exactamente cómo lo haría.");
   }
 
   // ==========================
-  // SEND (IA OPCIONAL)
+  // SEND
   // ==========================
   async function sendMessage() {
     const text = el.input.value.trim();
@@ -217,7 +219,7 @@ function closeChat() {
     addMessage(text, "user");
     el.input.value = "";
 
-    trackEvent("chat_message");
+    handleLead(text);
 
     try {
       const res = await fetch(CHAT_CONFIG.API_URL, {
@@ -235,6 +237,26 @@ function closeChat() {
     }
   }
 
+  el.send.onclick = sendMessage;
+
+  el.input.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // ==========================
+  // AUTO OPEN (VENTAS)
+  // ==========================
+  setTimeout(() => {
+    if (!localStorage.getItem("vb_seen")) {
+      openChat();
+      addMessage("👋 ¿Estás buscando una web o automatizar algo?");
+      localStorage.setItem("vb_seen", "true");
+    }
+  }, CHAT_CONFIG.AUTO_OPEN_DELAY);
+
   // ==========================
   // HELPERS
   // ==========================
@@ -250,24 +272,12 @@ function closeChat() {
     return new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
   }
 
-  function trackEvent(name) {
-    console.log("EVENT:", name);
+  // ==========================
+  // INIT
+  // ==========================
+  loadChat();
+
+  if (!el.messages.innerHTML) {
+    startFlow();
   }
-
-  // ==========================
-  // EVENTS
-  // ==========================
-  el.send.onclick = sendMessage;
-
-  el.input.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  // ==========================
-  // INIT FLOW
-  // ==========================
-  startFlow();
 }
