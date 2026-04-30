@@ -26,7 +26,7 @@ function initChatbot() {
   document.body.insertAdjacentHTML("beforeend", `
     <div id="vb-chatbot">
 
-      <div id="chatContainer" class="hidden">
+      <div id="chatContainer" >
 
         <div id="chatHeader">
           <div class="chat-user">
@@ -71,20 +71,24 @@ function initChatbot() {
   // ==========================
   // TOGGLE FIX REAL
   // ==========================
-  function openChat() {
-    isOpen = true;
-    el.container.classList.remove("hidden");
-    el.toggle.textContent = "✕";
-    document.body.style.overflow = "hidden";
-    focusInput();
-  }
+ function openChat() {
+  isOpen = true;
 
-  function closeChat() {
-    isOpen = false;
-    el.container.classList.add("hidden");
-    el.toggle.textContent = "💬";
-    document.body.style.overflow = "";
-  }
+  el.container.classList.add("active");   // 🔥 clave
+  el.toggle.textContent = "✕";
+
+  document.body.style.overflow = "hidden";
+  focusInput();
+}
+
+function closeChat() {
+  isOpen = false;
+
+  el.container.classList.remove("active"); // 🔥 clave
+  el.toggle.textContent = "💬";
+
+  document.body.style.overflow = "";
+}
 
   el.toggle.onclick = () => isOpen ? closeChat() : openChat();
   el.close.onclick = closeChat;
