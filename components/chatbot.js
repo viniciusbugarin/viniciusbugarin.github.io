@@ -75,23 +75,37 @@ function initChatbot() {
   // ==========================
   // TOGGLE
   // ==========================
-  el.toggle.onclick = () => openChat();
-  el.close.onclick = () => closeChat();
+  let isOpen = false;
 
-  function openChat() {
-    el.container.classList.remove("hidden");
-    el.toggle.style.display = "none";
-    document.body.style.overflow = "hidden";
-    focusInput();
-    trackEvent("chat_open");
+el.toggle.addEventListener("click", toggleChat);
+el.close.addEventListener("click", toggleChat);
+
+function toggleChat() {
+  isOpen = !isOpen;
+
+  if (isOpen) {
+    openChat();
+  } else {
+    closeChat();
   }
+}
 
-  function closeChat() {
-    el.container.classList.add("hidden");
-    el.toggle.style.display = "block";
-    document.body.style.overflow = "";
-  }
+function openChat() {
+  el.container.classList.remove("hidden");
+  el.toggle.classList.add("active");
 
+  document.body.style.overflow = "hidden";
+  focusInput();
+
+  trackEvent("chat_open");
+}
+
+function closeChat() {
+  el.container.classList.add("hidden");
+  el.toggle.classList.remove("active");
+
+  document.body.style.overflow = "";
+}
   // ==========================
   // MENSAJES
   // ==========================
