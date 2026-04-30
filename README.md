@@ -64,7 +64,7 @@ Este portfolio incluye un asistente inteligente que:
 
 ## 📩 Contacto
 
-📧 Email: (añádelo aquí)  
+📧 Email: (viniciusbugarin@gmail.com)  
 🌐 Portfolio: https://viniciusbugarin.github.io  
 
 ---

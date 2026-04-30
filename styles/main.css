@@ -1,7 +1,8 @@
 /* ==========================
-   DESIGN SYSTEM (PRO)
+   DESIGN SYSTEM (ULTRA PRO++)
 ========================== */
 :root {
+
   /* COLORS */
   --bg-main: #020617;
   --bg-secondary: #0f172a;
@@ -16,21 +17,34 @@
 
   --border: rgba(255,255,255,0.08);
 
-  /* UI */
-  --radius: 16px;
-  --radius-sm: 10px;
+  /* TYPO SCALE */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --text-xxl: 48px;
 
-  /* SPACING SYSTEM */
+  /* SPACING */
   --space-xs: 8px;
   --space-sm: 12px;
   --space-md: 20px;
   --space-lg: 40px;
   --space-xl: 80px;
 
+  /* UI */
+  --radius: 16px;
+  --radius-sm: 10px;
+
   /* EFFECTS */
   --transition: 0.3s cubic-bezier(.4,0,.2,1);
   --shadow: 0 10px 30px rgba(0,0,0,0.4);
   --shadow-lg: 0 30px 80px rgba(0,0,0,0.7);
+
+  /* Z-INDEX SYSTEM */
+  --z-navbar: 1000;
+  --z-chat: 2000;
+  --z-modal: 3000;
 }
 
 /* ==========================
@@ -66,7 +80,7 @@ body {
 }
 
 /* ==========================
-   TYPOGRAPHY
+   TYPOGRAPHY SYSTEM
 ========================== */
 h1 {
   font-size: clamp(32px, 5vw, 60px);
@@ -78,16 +92,17 @@ h2 {
 }
 
 h3 {
-  font-size: 20px;
+  font-size: var(--text-lg);
 }
 
 p {
+  font-size: var(--text-md);
   line-height: 1.7;
   color: var(--text-secondary);
 }
 
 /* ==========================
-   LAYOUT SYSTEM (PRO)
+   LAYOUT SYSTEM
 ========================== */
 .container {
   max-width: 1100px;
@@ -104,12 +119,27 @@ p {
   background: var(--bg-secondary);
 }
 
-.section-subtitle {
-  margin-bottom: var(--space-lg);
+/* ==========================
+   FLEX UTILITIES (PRO)
+========================== */
+.flex {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.flex.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
 }
 
 /* ==========================
-   HERO (HIGH CONVERSION)
+   HERO
 ========================== */
 .hero {
   min-height: 100vh;
@@ -121,7 +151,6 @@ p {
   position: relative;
 }
 
-/* Glow animado */
 .hero::before {
   content: "";
   position: absolute;
@@ -130,7 +159,6 @@ p {
   background: radial-gradient(circle, rgba(59,130,246,0.25), transparent);
   filter: blur(140px);
   animation: floatGlow 8s ease-in-out infinite;
-  z-index: 0;
 }
 
 @keyframes floatGlow {
@@ -138,18 +166,15 @@ p {
   50% { transform: translateY(-40px); }
 }
 
-/* Texto gradient */
 .hero h1 {
   background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
   background-size: 200%;
   animation: gradientMove 6s linear infinite;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  z-index: 1;
 }
 
 @keyframes gradientMove {
-  0% { background-position: 0%; }
   100% { background-position: 200%; }
 }
 
@@ -162,10 +187,11 @@ p {
   font-weight: 600;
   text-decoration: none;
   display: inline-block;
-  transition: var(--transition);
   cursor: pointer;
+  transition: var(--transition);
 }
 
+/* primary */
 .btn.primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
@@ -173,10 +199,11 @@ p {
 }
 
 .btn.primary:hover {
-  transform: translateY(-4px) scale(1.05);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
 }
 
+/* secondary */
 .btn.secondary {
   border: 1px solid var(--primary);
   color: var(--primary);
@@ -186,8 +213,13 @@ p {
   background: rgba(59,130,246,0.1);
 }
 
+/* focus (accesibilidad) */
+.btn:focus {
+  outline: 2px solid var(--accent);
+}
+
 /* ==========================
-   GRID SYSTEM
+   GRID
 ========================== */
 .grid {
   display: grid;
@@ -199,7 +231,7 @@ p {
 }
 
 /* ==========================
-   CARD (PREMIUM UI)
+   CARD
 ========================== */
 .card {
   background: var(--bg-glass);
@@ -212,28 +244,13 @@ p {
   overflow: hidden;
 }
 
-/* Glow hover */
-.card::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(59,130,246,0.2), transparent);
-  opacity: 0;
-  transition: 0.4s;
-}
-
-.card:hover::before {
-  opacity: 1;
-}
-
 .card:hover {
   transform: translateY(-10px);
   box-shadow: var(--shadow-lg);
 }
 
 /* ==========================
-   FORM (UX PRO)
+   FORM
 ========================== */
 form {
   max-width: 420px;
@@ -249,24 +266,45 @@ textarea {
   background: #020617;
   color: white;
   margin-bottom: var(--space-sm);
-  transition: var(--transition);
 }
 
 input:focus,
 textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 1px var(--primary);
+  outline: none;
+}
+
+/* ==========================
+   CHATBOT QUICK ACTIONS
+========================== */
+.quick-actions {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+}
+
+.quick-actions button {
+  background: #0f172a;
+  border: 1px solid var(--border);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.quick-actions button:hover {
+  background: var(--primary);
 }
 
 /* ==========================
    UTILITIES
 ========================== */
-.center {
-  text-align: center;
-}
-
 .hidden {
   display: none;
+}
+
+.center {
+  text-align: center;
 }
 
 /* ==========================
