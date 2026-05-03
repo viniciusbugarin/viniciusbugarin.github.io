@@ -8,39 +8,19 @@ const CHAT_CONFIG = {
 };
 
 // ==========================
-// LOCALE + €
+// STATE GLOBAL
 // ==========================
-const USER_LOCALE = navigator.language || "es-ES";
-
-function formatPrice(amount) {
-  return new Intl.NumberFormat(USER_LOCALE, {
-    style: "currency",
-    currency: "EUR"
-  }).format(amount);
-}
-
-// ==========================
-// LEAD SYSTEM (🔥 CLAVE)
-// ==========================
-let lead = {
-  need: null,
-  budget: 0,
-  urgency: null,
-  contact: null,
-  score: 0
+let state = {
+  isOpen: false,
+  step: "start",
+  lead: {
+    need: null,
+    budget: 0,
+    urgency: null,
+    contact: null,
+    score: 0
+  }
 };
-
-function scoreLead() {
-  let score = 0;
-
-  if (lead.budget >= 1500) score += 3;
-  if (lead.need === "web") score += 2;
-  if (lead.urgency === "urgente") score += 2;
-  if (lead.contact) score += 3;
-
-  lead.score = score;
-  console.log("LEAD SCORE:", score);
-}
 
 // ==========================
 // INIT SAFE
@@ -58,21 +38,15 @@ function initChatbot() {
     <div id="vb-chatbot">
       <div id="chatContainer">
         <div id="chatHeader">
-          <div class="chat-user">
-            <span class="avatar">VB</span>
-            <div>
-              <strong>Vinicius</strong>
-              <span class="status">Online</span>
-            </div>
-          </div>
+          <strong>Vinicius</strong>
           <button id="chatClose">✕</button>
         </div>
 
         <div id="chatMessages"></div>
-        <div id="chatOptions" class="chat-options"></div>
+        <div id="chatOptions"></div>
 
         <div class="chat-input">
-          <input id="chatInput" placeholder="Escribe tu mensaje..." />
+          <input id="chatInput" placeholder="Escribe aquí..." />
           <button id="sendBtn">➤</button>
         </div>
       </div>
@@ -91,24 +65,22 @@ function initChatbot() {
     options: document.getElementById("chatOptions")
   };
 
-  let isOpen = false;
-
+  // ==========================
+  // TOGGLE
+  // ==========================
   function openChat() {
-    isOpen = true;
+    state.isOpen = true;
     el.container.classList.add("active");
     el.toggle.textContent = "✕";
-    document.body.style.overflow = "hidden";
-    focusInput();
   }
 
   function closeChat() {
-    isOpen = false;
+    state.isOpen = false;
     el.container.classList.remove("active");
     el.toggle.textContent = "💬";
-    document.body.style.overflow = "";
   }
 
-  el.toggle.onclick = () => isOpen ? closeChat() : openChat();
+  el.toggle.onclick = () => state.isOpen ? closeChat() : openChat();
   el.close.onclick = closeChat;
 
   // ==========================
@@ -117,14 +89,7 @@ function initChatbot() {
   function addMessage(text, type = "bot") {
     const div = document.createElement("div");
     div.className = `msg ${type}`;
-
-    div.innerHTML = `
-      <div class="bubble">
-        ${text}
-        <span class="time">${getTime()}</span>
-      </div>
-    `;
-
+    div.innerHTML = `<div class="bubble">${text}</div>`;
     el.messages.appendChild(div);
     scrollBottom();
   }
@@ -150,84 +115,111 @@ function initChatbot() {
   }
 
   // ==========================
-  // FLOW PRO (VENTAS 🔥)
-// ==========================
-function startFlow() {
-  addMessage("👋 Soy Vinicius.\n\nTe ayudo a conseguir clientes con webs y automatización.");
+  // SCORING
+  // ==========================
+  function scoreLead() {
+    let score = 0;
+    if (state.lead.budget >= 1500) score += 3;
+    if (state.lead.need === "web") score += 2;
+    if (state.lead.urgency === "urgente") score += 2;
+    if (state.lead.contact) score += 3;
 
-  showOptions([
-    { label: "Quiero más clientes", action: () => stepNeed("web") },
-    { label: "Automatizar negocio", action: () => stepNeed("automation") },
-    { label: "Mejorar SEO", action: () => stepNeed("seo") }
-  ]);
-}
-
-function stepNeed(type) {
-  lead.need = type;
-
-  addMessage("¿Qué presupuesto tienes?");
-
-  showOptions([
-    { label: `Menos de ${formatPrice(500)}`, action: () => stepBudget(500) },
-    { label: `${formatPrice(500)} - ${formatPrice(1500)}`, action: () => stepBudget(1500) },
-    { label: `Más de ${formatPrice(1500)}`, action: () => stepBudget(2000) }
-  ]);
-}
-
-function stepBudget(amount) {
-  lead.budget = amount;
-
-  addMessage("¿Para cuándo lo necesitas?");
-
-  showOptions([
-    { label: "Urgente", action: () => stepUrgency("urgente") },
-    { label: "Este mes", action: () => stepUrgency("media") },
-    { label: "Sin prisa", action: () => stepUrgency("baja") }
-  ]);
-}
-
-function stepUrgency(u) {
-  lead.urgency = u;
-
-  scoreLead();
-  closeSale();
-}
-
-function closeSale() {
-
-  if (lead.score >= 6) {
-    addMessage(
-      "🔥 Esto tiene muy buena pinta.\n\n👉 Déjame tu email o WhatsApp y te explico cómo lo haría paso a paso."
-    );
-  } else {
-    addMessage(
-      "👌 Cuéntame tu caso y te doy una solución clara."
-    );
+    state.lead.score = score;
   }
-}
 
   // ==========================
-  // LEADS
+  // FLOW
   // ==========================
-  function handleLead(text) {
-    const emailRegex = /\S+@\S+\.\S+/;
-    const phoneRegex = /[0-9]{9}/;
+  function startFlow() {
+    addMessage("👋 Te ayudo a conseguir clientes con webs y automatización.");
 
-    if (emailRegex.test(text) || phoneRegex.test(text)) {
+    showOptions([
+      { label: "Quiero clientes", action: () => stepNeed("web") },
+      { label: "Automatizar negocio", action: () => stepNeed("automation") },
+      { label: "Mejorar SEO", action: () => stepNeed("seo") }
+    ]);
+  }
 
-      lead.contact = text;
-      scoreLead();
+  function stepNeed(type) {
+    state.lead.need = type;
 
-      addMessage("🔥 Perfecto. Te contacto en breve.");
+    addMessage("¿Qué presupuesto tienes?");
+    showOptions([
+      { label: "< 500€", action: () => stepBudget(500) },
+      { label: "500€ - 1500€", action: () => stepBudget(1500) },
+      { label: "+1500€", action: () => stepBudget(2000) }
+    ]);
+  }
 
-      console.log("LEAD REAL:", lead);
+  function stepBudget(budget) {
+    state.lead.budget = budget;
 
-      // 👉 aquí conectas webhook si quieres
+    addMessage("¿Para cuándo lo necesitas?");
+    showOptions([
+      { label: "Urgente", action: () => stepUrgency("urgente") },
+      { label: "Este mes", action: () => stepUrgency("media") },
+      { label: "Sin prisa", action: () => stepUrgency("baja") }
+    ]);
+  }
+
+  function stepUrgency(u) {
+    state.lead.urgency = u;
+
+    scoreLead();
+    askContact();
+  }
+
+  function askContact() {
+    if (state.lead.score >= 6) {
+      addMessage("🔥 Esto encaja muy bien.\n\n👉 Déjame tu email o WhatsApp y te explico cómo lo haría.");
+    } else {
+      addMessage("👉 Cuéntame tu email y te doy una propuesta clara.");
     }
   }
 
   // ==========================
-  // SEND
+  // DETECT CONTACT
+  // ==========================
+  function extractContact(text) {
+    const email = text.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
+    const phone = text.match(/\b\d{9}\b/);
+
+    return email?.[0] || phone?.[0] || null;
+  }
+
+  function handleLead(text) {
+    const contact = extractContact(text);
+
+    if (contact) {
+      state.lead.contact = contact;
+      scoreLead();
+
+      addMessage("🔥 Perfecto. Te contacto en breve.");
+
+      sendLeadToAPI();
+    }
+  }
+
+  // ==========================
+  // SEND LEAD REAL
+  // ==========================
+  async function sendLeadToAPI() {
+    try {
+      await fetch(CHAT_CONFIG.API_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          message: "Nuevo lead",
+          lead: state.lead
+        })
+      });
+    } catch (e) {
+      console.log("Error enviando lead");
+    }
+  }
+
+  // ==========================
+  // SEND MESSAGE
   // ==========================
   async function sendMessage() {
     const text = el.input.value.trim();
@@ -246,10 +238,10 @@ function closeSale() {
       });
 
       const data = await res.json();
-      addMessage(data.reply || "No he podido responder.");
+      addMessage(data.reply);
 
     } catch {
-      addMessage("⚠️ Error de conexión.");
+      addMessage("⚠️ Error conexión");
     }
   }
 
@@ -261,32 +253,6 @@ function closeSale() {
       sendMessage();
     }
   });
-
-  // ==========================
-  // AUTO OPEN
-  // ==========================
-  setTimeout(() => {
-    if (!localStorage.getItem("vb_seen")) {
-      openChat();
-      addMessage("👋 ¿Estás buscando una web o automatizar algo?");
-      localStorage.setItem("vb_seen", "true");
-    }
-  }, CHAT_CONFIG.AUTO_OPEN_DELAY);
-
-  // ==========================
-  // HELPERS
-  // ==========================
-  function scrollBottom() {
-    el.messages.scrollTop = el.messages.scrollHeight;
-  }
-
-  function focusInput() {
-    setTimeout(() => el.input.focus(), 200);
-  }
-
-  function getTime() {
-    return new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
-  }
 
   // ==========================
   // INIT
