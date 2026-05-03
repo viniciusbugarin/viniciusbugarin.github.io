@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido" });
 
   // ==========================
-  // 🛡️ RATE LIMIT (MEJORADO)
+  // 🛡️ RATE LIMIT PRO + CLEAN
   // ==========================
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
   const now = Date.now();
   const windowTime = 60000;
-  const limit = 25;
+  const limit = 30;
 
   const user = global.rateLimit.get(ip) || { count: 0, time: now };
 
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     user.count++;
     if (user.count > limit) {
       return res.status(429).json({
-        reply: "⚠️ Demasiadas peticiones. Espera unos segundos."
+        reply: "⚠️ Muchas peticiones. Espera un momento."
       });
     }
   } else {
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
   global.rateLimit.set(ip, user);
 
-  // 🔥 limpiar memoria (CLAVE)
+  // limpiar memoria
   for (const [key, val] of global.rateLimit.entries()) {
     if (now - val.time > windowTime) {
       global.rateLimit.delete(key);
@@ -66,12 +66,12 @@ export default async function handler(req, res) {
     if (contact) lead.contact = contact;
 
     // ==========================
-    // 🧠 SCORING PRO
+    // 🧠 SCORING AVANZADO
     // ==========================
-    const score = calculateScore(lead, intent);
+    const score = calculateScore(lead, intent, message);
 
     // ==========================
-    // 💾 GUARDAR SIEMPRE (CLAVE)
+    // 💾 GUARDAR SIEMPRE (CRM)
     // ==========================
     saveLeadSafe({
       ...lead,
@@ -83,60 +83,22 @@ export default async function handler(req, res) {
     });
 
     // ==========================
-    // 🔥 CIERRE DIRECTO SI HAY CONTACTO
+    // 🔥 CIERRE DIRECTO (CLAVE)
     // ==========================
     if (lead.contact) {
       return res.status(200).json({
-        reply: closeLeadMessage(score)
+        reply: closeLeadMessage(score, intent)
       });
     }
 
     // ==========================
     // 🤖 IA
     // ==========================
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 7000);
-
-    let reply = null;
-
-    try {
-
-      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
-          messages: [
-            { role: "system", content: buildPrompt(intent, score) },
-            { role: "user", content: message }
-          ],
-          temperature: 0.5,
-          max_tokens: 200
-        }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeout);
-
-      if (groqRes.ok) {
-        const data = await groqRes.json();
-        reply = data?.choices?.[0]?.message?.content;
-      }
-
-    } catch (e) {
-      console.error("Groq fallo:", e);
-    }
+    let reply = await generateAIReply(message, intent, score);
 
     // ==========================
-    // 🧠 FALLBACK INTELIGENTE
+    // 💰 OPTIMIZACIÓN CONVERSIÓN
     // ==========================
-    if (!reply) {
-      reply = fallbackReply(intent);
-    }
-
     reply = optimizeReply(reply, intent, score);
 
     return res.status(200).json({ reply });
@@ -152,7 +114,42 @@ export default async function handler(req, res) {
 }
 
 //////////////////////////////////////////////////
-// 🧠 INTENT (MEJORADO)
+// 🤖 IA ROBUSTA
+//////////////////////////////////////////////////
+
+async function generateAIReply(message, intent, score) {
+
+  try {
+
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        messages: [
+          { role: "system", content: buildPrompt(intent, score) },
+          { role: "user", content: message }
+        ],
+        temperature: 0.5,
+        max_tokens: 200
+      })
+    });
+
+    if (!res.ok) throw new Error();
+
+    const data = await res.json();
+    return data?.choices?.[0]?.message?.content;
+
+  } catch {
+    return fallbackReply(intent);
+  }
+}
+
+//////////////////////////////////////////////////
+// 🧠 INTENT PRO
 //////////////////////////////////////////////////
 
 function detectIntent(text) {
@@ -162,6 +159,7 @@ function detectIntent(text) {
   if (/web|pagina|sitio/.test(t)) return "web";
   if (/automat|bot|proceso/.test(t)) return "automation";
   if (/seo|google/.test(t)) return "seo";
+  if (/urgente|ya|rápido/.test(t)) return "urgent";
   if (/quiero|necesito|busco/.test(t)) return "hot";
 
   return "general";
@@ -174,28 +172,31 @@ function detectIntent(text) {
 function detectContact(text) {
   const email = text.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
   const phone = text.match(/\b\d{9}\b/);
-
   return email?.[0] || phone?.[0] || null;
 }
 
 //////////////////////////////////////////////////
-// 🎯 SCORING REAL
+// 🎯 SCORING REAL (CLAVE)
 //////////////////////////////////////////////////
 
-function calculateScore(lead, intent) {
+function calculateScore(lead, intent, message) {
+
   let score = 0;
 
   if (lead?.budget >= 1500) score += 3;
   if (intent === "automation") score += 3;
   if (intent === "web") score += 2;
+  if (intent === "urgent") score += 3;
   if (intent === "hot") score += 4;
   if (lead?.contact) score += 5;
+
+  if (/empresa|negocio/.test(message.toLowerCase())) score += 2;
 
   return score;
 }
 
 //////////////////////////////////////////////////
-// 🧠 PROMPT PRO (VENTAS)
+// 🧠 PROMPT VENTAS REAL
 //////////////////////////////////////////////////
 
 function buildPrompt(intent, score) {
@@ -206,35 +207,42 @@ OBJETIVO:
 Convertir visitantes en clientes.
 
 ESTILO:
-- Directo
+- Muy directo
 - Persuasivo
-- Máx 3-4 líneas
-- Lenguaje claro
+- Máx 3 líneas
 
 CONTEXTO:
 Intent: ${intent}
 Score: ${score}
 
 REGLAS:
-- No expliques demasiado
-- Empuja a contacto
 - Si está interesado → cerrar
+- Empujar a contacto siempre
+- Hablar en términos de negocio (clientes, dinero, resultados)
 `;
 }
 
 //////////////////////////////////////////////////
-// 🔥 CIERRE
+// 🔥 CIERRE REAL
 //////////////////////////////////////////////////
 
-function closeLeadMessage(score) {
+function closeLeadMessage(score, intent) {
 
-  if (score >= 7) {
+  if (score >= 8) {
     return `🔥 Esto encaja perfecto.
 
-👉 Te escribo ahora mismo y lo vemos rápido.`;
+👉 Te escribo ahora mismo y te preparo una estrategia para conseguir clientes.`;
   }
 
-  return "👌 Te contacto en breve con una propuesta.";
+  if (score >= 5) {
+    return `👌 Perfecto.
+
+👉 Te contacto y te explico cómo lo enfocaría.`;
+  }
+
+  return `👌 Genial.
+
+👉 Te escribo y vemos opciones.`;
 }
 
 //////////////////////////////////////////////////
@@ -242,11 +250,13 @@ function closeLeadMessage(score) {
 //////////////////////////////////////////////////
 
 function fallbackReply(intent) {
+
   const replies = {
     web: "Puedo ayudarte a crear una web que genere clientes.",
-    automation: "La automatización puede ahorrarte mucho tiempo.",
-    price: "Depende del proyecto, pero puedo orientarte rápido.",
-    hot: "Perfecto, esto encaja bien.",
+    automation: "Automatizar puede ahorrarte tiempo y dinero.",
+    price: "Depende del proyecto, pero puedo orientarte.",
+    urgent: "Perfecto, podemos hacerlo rápido.",
+    hot: "Esto encaja bien.",
     general: "Cuéntame qué necesitas."
   };
 
@@ -254,16 +264,22 @@ function fallbackReply(intent) {
 }
 
 //////////////////////////////////////////////////
-// 💰 OPTIMIZACIÓN CONVERSIÓN
+// 💰 CONVERSIÓN (CLAVE)
 //////////////////////////////////////////////////
 
 function optimizeReply(reply, intent, score) {
 
-  if (score >= 6) {
+  if (!reply) return "Cuéntame qué necesitas.";
+
+  if (score >= 7) {
     return reply + "\n\n🔥 Déjame tu email y lo vemos hoy mismo.";
   }
 
-  return reply + "\n\n👉 Cuéntame más detalles.";
+  if (intent === "price") {
+    return reply + "\n\n💡 Dime tu idea y te doy precio exacto.";
+  }
+
+  return reply + "\n\n👉 Cuéntame más.";
 }
 
 //////////////////////////////////////////////////
@@ -275,7 +291,7 @@ function sanitize(text) {
 }
 
 //////////////////////////////////////////////////
-// 💾 SAVE LEAD (NO BLOQUEANTE)
+// 💾 CRM (MAKE)
 //////////////////////////////////////////////////
 
 function saveLeadSafe(data) {
