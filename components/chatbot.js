@@ -2,18 +2,24 @@
 // CONFIG
 // ==========================
 const CHAT_CONFIG = {
-  API_URL: "https://viniciusbugarin-github-io.vercel.app/api/chat",
-  STORAGE_KEY: "vb_chat_ultra_v2",
-  AUTO_OPEN_DELAY: 4000
+  MAKE_WEBHOOK: "https://hook.eu1.make.com/2yahcl1bade5wz61gt54juj0zj2bdb7x",
+  API_FALLBACK: "https://viniciusbugarin-github-io.vercel.app/api/chat",
+  STORAGE_KEY: "vb_chat_ultra_final",
+  AUTO_OPEN_DELAY: 4000,
+  INACTIVITY_DELAY: 15000,
+  DEBUG: true
 };
 
 // ==========================
-// STATE GLOBAL (PERSISTENTE)
+// STATE
 // ==========================
 let state = JSON.parse(localStorage.getItem(CHAT_CONFIG.STORAGE_KEY)) || {
   isOpen: false,
-  step: "start",
   retries: 0,
+  leadSent: false,
+  lastInteraction: Date.now(),
+  sessionId: Math.random().toString(36).substring(2),
+  messages: [],
   lead: {
     need: null,
     budget: 0,
@@ -28,7 +34,7 @@ function saveState() {
 }
 
 // ==========================
-// INIT SAFE
+// INIT
 // ==========================
 if (!window.__VB_CHAT_INIT__) {
   window.__VB_CHAT_INIT__ = true;
@@ -71,42 +77,25 @@ function initChatbot() {
   };
 
   // ==========================
-  // TOGGLE
+  // UI
   // ==========================
-  function openChat() {
-    state.isOpen = true;
-    el.container.classList.add("active");
-    el.toggle.textContent = "✕";
-    saveState();
-  }
-
-  function closeChat() {
-    state.isOpen = false;
-    el.container.classList.remove("active");
-    el.toggle.textContent = "💬";
-    saveState();
-  }
-
-  el.toggle.onclick = () => state.isOpen ? closeChat() : openChat();
-  el.close.onclick = closeChat;
-
-  // ==========================
-  // MENSAJES
-  // ==========================
-  function addMessage(text, type = "bot") {
+  function renderMessage(text, type) {
     const div = document.createElement("div");
     div.className = `msg ${type}`;
     div.innerHTML = `<div class="bubble">${text}</div>`;
     el.messages.appendChild(div);
-    scrollBottom();
   }
 
-  // ==========================
-  // OPCIONES
-  // ==========================
+  function addMessage(text, type = "bot") {
+    state.messages.push({ text, type });
+    renderMessage(text, type);
+    scrollBottom();
+    state.lastInteraction = Date.now();
+    saveState();
+  }
+
   function showOptions(options) {
     el.options.innerHTML = "";
-
     options.forEach(opt => {
       const btn = document.createElement("button");
       btn.textContent = opt.label;
@@ -122,27 +111,25 @@ function initChatbot() {
   }
 
   // ==========================
-  // SCORING PRO
+  // SCORING
   // ==========================
   function scoreLead() {
     let score = 0;
 
     if (state.lead.budget >= 1500) score += 3;
+    if (state.lead.need === "automation") score += 4;
     if (state.lead.need === "web") score += 2;
-    if (state.lead.need === "automation") score += 3;
     if (state.lead.urgency === "urgente") score += 3;
     if (state.lead.contact) score += 5;
 
     state.lead.score = score;
-    saveState();
   }
 
   // ==========================
-  // FLOW VENTAS
+  // FLOW
   // ==========================
   function startFlow() {
-
-    if (state.step !== "start") return;
+    if (state.messages.length > 0) return;
 
     addMessage("👋 Te ayudo a conseguir clientes con webs y automatización.");
 
@@ -155,11 +142,8 @@ function initChatbot() {
 
   function stepNeed(type) {
     state.lead.need = type;
-    state.step = "budget";
-    saveState();
 
     addMessage("¿Qué presupuesto tienes?");
-
     showOptions([
       { label: "< 500€", action: () => stepBudget(500) },
       { label: "500€ - 1500€", action: () => stepBudget(1500) },
@@ -169,11 +153,8 @@ function initChatbot() {
 
   function stepBudget(budget) {
     state.lead.budget = budget;
-    state.step = "urgency";
-    saveState();
 
     addMessage("¿Para cuándo lo necesitas?");
-
     showOptions([
       { label: "Urgente", action: () => stepUrgency("urgente") },
       { label: "Este mes", action: () => stepUrgency("media") },
@@ -183,89 +164,68 @@ function initChatbot() {
 
   function stepUrgency(u) {
     state.lead.urgency = u;
-    state.step = "contact";
     scoreLead();
-
     askContact();
   }
 
   function askContact() {
-
-    if (state.lead.score >= 7) {
-      addMessage("🔥 Esto encaja perfecto.\n\n👉 Déjame tu WhatsApp o email y lo vemos hoy mismo.");
-    } else {
-      addMessage("👉 Déjame tu email y te doy una propuesta clara.");
-    }
+    addMessage("👉 Déjame tu email o WhatsApp y te digo exactamente cómo lo haría.");
   }
 
   // ==========================
-  // DETECT CONTACT
+  // CONTACT DETECTION
   // ==========================
   function extractContact(text) {
     const email = text.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
     const phone = text.match(/\b\d{9}\b/);
-
     return email?.[0] || phone?.[0] || null;
   }
 
-  function handleLead(text) {
-    const contact = extractContact(text);
-
-    if (contact) {
-      state.lead.contact = contact;
-      scoreLead();
-
-      addMessage("🔥 Perfecto. Te contacto ahora mismo.");
-
-      sendLeadToAPI();
-      saveState();
-    } else {
-      retryClose();
-    }
-  }
-
   // ==========================
-  // REINTENTO CIERRE (🔥 CLAVE)
+  // SEND LEAD (🔥 MAKE)
   // ==========================
-  function retryClose() {
+  async function sendLead() {
 
-    if (state.step !== "contact") return;
+    if (state.leadSent) return;
 
-    state.retries++;
+    const payload = {
+      sessionId: state.sessionId,
+      timestamp: new Date().toISOString(),
+      ...state.lead
+    };
 
-    if (state.retries === 1) {
-      addMessage("👉 Solo necesito tu email para enviarte la propuesta.");
+    if (CHAT_CONFIG.DEBUG) {
+      console.log("🚀 ENVIANDO LEAD:", payload);
     }
 
-    if (state.retries === 2) {
-      addMessage("🚀 Te digo exactamente qué haría en tu caso, sin compromiso.");
-    }
+    try {
+      // 🔥 ENVÍO DIRECTO A MAKE
+      await fetch(CHAT_CONFIG.MAKE_WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-    if (state.retries >= 3) {
-      addMessage("👉 Último paso: déjame tu contacto y lo vemos.");
+      state.leadSent = true;
+
+    } catch (err) {
+      console.error("Error Make:", err);
+
+      // fallback API
+      try {
+        await fetch(CHAT_CONFIG.API_FALLBACK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch {}
     }
 
     saveState();
   }
 
   // ==========================
-  // SEND LEAD (CRM)
-  // ==========================
-  async function sendLeadToAPI() {
-    try {
-      await fetch(CHAT_CONFIG.API_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          message: "lead",
-          lead: state.lead
-        })
-      });
-    } catch {}
-  }
-
-  // ==========================
-  // SEND MESSAGE
+  // HANDLE INPUT
   // ==========================
   async function sendMessage() {
     const text = el.input.value.trim();
@@ -274,21 +234,18 @@ function initChatbot() {
     addMessage(text, "user");
     el.input.value = "";
 
-    handleLead(text);
+    const contact = extractContact(text);
 
-    try {
-      const res = await fetch(CHAT_CONFIG.API_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ message: text, lead: state.lead })
-      });
+    if (contact && !state.leadSent) {
+      state.lead.contact = contact;
+      scoreLead();
 
-      const data = await res.json();
-      addMessage(data.reply);
-
-    } catch {
-      addMessage("⚠️ Error conexión");
+      addMessage("🔥 Perfecto. Te contacto ahora mismo.");
+      await sendLead();
+      return;
     }
+
+    addMessage("👍 Entendido. Sigue...");
   }
 
   el.send.onclick = sendMessage;
@@ -305,20 +262,14 @@ function initChatbot() {
   // ==========================
   setTimeout(() => {
     if (!state.isOpen) {
-      openChat();
-      addMessage("👋 ¿Quieres conseguir más clientes o automatizar tu negocio?");
+      el.container.classList.add("active");
+      addMessage("👋 ¿Quieres más clientes o automatizar tu negocio?");
     }
   }, CHAT_CONFIG.AUTO_OPEN_DELAY);
 
-  // ==========================
-  // HELPERS
-  // ==========================
   function scrollBottom() {
     el.messages.scrollTop = el.messages.scrollHeight;
   }
 
-  // ==========================
-  // INIT
-  // ==========================
   startFlow();
 }
