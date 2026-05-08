@@ -1,200 +1,391 @@
-/* ==========================
-   NAVBAR ULTRA PRO (REAL)
-========================== */
+/* =========================================
+   NAVBAR — ULTRA PRO FINAL
+========================================= */
 
 .navbar {
-  position: sticky;
+
+  position: fixed;
+
   top: 0;
+  left: 0;
+
   width: 100%;
-  z-index: 999;
+
+  z-index: 9999;
 
   display: flex;
   justify-content: center;
 
-  padding: 10px 20px;
+  padding: 18px 24px;
 
-  backdrop-filter: blur(14px);
-  background: rgba(2, 6, 23, 0.6);
+  transition:
+    background .35s ease,
+    border .35s ease,
+    padding .35s ease,
+    transform .35s ease;
 
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(18px);
 
-  transition: all 0.3s ease;
+  background:
+    rgba(2,6,23,.55);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.04);
 }
 
-/* SCROLL EFFECT (PRO REAL) */
+/* =========================================
+   NAVBAR SCROLLED
+========================================= */
+
 .navbar.scrolled {
-  background: rgba(2, 6, 23, 0.9);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  padding: 12px 24px;
+
+  background:
+    rgba(2,6,23,.82);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,.35);
 }
 
-/* ==========================
-   CONTENEDOR
-========================== */
+/* =========================================
+   CONTAINER
+========================================= */
+
 .nav-container {
+
   width: 100%;
+
   max-width: 1200px;
 
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
-  position: relative;
+  gap: 24px;
 }
 
-/* ==========================
+/* =========================================
    LOGO
-========================== */
-.logo img {
-  height: 40px;
-  transition: transform 0.3s ease;
-}
+========================================= */
 
-.logo img:hover {
-  transform: scale(1.08);
-}
+.logo {
 
-/* ==========================
-   LINKS
-========================== */
-.nav-links {
   display: flex;
   align-items: center;
-  gap: 30px;
+
+  gap: 12px;
+
+  text-decoration: none;
+}
+
+.logo img {
+
+  height: 42px;
+
+  transition:
+    transform .35s ease,
+    filter .35s ease;
+}
+
+.logo:hover img {
+
+  transform:
+    scale(1.08)
+    rotate(-2deg);
+
+  filter:
+    drop-shadow(0 0 18px rgba(59,130,246,.4));
+}
+
+/* =========================================
+   NAV LINKS
+========================================= */
+
+.nav-links {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 34px;
 
   list-style: none;
+
   margin: 0;
   padding: 0;
 }
 
-/* LINKS BASE */
+/* =========================================
+   LINKS
+========================================= */
+
 .nav-links a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
+
   position: relative;
 
-  transition: all 0.25s ease;
+  color: var(--text-secondary);
+
+  text-decoration: none;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  transition:
+    color .3s ease,
+    transform .3s ease;
 }
 
-/* HOVER */
 .nav-links a:hover {
-  color: var(--text-main);
+
+  color: white;
+
+  transform:
+    translateY(-1px);
 }
 
-/* UNDERLINE ANIMADO */
+/* =========================================
+   UNDERLINE FX
+========================================= */
+
 .nav-links a::after {
+
   content: "";
+
   position: absolute;
+
   left: 0;
-  bottom: -5px;
+  bottom: -8px;
 
   width: 0%;
   height: 2px;
 
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 999px;
 
-  transition: width 0.3s ease;
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  transition:
+    width .3s ease;
 }
 
 .nav-links a:hover::after {
+
   width: 100%;
 }
 
-/* LINK ACTIVO */
+/* =========================================
+   ACTIVE LINK
+========================================= */
+
 .active-link {
-  color: var(--text-main);
+
+  color: white !important;
 }
 
 .active-link::after {
+
   width: 100%;
 }
 
-/* ==========================
-   CTA (CLAVE PARA CONVERSIÓN)
-========================== */
-.nav-links .cta {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
+/* =========================================
+   CTA BUTTON
+========================================= */
 
-  padding: 8px 18px;
+.nav-links .cta {
+
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 12px 22px;
+
   border-radius: 999px;
 
-  font-weight: 600;
-  font-size: 13px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
 
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  color: white;
 
-  transition: all 0.3s ease;
+  font-size: 14px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 10px 30px rgba(59,130,246,.35);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+/* glow */
+.nav-links .cta::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -120%;
+
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.35),
+      transparent
+    );
+
+  transition: .7s;
+}
+
+.nav-links .cta:hover::before {
+
+  left: 120%;
 }
 
 .nav-links .cta:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+
+  transform:
+    translateY(-3px)
+    scale(1.03);
+
+  box-shadow:
+    0 20px 45px rgba(59,130,246,.45);
 }
 
-/* ==========================
-   HAMBURGUESA
-========================== */
+/* =========================================
+   MENU TOGGLE
+========================================= */
+
 .menu-toggle {
+
   display: none;
-  font-size: 26px;
-  cursor: pointer;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(255,255,255,.04);
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
   color: white;
-  transition: transform 0.3s ease;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    background .3s ease,
+    transform .3s ease;
 }
 
 .menu-toggle:hover {
-  transform: scale(1.1);
+
+  background:
+    rgba(255,255,255,.08);
+
+  transform:
+    scale(1.05);
 }
 
-/* ==========================
-   MOBILE (ULTRA PRO REAL)
-========================== */
+/* =========================================
+   MOBILE
+========================================= */
+
 @media (max-width: 768px) {
 
+  .navbar {
+
+    padding: 14px 18px;
+  }
+
   .menu-toggle {
-    display: block;
+
+    display: flex;
   }
 
   .nav-links {
+
     position: absolute;
-    top: 70px;
+
+    top: 78px;
     left: 0;
 
     width: 100%;
 
     flex-direction: column;
+
     align-items: center;
-    gap: 25px;
 
-    padding: 30px 0;
+    gap: 28px;
 
-    background: rgba(2, 6, 23, 0.98);
-    backdrop-filter: blur(20px);
+    padding:
+      34px 24px;
 
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background:
+      rgba(2,6,23,.96);
 
-    transform: translateY(-20px);
+    backdrop-filter:
+      blur(20px);
+
+    border-bottom:
+      1px solid rgba(255,255,255,.06);
+
+    transform:
+      translateY(-20px)
+      scale(.98);
+
     opacity: 0;
+
     pointer-events: none;
 
-    transition: all 0.3s ease;
+    transition:
+      all .35s ease;
   }
 
   .nav-links.active {
-    transform: translateY(0);
+
+    transform:
+      translateY(0)
+      scale(1);
+
     opacity: 1;
+
     pointer-events: auto;
   }
 
   .nav-links a {
+
     font-size: 18px;
   }
 
   .nav-links .cta {
-    padding: 12px 24px;
-    font-size: 15px;
-  }
 
+    width: 100%;
+
+    justify-content: center;
+  }
 }

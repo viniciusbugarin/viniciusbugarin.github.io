@@ -1,158 +1,340 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const navbar = `
+  // ==========================
+  // NAVBAR TEMPLATE
+  // ==========================
+
+  const navbarTemplate = `
     <nav class="navbar" id="navbar" role="navigation" aria-label="Menú principal">
+
       <div class="nav-container">
 
         <!-- LOGO -->
         <div class="logo">
           <a href="/" aria-label="Inicio">
-            <img src="/images/VB.png" alt="Vinicius Bugarin Logo" loading="eager">
+            <img
+              src="/images/VB.png"
+              alt="Vinicius Bugarin Logo"
+              width="40"
+              height="40"
+              loading="eager"
+              decoding="async"
+            >
           </a>
         </div>
 
-        <!-- HAMBURGUESA -->
-        <button 
-          class="menu-toggle" 
-          id="menu-toggle" 
+        <!-- MOBILE BUTTON -->
+        <button
+          class="menu-toggle"
+          id="menu-toggle"
           aria-label="Abrir menú"
           aria-expanded="false"
+          aria-controls="nav-links"
         >
           ☰
         </button>
 
-        <!-- OVERLAY MOBILE -->
+        <!-- OVERLAY -->
         <div class="nav-overlay" id="nav-overlay"></div>
 
         <!-- LINKS -->
-        <ul class="nav-links" id="nav-links">
-          <li><a href="/" data-link>Inicio</a></li>
-          <li><a href="/pages/desarrollador-web-barcelona.html" data-link>Barcelona</a></li>
-          <li><a href="/pages/desarrollador-web-freelance.html" data-link>Freelance</a></li>
-          <li><a href="#contact" class="cta">Contacto</a></li>
+        <ul
+          class="nav-links"
+          id="nav-links"
+          role="menubar"
+        >
+          <li role="none">
+            <a href="/" data-link role="menuitem">
+              Inicio
+            </a>
+          </li>
+
+          <li role="none">
+            <a
+              href="/pages/desarrollador-web-barcelona.html"
+              data-link
+              role="menuitem"
+            >
+              Barcelona
+            </a>
+          </li>
+
+          <li role="none">
+            <a
+              href="/pages/desarrollador-web-freelance.html"
+              data-link
+              role="menuitem"
+            >
+              Freelance
+            </a>
+          </li>
+
+          <li role="none">
+            <a
+              href="#contact"
+              class="cta"
+              role="menuitem"
+            >
+              Contacto
+            </a>
+          </li>
+
         </ul>
 
       </div>
+
     </nav>
   `;
 
-  document.getElementById("navbar").innerHTML = navbar;
+  const navbarRoot = document.getElementById("navbar");
 
+  if (!navbarRoot) return;
+
+  navbarRoot.innerHTML = navbarTemplate;
+
+  // ==========================
+  // ELEMENTS
+  // ==========================
+
+  const navbar = document.getElementById("navbar");
   const toggle = document.getElementById("menu-toggle");
   const links = document.getElementById("nav-links");
   const overlay = document.getElementById("nav-overlay");
-  const navbarEl = document.getElementById("navbar");
+
+  let isMenuOpen = false;
+  let lastScroll = 0;
+  let ticking = false;
 
   // ==========================
-  // 📱 MENU MOBILE PRO
+  // MENU
   // ==========================
+
   function openMenu() {
+
+    isMenuOpen = true;
+
     links.classList.add("active");
     overlay.classList.add("active");
-    document.body.style.overflow = "hidden";
+
     toggle.setAttribute("aria-expanded", "true");
+
+    document.body.style.overflow = "hidden";
+
+    requestAnimationFrame(() => {
+      links.querySelector("a")?.focus();
+    });
+
   }
 
   function closeMenu() {
+
+    isMenuOpen = false;
+
     links.classList.remove("active");
     overlay.classList.remove("active");
-    document.body.style.overflow = "";
+
     toggle.setAttribute("aria-expanded", "false");
+
+    document.body.style.overflow = "";
+
   }
 
-  toggle.addEventListener("click", () => {
-    links.classList.contains("active") ? closeMenu() : openMenu();
-  });
+  function toggleMenu() {
+
+    isMenuOpen
+      ? closeMenu()
+      : openMenu();
+
+  }
+
+  toggle.addEventListener("click", toggleMenu);
 
   overlay.addEventListener("click", closeMenu);
 
-  // 🔒 cerrar al hacer click en link
-  document.querySelectorAll(".nav-links a").forEach(link => {
-    link.addEventListener("click", closeMenu);
+  // ==========================
+  // CLOSE MENU ON LINK
+  // ==========================
+
+  links.addEventListener("click", (e) => {
+
+    if (e.target.tagName === "A") {
+      closeMenu();
+    }
+
   });
 
   // ==========================
-  // 🎯 NAVBAR SCROLL EFFECT (OPTIMIZADO)
+  // ESC CLOSE
   // ==========================
-  let lastScroll = 0;
 
-  window.addEventListener("scroll", () => {
+  document.addEventListener("keydown", (e) => {
+
+    if (e.key === "Escape" && isMenuOpen) {
+      closeMenu();
+    }
+
+  });
+
+  // ==========================
+  // RESPONSIVE RESET
+  // ==========================
+
+  window.addEventListener("resize", () => {
+
+    if (window.innerWidth > 768 && isMenuOpen) {
+      closeMenu();
+    }
+
+  });
+
+  // ==========================
+  // ACTIVE LINK
+  // ==========================
+
+  const currentPath =
+    window.location.pathname.replace(/\/$/, "");
+
+  document.querySelectorAll(".nav-links a").forEach(link => {
+
+    const linkPath =
+      new URL(link.href).pathname.replace(/\/$/, "");
+
+    if (currentPath === linkPath) {
+
+      link.classList.add("active-link");
+
+      link.setAttribute("aria-current", "page");
+
+    }
+
+  });
+
+  // ==========================
+  // SMOOTH SCROLL
+  // ==========================
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+
+    anchor.addEventListener("click", function(e) {
+
+      const target =
+        document.querySelector(this.getAttribute("href"));
+
+      if (!target) return;
+
+      e.preventDefault();
+
+      const offset =
+        navbar.offsetHeight;
+
+      const top =
+        target.getBoundingClientRect().top +
+        window.scrollY -
+        offset;
+
+      window.scrollTo({
+        top,
+        behavior: "smooth"
+      });
+
+    });
+
+  });
+
+  // ==========================
+  // NAVBAR SCROLL EFFECT
+  // ==========================
+
+  function updateNavbar() {
+
     const currentScroll = window.scrollY;
 
-    // efecto background
-    navbarEl.classList.toggle("scrolled", currentScroll > 50);
+    navbar.classList.toggle(
+      "scrolled",
+      currentScroll > 40
+    );
 
-    // hide / show navbar (UX PRO)
-    if (currentScroll > lastScroll && currentScroll > 100) {
-      navbarEl.classList.add("hide");
+    // hide/show
+    if (
+      currentScroll > lastScroll &&
+      currentScroll > 120
+    ) {
+
+      navbar.classList.add("hide");
+
     } else {
-      navbarEl.classList.remove("hide");
+
+      navbar.classList.remove("hide");
+
     }
 
     lastScroll = currentScroll;
-  });
 
-  // ==========================
-  // 🔥 LINK ACTIVO ULTRA PRO
-  // ==========================
-  const currentPath = window.location.pathname.replace(/\/$/, "");
+    ticking = false;
+  }
 
-  document.querySelectorAll(".nav-links a").forEach(link => {
-    const linkPath = link.pathname.replace(/\/$/, "");
+  window.addEventListener("scroll", () => {
 
-    if (currentPath === linkPath) {
-      link.classList.add("active-link");
-      link.setAttribute("aria-current", "page");
+    if (!ticking) {
+
+      requestAnimationFrame(updateNavbar);
+
+      ticking = true;
+
     }
-  });
+
+  }, { passive: true });
 
   // ==========================
-  // 🚀 SCROLL SUAVE (CON OFFSET NAV)
+  // PREFETCH INTELIGENTE
   // ==========================
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", function (e) {
-      const target = document.querySelector(this.getAttribute("href"));
 
-      if (target) {
-        e.preventDefault();
-
-        const offset = navbarEl.offsetHeight;
-
-        const top = target.getBoundingClientRect().top + window.scrollY - offset;
-
-        window.scrollTo({
-          top,
-          behavior: "smooth"
-        });
-      }
-    });
-  });
-
-  // ==========================
-  // ⚡ PREFETCH INTELIGENTE (UNA SOLA VEZ)
-  // ==========================
   const prefetched = new Set();
 
   document.querySelectorAll("a[data-link]").forEach(link => {
-    link.addEventListener("mouseenter", () => {
+
+    function prefetchPage() {
+
       const href = link.href;
 
-      if (!prefetched.has(href)) {
-        const prefetch = document.createElement("link");
-        prefetch.rel = "prefetch";
-        prefetch.href = href;
+      if (
+        prefetched.has(href) ||
+        href.includes("#")
+      ) return;
 
-        document.head.appendChild(prefetch);
-        prefetched.add(href);
-      }
-    });
+      const prefetch =
+        document.createElement("link");
+
+      prefetch.rel = "prefetch";
+      prefetch.href = href;
+      prefetch.as = "document";
+
+      document.head.appendChild(prefetch);
+
+      prefetched.add(href);
+
+    }
+
+    link.addEventListener(
+      "mouseenter",
+      prefetchPage,
+      { once: true }
+    );
+
+    link.addEventListener(
+      "touchstart",
+      prefetchPage,
+      { once: true }
+    );
+
   });
 
   // ==========================
-  // ⌨️ ACCESIBILIDAD (ESC PARA CERRAR)
+  // AUTO SHADOW INIT
   // ==========================
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
-  });
+
+  if (window.scrollY > 40) {
+    navbar.classList.add("scrolled");
+  }
 
 });
