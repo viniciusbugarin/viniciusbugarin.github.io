@@ -1,13 +1,18 @@
+```css
 /* =========================================
-   VINICIUS BUGARIN — ULTRA PRO FINAL CSS
+   VINICIUS BUGARIN — ULTRA PRO MAX CSS
+   FINAL PRODUCTION VERSION
 ========================================= */
 
 :root {
 
-  /* COLORS */
+  /* =========================================
+     COLORS
+  ========================================= */
+
   --bg-main: #020617;
   --bg-secondary: #0f172a;
-  --bg-card: rgba(15, 23, 42, 0.72);
+  --bg-tertiary: #111827;
 
   --primary: #3b82f6;
   --primary-light: #60a5fa;
@@ -19,10 +24,14 @@
 
   --text-main: #ffffff;
   --text-secondary: #94a3b8;
+  --text-muted: #64748b;
 
-  --border: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,.08);
 
-  /* TYPO */
+  /* =========================================
+     TYPOGRAPHY
+  ========================================= */
+
   --text-xs: 12px;
   --text-sm: 14px;
   --text-md: 16px;
@@ -30,27 +39,44 @@
   --text-xl: 32px;
   --text-xxl: 64px;
 
-  /* SPACING */
+  /* =========================================
+     SPACING
+  ========================================= */
+
   --space-xs: 8px;
   --space-sm: 14px;
   --space-md: 24px;
   --space-lg: 48px;
   --space-xl: 100px;
 
-  /* UI */
+  /* =========================================
+     LAYOUT
+  ========================================= */
+
+  --container-width: 1200px;
+  --navbar-height: 80px;
+
+  /* =========================================
+     UI
+  ========================================= */
+
   --radius: 24px;
   --radius-sm: 16px;
 
-  /* EFFECTS */
-  --transition: .35s cubic-bezier(.4,0,.2,1);
+  --blur: blur(18px);
+
+  /* =========================================
+     EFFECTS
+  ========================================= */
+
+  --transition:
+    .35s cubic-bezier(.4,0,.2,1);
 
   --shadow:
-    0 10px 30px rgba(0,0,0,0.25);
+    0 10px 30px rgba(0,0,0,.25);
 
   --shadow-lg:
-    0 25px 80px rgba(0,0,0,0.55);
-
-  --blur: blur(18px);
+    0 25px 80px rgba(0,0,0,.55);
 
   --gradient-main:
     linear-gradient(
@@ -58,6 +84,25 @@
       var(--primary),
       var(--secondary)
     );
+
+  --glass-bg:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.03)
+    );
+
+  --glass-border:
+    1px solid rgba(255,255,255,.08);
+
+  --focus-ring:
+    0 0 0 4px rgba(59,130,246,.18);
+
+  --selection-bg:
+    rgba(59,130,246,.25);
+
+  --selection-text:
+    #fff;
 }
 
 /* =========================================
@@ -70,8 +115,13 @@
   box-sizing: border-box;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 html {
   scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -92,6 +142,15 @@ body {
   overflow-x: hidden;
 
   position: relative;
+
+  opacity: 0;
+
+  transition:
+    opacity .5s ease;
+}
+
+body.loaded {
+  opacity: 1;
 }
 
 /* =========================================
@@ -115,6 +174,8 @@ body::before {
   pointer-events: none;
 
   z-index: -2;
+
+  opacity: .9;
 }
 
 body::after {
@@ -134,17 +195,51 @@ body::after {
 }
 
 /* =========================================
+   NOISE EFFECT
+========================================= */
+
+.noise {
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: .03;
+
+  z-index: -1;
+
+  background-image:
+    url("https://grainy-gradients.vercel.app/noise.svg");
+}
+
+/* =========================================
+   TEXT SELECTION
+========================================= */
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* =========================================
    SCROLLBAR
 ========================================= */
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
 }
 
 ::-webkit-scrollbar-thumb {
 
   background:
     linear-gradient(
+      180deg,
       var(--primary),
       var(--secondary)
     );
@@ -202,8 +297,12 @@ a {
 }
 
 img {
+
   max-width: 100%;
+
   display: block;
+
+  will-change: transform;
 }
 
 /* =========================================
@@ -212,13 +311,10 @@ img {
 
 .container {
 
-  width: 100%;
+  width:
+    min(100% - 40px, var(--container-width));
 
-  max-width: 1200px;
-
-  margin: 0 auto;
-
-  padding: 0 24px;
+  margin-inline: auto;
 }
 
 /* =========================================
@@ -241,9 +337,11 @@ img {
       rgba(2,6,23,.92)
     );
 
-  border-top: 1px solid rgba(255,255,255,.04);
+  border-top:
+    1px solid rgba(255,255,255,.04);
 
-  border-bottom: 1px solid rgba(255,255,255,.04);
+  border-bottom:
+    1px solid rgba(255,255,255,.04);
 }
 
 /* =========================================
@@ -257,11 +355,6 @@ img {
   margin: 0 auto 60px;
 
   text-align: center;
-}
-
-.section-heading h2 {
-
-  margin-bottom: 18px;
 }
 
 .section-description {
@@ -300,20 +393,26 @@ img {
 
 .section-badge {
 
-  background: rgba(59,130,246,.12);
+  background:
+    rgba(59,130,246,.12);
 
-  border: 1px solid rgba(59,130,246,.25);
+  border:
+    1px solid rgba(59,130,246,.25);
 
-  color: var(--primary-light);
+  color:
+    var(--primary-light);
 }
 
 .project-category {
 
-  background: rgba(34,197,94,.12);
+  background:
+    rgba(34,197,94,.12);
 
-  border: 1px solid rgba(34,197,94,.25);
+  border:
+    1px solid rgba(34,197,94,.25);
 
-  color: var(--secondary-light);
+  color:
+    var(--secondary-light);
 }
 
 /* =========================================
@@ -339,6 +438,13 @@ img {
   isolation: isolate;
 }
 
+.hero-content {
+
+  position: relative;
+
+  z-index: 5;
+}
+
 .hero::before {
 
   content: "";
@@ -357,7 +463,8 @@ img {
 
   filter: blur(120px);
 
-  animation: glowMove 8s ease-in-out infinite;
+  animation:
+    glowMove 8s ease-in-out infinite;
 
   z-index: -2;
 }
@@ -380,17 +487,6 @@ img {
   z-index: -1;
 }
 
-@keyframes glowMove {
-
-  0%,100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-40px);
-  }
-}
-
 .hero h1 {
 
   background:
@@ -407,14 +503,8 @@ img {
 
   -webkit-text-fill-color: transparent;
 
-  animation: gradientMove 6s linear infinite;
-}
-
-@keyframes gradientMove {
-
-  100% {
-    background-position: 200%;
-  }
+  animation:
+    gradientMove 6s linear infinite;
 }
 
 .subtitle {
@@ -453,8 +543,6 @@ img {
 
   font-weight: 700;
 
-  text-decoration: none;
-
   display: inline-flex;
 
   align-items: center;
@@ -468,6 +556,8 @@ img {
   transition: var(--transition);
 
   white-space: nowrap;
+
+  will-change: transform;
 }
 
 .btn::before {
@@ -499,7 +589,8 @@ img {
 
 .btn.primary {
 
-  background: var(--gradient-main);
+  background:
+    var(--gradient-main);
 
   color: white;
 
@@ -519,14 +610,14 @@ img {
 
 .btn.secondary {
 
-  border: 1px solid rgba(255,255,255,.12);
-
-  color: white;
-
   background:
     rgba(255,255,255,.03);
 
-  backdrop-filter: blur(12px);
+  border:
+    1px solid rgba(255,255,255,.12);
+
+  backdrop-filter:
+    blur(12px);
 }
 
 .btn.secondary:hover {
@@ -538,11 +629,19 @@ img {
     translateY(-3px);
 }
 
-.btn:focus-visible {
+/* =========================================
+   ACCESSIBILITY
+========================================= */
 
-  outline: 2px solid var(--accent);
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
 
-  outline-offset: 2px;
+  outline: none;
+
+  box-shadow:
+    var(--focus-ring);
 }
 
 /* =========================================
@@ -572,21 +671,30 @@ img {
 
   position: relative;
 
-  background: var(--bg-card);
+  background:
+    var(--glass-bg);
 
-  border: 1px solid rgba(255,255,255,.06);
+  border:
+    var(--glass-border);
 
-  backdrop-filter: var(--blur);
+  backdrop-filter:
+    var(--blur);
 
-  border-radius: var(--radius);
+  border-radius:
+    var(--radius);
 
   padding: 32px;
 
   overflow: hidden;
 
-  transition: var(--transition);
+  transition:
+    var(--transition);
 
-  box-shadow: var(--shadow);
+  box-shadow:
+    var(--shadow);
+
+  will-change:
+    transform;
 }
 
 .card::before,
@@ -611,64 +719,24 @@ img {
   transition: var(--transition);
 }
 
-.card::after,
-.project-card::after,
-.value-card::after {
-
-  content: "";
-
-  position: absolute;
-
-  inset: -1px;
-
-  border-radius: inherit;
-
-  padding: 1px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(59,130,246,.4),
-      rgba(34,197,94,.2),
-      transparent
-    );
-
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-
-  -webkit-mask-composite: xor;
-
-  opacity: 0;
-
-  transition: .4s;
-}
-
 .card:hover,
 .project-card:hover,
 .value-card:hover {
 
   transform:
     translateY(-10px)
-    scale(1.01);
-
-  border-color:
-    rgba(59,130,246,.35);
+    scale(1.015);
 
   box-shadow:
     var(--shadow-lg);
+
+  backdrop-filter:
+    blur(22px);
 }
 
 .card:hover::before,
 .project-card:hover::before,
 .value-card:hover::before {
-
-  opacity: 1;
-}
-
-.card:hover::after,
-.project-card:hover::after,
-.value-card:hover::after {
 
   opacity: 1;
 }
@@ -722,7 +790,8 @@ img {
 
 .project-list li {
 
-  color: var(--text-secondary);
+  color:
+    var(--text-secondary);
 }
 
 .project-stack {
@@ -740,19 +809,17 @@ img {
 
   border-radius: 999px;
 
-  background: rgba(255,255,255,.05);
+  background:
+    rgba(255,255,255,.05);
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
 
   font-size: 13px;
 }
 
-.project-actions {
-  margin-top: auto;
-}
-
 /* =========================================
-   FORM
+   FORMS
 ========================================= */
 
 form {
@@ -772,7 +839,8 @@ select {
 
   border-radius: 16px;
 
-  border: 1px solid rgba(255,255,255,.08);
+  border:
+    1px solid rgba(255,255,255,.08);
 
   background:
     linear-gradient(
@@ -787,7 +855,8 @@ select {
 
   font-size: 16px;
 
-  backdrop-filter: blur(10px);
+  backdrop-filter:
+    blur(10px);
 
   transition:
     border .3s,
@@ -799,11 +868,11 @@ input:focus,
 textarea:focus,
 select:focus {
 
-  border-color: var(--primary);
+  border-color:
+    var(--primary);
 
-  outline: none;
-
-  transform: translateY(-2px);
+  transform:
+    translateY(-2px);
 
   box-shadow:
     0 0 0 4px rgba(59,130,246,.15);
@@ -818,62 +887,43 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: #64748b;
+
+  color:
+    var(--text-muted);
 }
 
 /* =========================================
-   HERO FORM
+   ANIMATIONS
 ========================================= */
 
-.hero-form {
+@keyframes glowMove {
 
-  display: flex;
+  0%,100% {
+    transform: translateY(0);
+  }
 
-  gap: 12px;
-
-  max-width: 620px;
-
-  margin: 42px auto 0;
+  50% {
+    transform: translateY(-40px);
+  }
 }
 
-.hero-form input {
-  margin: 0;
-}
+@keyframes gradientMove {
 
-/* =========================================
-   HERO PROOF
-========================================= */
-
-.hero-proof {
-
-  margin-top: 26px;
-
-  color: #cbd5e1;
-
-  font-size: 15px;
+  100% {
+    background-position: 200%;
+  }
 }
 
 /* =========================================
-   UTILITIES
-========================================= */
-
-.center {
-  text-align: center;
-}
-
-.hidden {
-  display: none;
-}
-
-/* =========================================
-   REVEAL ANIMATIONS
+   REVEAL STATES
 ========================================= */
 
 .reveal {
 
   opacity: 0;
 
-  transform: translateY(40px);
+  transform:
+    translateY(40px);
 
   transition:
     opacity .8s ease,
@@ -884,22 +934,53 @@ textarea::placeholder {
 
   opacity: 1;
 
-  transform: translateY(0);
+  transform:
+    translateY(0);
 }
 
 /* =========================================
-   GLOBAL TRANSITIONS
+   NAVBAR HIDE
 ========================================= */
 
-a,
-button,
-input,
-textarea,
-.card,
-.project-card,
-.value-card {
+.navbar.hide {
 
-  transition: var(--transition);
+  transform:
+    translateY(-120%);
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  * {
+
+    animation: none !important;
+
+    transition: none !important;
+
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================
+   SAFARI FIXES
+========================================= */
+
+@supports (-webkit-touch-callout: none) {
+
+  body {
+    background-attachment: scroll;
+  }
+
+  .card,
+  .project-card,
+  .value-card {
+
+    backdrop-filter:
+      blur(14px);
+  }
 }
 
 /* =========================================
@@ -914,6 +995,10 @@ textarea,
 }
 
 @media (max-width: 768px) {
+
+  body {
+    overflow-x: hidden;
+  }
 
   .hero {
 
@@ -930,6 +1015,10 @@ textarea,
     font-size: 20px;
   }
 
+  .hero-description {
+    font-size: 16px;
+  }
+
   .hero-buttons,
   .hero-form {
 
@@ -941,7 +1030,7 @@ textarea,
   }
 
   .section {
-    padding: 80px 0;
+    padding: 72px 0;
   }
 
   .card,
@@ -956,13 +1045,13 @@ textarea,
 
     grid-template-columns: 1fr;
   }
+
+  .project-stack span {
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 480px) {
-
-  .container {
-    padding: 0 18px;
-  }
 
   h1 {
     font-size: 36px;

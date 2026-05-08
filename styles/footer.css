@@ -1,219 +1,497 @@
-/* ==========================
-   FOOTER ULTRA PRO (CONVERSIÓN + SEO)
-========================== */
-.footer {
-  margin-top: 120px;
-  padding: 90px 20px 40px;
+/* =========================================
+   FOOTER — ULTRA PRO FINAL
+========================================= */
 
-  background: linear-gradient(180deg, #020617, #010409);
-  border-top: 1px solid rgba(255,255,255,0.06);
+.footer {
 
   position: relative;
+
   overflow: hidden;
+
+  margin-top: 140px;
+
+  padding:
+    100px 24px
+    40px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #020617 0%,
+      #010409 100%
+    );
+
+  border-top:
+    1px solid rgba(255,255,255,.06);
 }
 
-/* Glow premium más limpio */
+/* =========================================
+   GLOW FX
+========================================= */
+
 .footer::before {
+
   content: "";
+
   position: absolute;
-  width: 600px;
-  height: 600px;
 
-  background: radial-gradient(circle, rgba(59,130,246,0.15), transparent);
+  width: 700px;
+  height: 700px;
 
-  top: -200px;
+  top: -260px;
   left: 50%;
+
   transform: translateX(-50%);
 
-  filter: blur(140px);
-  opacity: 0.5;
+  background:
+    radial-gradient(
+      circle,
+      rgba(59,130,246,.16),
+      transparent 70%
+    );
+
+  filter: blur(160px);
+
+  opacity: .7;
+
+  pointer-events: none;
 }
 
-/* ==========================
-   CONTENEDOR
-========================== */
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
+.footer::after {
 
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  gap: 50px;
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,.012) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.012) 1px,
+      transparent 1px
+    );
+
+  background-size: 60px 60px;
+
+  opacity: .25;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.footer-container {
 
   position: relative;
   z-index: 2;
+
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    1.4fr
+    1fr
+    1fr
+    1.1fr;
+
+  gap: 60px;
 }
 
-/* ==========================
-   BRAND (CLAVE SEO + CONVERSIÓN)
-========================== */
+/* =========================================
+   BRAND
+========================================= */
+
 .footer-brand {
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
+
+  gap: 18px;
 }
 
 .footer-brand h3 {
-  font-size: 18px;
+
   margin: 0;
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: white;
 }
 
 .footer-brand p {
+
+  max-width: 340px;
+
+  margin: 0;
+
   color: var(--text-secondary);
-  font-size: 14px;
-  max-width: 320px;
+
+  line-height: 1.8;
+
+  font-size: 15px;
 }
 
-/* Badge autoridad */
-.footer-badge {
-  display: inline-block;
-  font-size: 12px;
-  color: var(--primary);
-  background: rgba(59,130,246,0.1);
-  padding: 6px 10px;
+/* =========================================
+   BADGES
+========================================= */
+
+.footer-badges {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 6px;
+}
+
+.footer-badges span {
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    8px 14px;
+
   border-radius: 999px;
-  width: fit-content;
+
+  background:
+    rgba(255,255,255,.04);
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  color: #cbd5e1;
+
+  font-size: 13px;
+
+  backdrop-filter: blur(10px);
+
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease;
 }
 
-/* ==========================
-   COLUMNAS
-========================== */
-.footer-column {
+.footer-badges span:hover {
+
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(59,130,246,.35);
+
+  background:
+    rgba(59,130,246,.08);
+}
+
+/* =========================================
+   LINKS
+========================================= */
+
+.footer-links,
+.footer-contact {
+
   display: flex;
   flex-direction: column;
-  gap: 12px;
+
+  gap: 18px;
 }
 
-.footer-column h4 {
-  font-size: 13px;
+.footer-links h4,
+.footer-contact h4 {
+
+  margin: 0;
+
   color: white;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
   text-transform: uppercase;
+
   letter-spacing: 1px;
-  margin-bottom: 10px;
 }
 
-/* LINKS */
-.footer-column a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
+.footer-links ul {
+
+  list-style: none;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+/* =========================================
+   LINK STYLE
+========================================= */
+
+.footer-links a,
+.footer-mini-links a {
+
   position: relative;
 
-  transition: all 0.25s ease;
+  width: fit-content;
+
+  text-decoration: none;
+
+  color: var(--text-secondary);
+
+  font-size: 15px;
+
+  transition:
+    color .25s ease,
+    transform .25s ease;
 }
 
-.footer-column a:hover {
+.footer-links a:hover,
+.footer-mini-links a:hover {
+
   color: white;
+
+  transform: translateX(3px);
 }
 
-/* underline pro */
-.footer-column a::after {
+.footer-links a::after,
+.footer-mini-links a::after {
+
   content: "";
+
   position: absolute;
+
   left: 0;
-  bottom: -4px;
+  bottom: -5px;
 
   width: 0%;
   height: 2px;
 
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 999px;
 
-  transition: width 0.3s ease;
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  transition: width .3s ease;
 }
 
-.footer-column a:hover::after {
+.footer-links a:hover::after,
+.footer-mini-links a:hover::after {
+
   width: 100%;
 }
 
-/* ==========================
-   CTA (MUY IMPORTANTE)
-========================== */
-.footer-cta {
+/* =========================================
+   CONTACT
+========================================= */
+
+.footer-contact p {
+
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+
+  font-size: 15px;
+}
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.footer-actions {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 14px;
+
   margin-top: 12px;
+}
 
-  display: inline-block;
+/* =========================================
+   BUTTON SMALL
+========================================= */
 
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
+.btn.small {
 
-  padding: 12px 20px;
-  border-radius: 999px;
+  padding:
+    12px 18px;
 
-  font-weight: 600;
   font-size: 14px;
 
-  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-
-  transition: all 0.3s ease;
+  min-height: auto;
 }
 
-.footer-cta:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
-}
+/* =========================================
+   BOTTOM
+========================================= */
 
-/* ==========================
-   SOCIAL (NUEVO - PRO)
-========================== */
-.footer-social {
-  display: flex;
-  gap: 12px;
-  margin-top: 10px;
-}
+.footer-bottom {
 
-.footer-social a {
-  width: 36px;
-  height: 36px;
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1200px;
+
+  margin:
+    80px auto 0;
+
+  padding-top: 26px;
+
+  border-top:
+    1px solid rgba(255,255,255,.06);
+
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 20px;
 
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
-
-  transition: all 0.3s ease;
+  flex-wrap: wrap;
 }
 
-.footer-social a:hover {
-  background: var(--primary);
-  transform: translateY(-3px);
-}
+.footer-bottom p {
 
-/* ==========================
-   BOTTOM
-========================== */
-.footer-bottom {
-  margin-top: 70px;
-  padding-top: 25px;
+  margin: 0;
 
-  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
 
-  text-align: center;
   color: #64748b;
-  font-size: 13px;
 }
 
-/* ==========================
-   MOBILE
-========================== */
-@media (max-width: 900px) {
+/* =========================================
+   MINI LINKS
+========================================= */
+
+.footer-mini-links {
+
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+
+  flex-wrap: wrap;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
 
   .footer-container {
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 50px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .footer {
+
+    margin-top: 100px;
+
+    padding:
+      80px 20px
+      35px;
+  }
+
+  .footer-container {
+
     grid-template-columns: 1fr;
+
     text-align: center;
-    gap: 35px;
+
+    gap: 45px;
   }
 
-  .footer-brand {
+  .footer-brand,
+  .footer-links,
+  .footer-contact {
+
     align-items: center;
   }
 
-  .footer-column {
-    align-items: center;
+  .footer-brand p {
+
+    max-width: 100%;
   }
 
-  .footer-social {
+  .footer-links a,
+  .footer-mini-links a {
+
+    width: auto;
+  }
+
+  .footer-actions,
+  .footer-badges,
+  .footer-mini-links {
+
     justify-content: center;
+  }
+
+  .footer-bottom {
+
+    flex-direction: column;
+
+    text-align: center;
+
+    margin-top: 60px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .footer-brand h3 {
+
+    font-size: 22px;
+  }
+
+  .footer-links a,
+  .footer-contact p {
+
+    font-size: 14px;
+  }
+
+  .footer-actions {
+
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .footer-actions .btn {
+
+    width: 100%;
   }
 
 }
