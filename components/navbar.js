@@ -1,29 +1,68 @@
+// =========================================
+// VINICIUS BUGARIN — NAVBAR SYSTEM FINAL
+// ULTRA PRO VERSION
+// =========================================
+
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ==========================
+  // =========================================
+  // CONFIG
+  // =========================================
+
+  const CONFIG = {
+
+    mobileBreakpoint: 768,
+
+    navbarScrollOffset: 40,
+
+    navbarHideOffset: 120,
+
+    enablePrefetch: true,
+
+    enableSmartActive: true,
+
+    enableScrollSpy: true
+
+  };
+
+  // =========================================
   // NAVBAR TEMPLATE
-  // ==========================
+  // =========================================
 
   const navbarTemplate = `
-    <nav class="navbar" id="navbar" role="navigation" aria-label="Menú principal">
+
+    <nav
+      class="navbar"
+      id="main-navbar"
+      role="navigation"
+      aria-label="Menú principal"
+    >
 
       <div class="nav-container">
 
         <!-- LOGO -->
-        <div class="logo">
-          <a href="/" aria-label="Inicio">
-            <img
-              src="/images/VB.png"
-              alt="Vinicius Bugarin Logo"
-              width="40"
-              height="40"
-              loading="eager"
-              decoding="async"
-            >
-          </a>
-        </div>
+        <a
+          href="/"
+          class="logo"
+          aria-label="Inicio Vinicius Bugarin"
+        >
 
-        <!-- MOBILE BUTTON -->
+          <img
+            src="/images/VB.png"
+            alt="Logo Vinicius Bugarin"
+            width="42"
+            height="42"
+            loading="eager"
+            decoding="async"
+          >
+
+          <span class="logo-text">
+            Vinicius Bugarin
+          </span>
+
+        </a>
+
+        <!-- MOBILE TOGGLE -->
         <button
           class="menu-toggle"
           id="menu-toggle"
@@ -31,11 +70,18 @@ document.addEventListener("DOMContentLoaded", () => {
           aria-expanded="false"
           aria-controls="nav-links"
         >
-          ☰
+
+          <span></span>
+          <span></span>
+          <span></span>
+
         </button>
 
-        <!-- OVERLAY -->
-        <div class="nav-overlay" id="nav-overlay"></div>
+        <!-- MOBILE OVERLAY -->
+        <div
+          class="nav-overlay"
+          id="nav-overlay"
+        ></div>
 
         <!-- LINKS -->
         <ul
@@ -43,40 +89,78 @@ document.addEventListener("DOMContentLoaded", () => {
           id="nav-links"
           role="menubar"
         >
+
           <li role="none">
-            <a href="/" data-link role="menuitem">
+
+            <a
+              href="/"
+              role="menuitem"
+              data-link
+            >
               Inicio
             </a>
+
           </li>
 
           <li role="none">
+
+            <a
+              href="#projects"
+              role="menuitem"
+              data-scroll
+            >
+              Proyectos
+            </a>
+
+          </li>
+
+          <li role="none">
+
+            <a
+              href="#contact"
+              role="menuitem"
+              data-scroll
+            >
+              Contacto
+            </a>
+
+          </li>
+
+          <li role="none">
+
             <a
               href="/pages/desarrollador-web-barcelona.html"
-              data-link
               role="menuitem"
+              data-link
             >
               Barcelona
             </a>
+
           </li>
 
           <li role="none">
+
             <a
               href="/pages/desarrollador-web-freelance.html"
-              data-link
               role="menuitem"
+              data-link
             >
               Freelance
             </a>
+
           </li>
 
           <li role="none">
+
             <a
               href="#contact"
               class="cta"
               role="menuitem"
+              data-scroll
             >
-              Contacto
+              🚀 Trabajemos juntos
             </a>
+
           </li>
 
         </ul>
@@ -84,44 +168,78 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
     </nav>
+
   `;
 
-  const navbarRoot = document.getElementById("navbar");
+  // =========================================
+  // INJECT NAVBAR
+  // =========================================
+
+  const navbarRoot =
+    document.getElementById("navbar");
 
   if (!navbarRoot) return;
 
-  navbarRoot.innerHTML = navbarTemplate;
+  navbarRoot.innerHTML =
+    navbarTemplate;
 
-  // ==========================
+  // =========================================
   // ELEMENTS
-  // ==========================
+  // =========================================
 
-  const navbar = document.getElementById("navbar");
-  const toggle = document.getElementById("menu-toggle");
-  const links = document.getElementById("nav-links");
-  const overlay = document.getElementById("nav-overlay");
+  const navbar =
+    document.getElementById("main-navbar");
+
+  const menuToggle =
+    document.getElementById("menu-toggle");
+
+  const navLinks =
+    document.getElementById("nav-links");
+
+  const overlay =
+    document.getElementById("nav-overlay");
+
+  const navAnchors =
+    document.querySelectorAll(".nav-links a");
+
+  // =========================================
+  // STATE
+  // =========================================
 
   let isMenuOpen = false;
+
   let lastScroll = 0;
+
   let ticking = false;
 
-  // ==========================
-  // MENU
-  // ==========================
+  // =========================================
+  // MENU SYSTEM
+  // =========================================
 
   function openMenu() {
 
     isMenuOpen = true;
 
-    links.classList.add("active");
+    navLinks.classList.add("active");
+
     overlay.classList.add("active");
 
-    toggle.setAttribute("aria-expanded", "true");
+    menuToggle.classList.add("active");
 
-    document.body.style.overflow = "hidden";
+    menuToggle.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+    document.body.classList.add(
+      "menu-open"
+    );
 
     requestAnimationFrame(() => {
-      links.querySelector("a")?.focus();
+
+      navLinks.querySelector("a")
+        ?.focus();
+
     });
 
   }
@@ -130,12 +248,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     isMenuOpen = false;
 
-    links.classList.remove("active");
+    navLinks.classList.remove("active");
+
     overlay.classList.remove("active");
 
-    toggle.setAttribute("aria-expanded", "false");
+    menuToggle.classList.remove("active");
 
-    document.body.style.overflow = "";
+    menuToggle.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    document.body.classList.remove(
+      "menu-open"
+    );
 
   }
 
@@ -147,117 +273,192 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  toggle.addEventListener("click", toggleMenu);
+  menuToggle?.addEventListener(
+    "click",
+    toggleMenu
+  );
 
-  overlay.addEventListener("click", closeMenu);
+  overlay?.addEventListener(
+    "click",
+    closeMenu
+  );
 
-  // ==========================
-  // CLOSE MENU ON LINK
-  // ==========================
+  // =========================================
+  // CLOSE ON LINK CLICK
+  // =========================================
 
-  links.addEventListener("click", (e) => {
+  navAnchors.forEach(link => {
 
-    if (e.target.tagName === "A") {
-      closeMenu();
-    }
+    link.addEventListener("click", () => {
 
-  });
+      if (
+        window.innerWidth <=
+        CONFIG.mobileBreakpoint
+      ) {
 
-  // ==========================
-  // ESC CLOSE
-  // ==========================
+        closeMenu();
 
-  document.addEventListener("keydown", (e) => {
-
-    if (e.key === "Escape" && isMenuOpen) {
-      closeMenu();
-    }
-
-  });
-
-  // ==========================
-  // RESPONSIVE RESET
-  // ==========================
-
-  window.addEventListener("resize", () => {
-
-    if (window.innerWidth > 768 && isMenuOpen) {
-      closeMenu();
-    }
-
-  });
-
-  // ==========================
-  // ACTIVE LINK
-  // ==========================
-
-  const currentPath =
-    window.location.pathname.replace(/\/$/, "");
-
-  document.querySelectorAll(".nav-links a").forEach(link => {
-
-    const linkPath =
-      new URL(link.href).pathname.replace(/\/$/, "");
-
-    if (currentPath === linkPath) {
-
-      link.classList.add("active-link");
-
-      link.setAttribute("aria-current", "page");
-
-    }
-
-  });
-
-  // ==========================
-  // SMOOTH SCROLL
-  // ==========================
-
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-    anchor.addEventListener("click", function(e) {
-
-      const target =
-        document.querySelector(this.getAttribute("href"));
-
-      if (!target) return;
-
-      e.preventDefault();
-
-      const offset =
-        navbar.offsetHeight;
-
-      const top =
-        target.getBoundingClientRect().top +
-        window.scrollY -
-        offset;
-
-      window.scrollTo({
-        top,
-        behavior: "smooth"
-      });
+      }
 
     });
 
   });
 
-  // ==========================
-  // NAVBAR SCROLL EFFECT
-  // ==========================
+  // =========================================
+  // ESC CLOSE
+  // =========================================
+
+  document.addEventListener(
+    "keydown",
+    e => {
+
+      if (
+        e.key === "Escape" &&
+        isMenuOpen
+      ) {
+
+        closeMenu();
+
+      }
+
+    }
+  );
+
+  // =========================================
+  // RESPONSIVE RESET
+  // =========================================
+
+  window.addEventListener(
+    "resize",
+    () => {
+
+      if (
+        window.innerWidth >
+        CONFIG.mobileBreakpoint &&
+        isMenuOpen
+      ) {
+
+        closeMenu();
+
+      }
+
+    }
+  );
+
+  // =========================================
+  // ACTIVE LINK SYSTEM
+  // =========================================
+
+  function setActiveLink() {
+
+    const currentPath =
+      window.location.pathname
+        .replace(/\/$/, "");
+
+    navAnchors.forEach(link => {
+
+      const linkPath =
+        new URL(link.href)
+          .pathname
+          .replace(/\/$/, "");
+
+      if (
+        currentPath === linkPath
+      ) {
+
+        link.classList.add(
+          "active-link"
+        );
+
+        link.setAttribute(
+          "aria-current",
+          "page"
+        );
+
+      }
+
+    });
+
+  }
+
+  if (CONFIG.enableSmartActive) {
+    setActiveLink();
+  }
+
+  // =========================================
+  // SMOOTH SCROLL
+  // =========================================
+
+  document
+    .querySelectorAll("[data-scroll]")
+    .forEach(anchor => {
+
+      anchor.addEventListener(
+        "click",
+        e => {
+
+          const href =
+            anchor.getAttribute("href");
+
+          if (
+            !href.startsWith("#")
+          ) return;
+
+          const target =
+            document.querySelector(href);
+
+          if (!target) return;
+
+          e.preventDefault();
+
+          const offset =
+            navbar.offsetHeight;
+
+          const top =
+            target
+              .getBoundingClientRect()
+              .top +
+            window.scrollY -
+            offset;
+
+          window.scrollTo({
+
+            top,
+
+            behavior: "smooth"
+
+          });
+
+        }
+      );
+
+    });
+
+  // =========================================
+  // SCROLL EFFECTS
+  // =========================================
 
   function updateNavbar() {
 
-    const currentScroll = window.scrollY;
+    const currentScroll =
+      window.scrollY;
 
+    // SCROLLED STATE
     navbar.classList.toggle(
       "scrolled",
-      currentScroll > 40
+      currentScroll >
+      CONFIG.navbarScrollOffset
     );
 
-    // hide/show
+    // HIDE ON DOWN
     if (
-      currentScroll > lastScroll &&
-      currentScroll > 120
+
+      currentScroll >
+      lastScroll &&
+
+      currentScroll >
+      CONFIG.navbarHideOffset
+
     ) {
 
       navbar.classList.add("hide");
@@ -268,73 +469,173 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    lastScroll = currentScroll;
+    lastScroll =
+      currentScroll;
 
     ticking = false;
+
   }
 
-  window.addEventListener("scroll", () => {
+  window.addEventListener(
+    "scroll",
+    () => {
 
-    if (!ticking) {
+      if (!ticking) {
 
-      requestAnimationFrame(updateNavbar);
+        requestAnimationFrame(
+          updateNavbar
+        );
 
-      ticking = true;
+        ticking = true;
 
-    }
+      }
 
-  }, { passive: true });
+    },
+    { passive: true }
+  );
 
-  // ==========================
-  // PREFETCH INTELIGENTE
-  // ==========================
+  // =========================================
+  // PREFETCH
+  // =========================================
 
-  const prefetched = new Set();
+  if (CONFIG.enablePrefetch) {
 
-  document.querySelectorAll("a[data-link]").forEach(link => {
+    const prefetched =
+      new Set();
 
-    function prefetchPage() {
+    document
+      .querySelectorAll("a[data-link]")
+      .forEach(link => {
 
-      const href = link.href;
+        function prefetchPage() {
 
-      if (
-        prefetched.has(href) ||
-        href.includes("#")
-      ) return;
+          const href =
+            link.href;
 
-      const prefetch =
-        document.createElement("link");
+          if (
 
-      prefetch.rel = "prefetch";
-      prefetch.href = href;
-      prefetch.as = "document";
+            prefetched.has(href) ||
 
-      document.head.appendChild(prefetch);
+            href.includes("#")
 
-      prefetched.add(href);
+          ) return;
 
-    }
+          const prefetch =
+            document.createElement(
+              "link"
+            );
 
-    link.addEventListener(
-      "mouseenter",
-      prefetchPage,
-      { once: true }
+          prefetch.rel =
+            "prefetch";
+
+          prefetch.href =
+            href;
+
+          prefetch.as =
+            "document";
+
+          document.head.appendChild(
+            prefetch
+          );
+
+          prefetched.add(href);
+
+        }
+
+        link.addEventListener(
+          "mouseenter",
+          prefetchPage,
+          { once: true }
+        );
+
+        link.addEventListener(
+          "touchstart",
+          prefetchPage,
+          { once: true }
+        );
+
+      });
+
+  }
+
+  // =========================================
+  // SCROLL SPY
+  // =========================================
+
+  if (CONFIG.enableScrollSpy) {
+
+    const sections =
+      document.querySelectorAll(
+        "section[id]"
+      );
+
+    const observer =
+      new IntersectionObserver(
+
+        entries => {
+
+          entries.forEach(entry => {
+
+            if (
+              entry.isIntersecting
+            ) {
+
+              const id =
+                entry.target.id;
+
+              navAnchors.forEach(
+                link => {
+
+                  link.classList.remove(
+                    "active-link"
+                  );
+
+                  if (
+                    link.getAttribute(
+                      "href"
+                    ) === `#${id}`
+                  ) {
+
+                    link.classList.add(
+                      "active-link"
+                    );
+
+                  }
+
+                }
+              );
+
+            }
+
+          });
+
+        },
+
+        {
+          threshold: 0.5
+        }
+
+      );
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+  }
+
+  // =========================================
+  // INITIAL STATE
+  // =========================================
+
+  if (
+    window.scrollY >
+    CONFIG.navbarScrollOffset
+  ) {
+
+    navbar.classList.add(
+      "scrolled"
     );
 
-    link.addEventListener(
-      "touchstart",
-      prefetchPage,
-      { once: true }
-    );
-
-  });
-
-  // ==========================
-  // AUTO SHADOW INIT
-  // ==========================
-
-  if (window.scrollY > 40) {
-    navbar.classList.add("scrolled");
   }
 
 });

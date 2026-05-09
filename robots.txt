@@ -1,2 +1,24 @@
+# =========================================
+# ROBOTS.TXT — ULTRA SEO FINAL
+# =========================================
+
 User-agent: *
+
+# ALLOW MAIN SITE
 Allow: /
+
+# BLOCK SYSTEM FILES
+Disallow: /components/
+Disallow: /js/
+Disallow: /styles/
+
+# BLOCK PRIVATE / TEMP
+Disallow: /tmp/
+Disallow: /drafts/
+Disallow: /private/
+
+# HOST
+Host: https://viniciusbugarin.github.io
+
+# SITEMAP
+Sitemap: https://viniciusbugarin.github.io/sitemap.xml

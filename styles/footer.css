@@ -1,5 +1,5 @@
 /* =========================================
-   FOOTER — ULTRA PRO FINAL
+   FOOTER — VINICIUS BUGARIN FINAL VERSION
 ========================================= */
 
 .footer {
@@ -11,7 +11,7 @@
   margin-top: 140px;
 
   padding:
-    100px 24px
+    110px 24px
     40px;
 
   background:
@@ -23,10 +23,12 @@
 
   border-top:
     1px solid rgba(255,255,255,.06);
+
+  isolation: isolate;
 }
 
 /* =========================================
-   GLOW FX
+   BACKGROUND FX
 ========================================= */
 
 .footer::before {
@@ -35,10 +37,10 @@
 
   position: absolute;
 
-  width: 700px;
-  height: 700px;
+  width: 720px;
+  height: 720px;
 
-  top: -260px;
+  top: -320px;
   left: 50%;
 
   transform: translateX(-50%);
@@ -46,15 +48,17 @@
   background:
     radial-gradient(
       circle,
-      rgba(59,130,246,.16),
+      rgba(59,130,246,.18),
       transparent 70%
     );
 
   filter: blur(160px);
 
-  opacity: .7;
+  opacity: .8;
 
   pointer-events: none;
+
+  z-index: -2;
 }
 
 .footer::after {
@@ -78,9 +82,11 @@
 
   background-size: 60px 60px;
 
-  opacity: .25;
+  opacity: .22;
 
   pointer-events: none;
+
+  z-index: -1;
 }
 
 /* =========================================
@@ -90,6 +96,7 @@
 .footer-container {
 
   position: relative;
+
   z-index: 2;
 
   width: 100%;
@@ -100,10 +107,10 @@
   display: grid;
 
   grid-template-columns:
-    1.4fr
+    1.5fr
     1fr
     1fr
-    1.1fr;
+    1.2fr;
 
   gap: 60px;
 }
@@ -115,9 +122,44 @@
 .footer-brand {
 
   display: flex;
+
   flex-direction: column;
 
-  gap: 18px;
+  gap: 20px;
+}
+
+.footer-logo {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.footer-logo img {
+
+  width: 52px;
+
+  height: 52px;
+
+  object-fit: contain;
+
+  border-radius: 14px;
+
+  transition:
+    transform .35s ease,
+    filter .35s ease;
+}
+
+.footer-logo:hover img {
+
+  transform:
+    rotate(-3deg)
+    scale(1.05);
+
+  filter:
+    drop-shadow(0 0 20px rgba(59,130,246,.45));
 }
 
 .footer-brand h3 {
@@ -126,20 +168,22 @@
 
   font-size: 24px;
 
-  font-weight: 700;
+  font-weight: 800;
+
+  letter-spacing: -.5px;
 
   color: white;
 }
 
 .footer-brand p {
 
-  max-width: 340px;
-
   margin: 0;
+
+  max-width: 360px;
 
   color: var(--text-secondary);
 
-  line-height: 1.8;
+  line-height: 1.9;
 
   font-size: 15px;
 }
@@ -156,17 +200,19 @@
 
   gap: 10px;
 
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .footer-badges span {
 
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
 
   padding:
-    8px 14px;
+    9px 15px;
 
   border-radius: 999px;
 
@@ -180,40 +226,38 @@
 
   font-size: 13px;
 
+  font-weight: 500;
+
   backdrop-filter: blur(10px);
 
   transition:
     transform .25s ease,
     border-color .25s ease,
-    background .25s ease;
+    background .25s ease,
+    color .25s ease;
 }
 
 .footer-badges span:hover {
 
-  transform: translateY(-2px);
+  transform:
+    translateY(-3px);
 
   border-color:
     rgba(59,130,246,.35);
 
   background:
     rgba(59,130,246,.08);
+
+  color: white;
 }
 
 /* =========================================
-   LINKS
+   TITLES
 ========================================= */
 
-.footer-links,
-.footer-contact {
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 18px;
-}
-
 .footer-links h4,
-.footer-contact h4 {
+.footer-contact h4,
+.footer-social h4 {
 
   margin: 0;
 
@@ -225,20 +269,37 @@
 
   text-transform: uppercase;
 
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
+}
+
+/* =========================================
+   LINKS
+========================================= */
+
+.footer-links,
+.footer-contact,
+.footer-social {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
 }
 
 .footer-links ul {
 
   list-style: none;
 
-  padding: 0;
   margin: 0;
 
+  padding: 0;
+
   display: flex;
+
   flex-direction: column;
 
-  gap: 14px;
+  gap: 15px;
 }
 
 /* =========================================
@@ -246,15 +307,16 @@
 ========================================= */
 
 .footer-links a,
-.footer-mini-links a {
+.footer-mini-links a,
+.footer-contact a {
 
   position: relative;
 
   width: fit-content;
 
-  text-decoration: none;
-
   color: var(--text-secondary);
+
+  text-decoration: none;
 
   font-size: 15px;
 
@@ -264,15 +326,18 @@
 }
 
 .footer-links a:hover,
-.footer-mini-links a:hover {
+.footer-mini-links a:hover,
+.footer-contact a:hover {
 
   color: white;
 
-  transform: translateX(3px);
+  transform:
+    translateX(3px);
 }
 
 .footer-links a::after,
-.footer-mini-links a::after {
+.footer-mini-links a::after,
+.footer-contact a::after {
 
   content: "";
 
@@ -293,17 +358,19 @@
       var(--secondary)
     );
 
-  transition: width .3s ease;
+  transition:
+    width .3s ease;
 }
 
 .footer-links a:hover::after,
-.footer-mini-links a:hover::after {
+.footer-mini-links a:hover::after,
+.footer-contact a:hover::after {
 
   width: 100%;
 }
 
 /* =========================================
-   CONTACT
+   CONTACT TEXT
 ========================================= */
 
 .footer-contact p {
@@ -312,9 +379,66 @@
 
   color: var(--text-secondary);
 
-  line-height: 1.7;
+  line-height: 1.8;
 
   font-size: 15px;
+}
+
+/* =========================================
+   SOCIAL
+========================================= */
+
+.social-links {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.social-links a {
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255,255,255,.04);
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  color: white;
+
+  font-size: 18px;
+
+  transition:
+    transform .3s ease,
+    background .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease;
+}
+
+.social-links a:hover {
+
+  transform:
+    translateY(-4px);
+
+  background:
+    rgba(59,130,246,.1);
+
+  border-color:
+    rgba(59,130,246,.3);
+
+  box-shadow:
+    0 12px 28px rgba(59,130,246,.18);
 }
 
 /* =========================================
@@ -329,12 +453,8 @@
 
   gap: 14px;
 
-  margin-top: 12px;
+  margin-top: 14px;
 }
-
-/* =========================================
-   BUTTON SMALL
-========================================= */
 
 .btn.small {
 
@@ -353,6 +473,7 @@
 .footer-bottom {
 
   position: relative;
+
   z-index: 2;
 
   width: 100%;
@@ -361,14 +482,17 @@
   margin:
     80px auto 0;
 
-  padding-top: 26px;
+  padding-top: 28px;
 
   border-top:
     1px solid rgba(255,255,255,.06);
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 20px;
 
   flex-wrap: wrap;
@@ -381,6 +505,8 @@
   font-size: 14px;
 
   color: #64748b;
+
+  line-height: 1.6;
 }
 
 /* =========================================
@@ -390,11 +516,33 @@
 .footer-mini-links {
 
   display: flex;
+
   align-items: center;
 
   gap: 20px;
 
   flex-wrap: wrap;
+}
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.footer-divider {
+
+  width: 100%;
+
+  height: 1px;
+
+  margin: 10px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.08),
+      transparent
+    );
 }
 
 /* =========================================
@@ -406,7 +554,8 @@
   .footer-container {
 
     grid-template-columns:
-      1fr 1fr;
+      1fr
+      1fr;
 
     gap: 50px;
   }
@@ -420,7 +569,7 @@
     margin-top: 100px;
 
     padding:
-      80px 20px
+      85px 20px
       35px;
   }
 
@@ -430,12 +579,13 @@
 
     text-align: center;
 
-    gap: 45px;
+    gap: 50px;
   }
 
   .footer-brand,
   .footer-links,
-  .footer-contact {
+  .footer-contact,
+  .footer-social {
 
     align-items: center;
   }
@@ -446,14 +596,16 @@
   }
 
   .footer-links a,
-  .footer-mini-links a {
+  .footer-mini-links a,
+  .footer-contact a {
 
     width: auto;
   }
 
-  .footer-actions,
   .footer-badges,
-  .footer-mini-links {
+  .footer-actions,
+  .footer-mini-links,
+  .social-links {
 
     justify-content: center;
   }
@@ -471,11 +623,19 @@
 
 @media (max-width: 480px) {
 
+  .footer {
+
+    padding:
+      70px 18px
+      30px;
+  }
+
   .footer-brand h3 {
 
     font-size: 22px;
   }
 
+  .footer-brand p,
   .footer-links a,
   .footer-contact p {
 
@@ -492,6 +652,12 @@
   .footer-actions .btn {
 
     width: 100%;
+  }
+
+  .social-links a {
+
+    width: 44px;
+    height: 44px;
   }
 
 }
