@@ -2,9 +2,14 @@
 
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
 >
 
+  <!-- ========================================= -->
   <!-- HOME -->
+  <!-- ========================================= -->
+
   <url>
 
     <loc>
@@ -12,7 +17,7 @@
     </loc>
 
     <lastmod>
-      2026-05-09
+      2026-05-10
     </lastmod>
 
     <changefreq>
@@ -23,9 +28,22 @@
       1.0
     </priority>
 
+    <image:image>
+      <image:loc>
+        https://viniciusbugarin.github.io/images/VB.png
+      </image:loc>
+
+      <image:title>
+        Vinicius Bugarin - Desarrollador Web
+      </image:title>
+    </image:image>
+
   </url>
 
+  <!-- ========================================= -->
   <!-- SERVICIOS -->
+  <!-- ========================================= -->
+
   <url>
 
     <loc>
@@ -33,7 +51,7 @@
     </loc>
 
     <lastmod>
-      2026-05-09
+      2026-05-10
     </lastmod>
 
     <changefreq>
@@ -41,7 +59,7 @@
     </changefreq>
 
     <priority>
-      0.9
+      0.95
     </priority>
 
   </url>
@@ -53,7 +71,7 @@
     </loc>
 
     <lastmod>
-      2026-05-09
+      2026-05-10
     </lastmod>
 
     <changefreq>
@@ -61,12 +79,17 @@
     </changefreq>
 
     <priority>
-      0.9
+      0.95
     </priority>
 
   </url>
 
+  <!-- ========================================= -->
   <!-- PROYECTOS -->
+  <!-- ========================================= -->
+
+  <!-- CALCULADORA IRPF -->
+
   <url>
 
     <loc>
@@ -74,7 +97,7 @@
     </loc>
 
     <lastmod>
-      2026-05-09
+      2026-05-10
     </lastmod>
 
     <changefreq>
@@ -82,10 +105,12 @@
     </changefreq>
 
     <priority>
-      0.8
+      0.90
     </priority>
 
   </url>
+
+  <!-- CALCULADORA AUTÓNOMOS -->
 
   <url>
 
@@ -94,7 +119,7 @@
     </loc>
 
     <lastmod>
-      2026-05-09
+      2026-05-10
     </lastmod>
 
     <changefreq>
@@ -102,7 +127,73 @@
     </changefreq>
 
     <priority>
-      0.8
+      0.90
+    </priority>
+
+  </url>
+
+  <!-- IRON FORGE GYM -->
+
+  <url>
+
+    <loc>
+      https://viniciusbugarin.github.io/iron-forge-gym/
+    </loc>
+
+    <lastmod>
+      2026-05-10
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.85
+    </priority>
+
+  </url>
+
+  <!-- LA PLAZA GOURMET -->
+
+  <url>
+
+    <loc>
+      https://viniciusbugarin.github.io/La-Plaza-Gourmet/
+    </loc>
+
+    <lastmod>
+      2026-05-10
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.85
+    </priority>
+
+  </url>
+
+  <!-- LEXORIA ABOGADOS -->
+
+  <url>
+
+    <loc>
+      https://viniciusbugarin.github.io/lexoria-abogados/
+    </loc>
+
+    <lastmod>
+      2026-05-10
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.90
     </priority>
 
   </url>
