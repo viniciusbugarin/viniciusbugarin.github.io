@@ -1,27 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ==========================
+  // =========================================
   // CONFIG
-  // ==========================
+  // =========================================
 
   const CONFIG = {
+
     brand: "Vinicius Bugarin",
+
     email: "viniciusbugarin@gmail.com",
+
     location: "Barcelona, España",
-    whatsapp: "34662352675"
+
+    whatsapp: "34662352675",
+
+    github: "https://github.com/viniciusbugarin"
+
   };
 
-  // ==========================
+  // =========================================
   // YEAR
-  // ==========================
+  // =========================================
 
-  const currentYear = new Date().getFullYear();
+  const currentYear =
+    new Date().getFullYear();
 
-  // ==========================
+  // =========================================
   // FOOTER TEMPLATE
-  // ==========================
+  // =========================================
 
   const footerTemplate = `
+  
     <footer
       class="footer"
       role="contentinfo"
@@ -31,21 +40,28 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="footer-container">
 
         <!-- BRAND -->
-        <section class="footer-brand">
+        <section class="footer-brand reveal fade">
 
-          <h3>${CONFIG.brand}</h3>
+          <h3>
+            ${CONFIG.brand}
+          </h3>
 
           <p>
-            Desarrollo páginas web modernas, automatizaciones
-            inteligentes y herramientas digitales optimizadas
+            Desarrollo páginas web modernas,
+            automatizaciones inteligentes y
+            herramientas digitales optimizadas
             para generar resultados reales.
           </p>
 
           <div class="footer-badges">
 
-            <span>⚡ SEO Optimizado</span>
+            <span>⚡ SEO Técnico</span>
+
             <span>🚀 Automatización</span>
+
             <span>💻 Desarrollo Web</span>
+
+            <span>📈 Conversión</span>
 
           </div>
 
@@ -53,11 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- NAVIGATION -->
         <nav
-          class="footer-links"
+          class="footer-links reveal fade"
           aria-label="Navegación principal"
         >
 
-          <h4>Enlaces</h4>
+          <h4>
+            Navegación
+          </h4>
 
           <ul>
 
@@ -95,13 +113,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </nav>
 
-        <!-- SEO SERVICES -->
+        <!-- SERVICES -->
         <nav
-          class="footer-links"
+          class="footer-links reveal fade"
           aria-label="Servicios"
         >
 
-          <h4>Servicios</h4>
+          <h4>
+            Servicios
+          </h4>
 
           <ul>
 
@@ -124,8 +144,8 @@ document.addEventListener("DOMContentLoaded", () => {
             </li>
 
             <li>
-              <a href="/pages/desarrollo-web-barcelona.html">
-                Webs para Negocios
+              <a href="/pages/desarrollo-apps.html">
+                Desarrollo Apps Web
               </a>
             </li>
 
@@ -135,14 +155,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- CONTACT -->
         <section
-          class="footer-contact"
+          class="footer-contact reveal fade"
           aria-label="Información de contacto"
         >
 
-          <h4>Contacto</h4>
+          <h4>
+            Contacto
+          </h4>
 
           <p>
-            📩 ${CONFIG.email}
+            📩
+            <a href="mailto:${CONFIG.email}">
+              ${CONFIG.email}
+            </a>
           </p>
 
           <p>
@@ -163,8 +188,19 @@ document.addEventListener("DOMContentLoaded", () => {
               target="_blank"
               rel="noopener noreferrer"
               class="btn secondary small"
+              aria-label="WhatsApp"
             >
               WhatsApp
+            </a>
+
+            <a
+              href="${CONFIG.github}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn secondary small"
+              aria-label="GitHub"
+            >
+              GitHub
             </a>
 
           </div>
@@ -178,7 +214,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="footer-bottom">
 
         <p>
-          © ${currentYear} ${CONFIG.brand}
+          © ${currentYear}
+          ${CONFIG.brand}
           · Todos los derechos reservados
         </p>
 
@@ -203,26 +240,27 @@ document.addEventListener("DOMContentLoaded", () => {
     </footer>
   `;
 
-  // ==========================
+  // =========================================
   // RENDER
-  // ==========================
+  // =========================================
 
   const footerRoot =
     document.getElementById("footer");
 
   if (!footerRoot) return;
 
-  footerRoot.innerHTML = footerTemplate;
+  footerRoot.innerHTML =
+    footerTemplate;
 
-  // ==========================
+  // =========================================
   // SMOOTH SCROLL
-  // ==========================
+  // =========================================
 
   document
     .querySelectorAll('footer a[href^="#"]')
     .forEach(link => {
 
-      link.addEventListener("click", (e) => {
+      link.addEventListener("click", e => {
 
         const target =
           document.querySelector(
@@ -237,7 +275,9 @@ document.addEventListener("DOMContentLoaded", () => {
           document.querySelector(".navbar");
 
         const offset =
-          navbar ? navbar.offsetHeight : 0;
+          navbar
+            ? navbar.offsetHeight
+            : 0;
 
         const top =
           target.getBoundingClientRect().top +
@@ -253,11 +293,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-  // ==========================
+  // =========================================
   // PREFETCH INTERNAL LINKS
-  // ==========================
+  // =========================================
 
-  const prefetched = new Set();
+  const prefetched =
+    new Set();
 
   document
     .querySelectorAll('footer a[href^="/"]')
@@ -267,13 +308,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const href = link.href;
 
-        if (prefetched.has(href)) return;
+        if (
+          prefetched.has(href)
+        ) return;
 
         const preload =
           document.createElement("link");
 
         preload.rel = "prefetch";
+
         preload.href = href;
+
         preload.as = "document";
 
         document.head.appendChild(preload);
