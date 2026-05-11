@@ -17,7 +17,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -28,7 +28,14 @@
       1.0
     </priority>
 
+    <xhtml:link
+      rel="alternate"
+      hreflang="es"
+      href="https://viniciusbugarin.github.io/"
+    />
+
     <image:image>
+
       <image:loc>
         https://viniciusbugarin.github.io/images/VB.png
       </image:loc>
@@ -36,6 +43,7 @@
       <image:title>
         Vinicius Bugarin - Desarrollador Web
       </image:title>
+
     </image:image>
 
   </url>
@@ -44,6 +52,8 @@
   <!-- SERVICIOS -->
   <!-- ========================================= -->
 
+  <!-- BARCELONA -->
+
   <url>
 
     <loc>
@@ -51,7 +61,37 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.95
+    </priority>
+
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/VB.png
+      </image:loc>
+
+    </image:image>
+
+  </url>
+
+  <!-- FREELANCE -->
+
+  <url>
+
+    <loc>
+      https://viniciusbugarin.github.io/pages/desarrollador-web-freelance.html
+    </loc>
+
+    <lastmod>
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -64,14 +104,16 @@
 
   </url>
 
+  <!-- SEO -->
+
   <url>
 
     <loc>
-      https://viniciusbugarin.github.io/pages/desarrollador-web-freelance.html
+      https://viniciusbugarin.github.io/desarrollador-web-seo.html
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -88,7 +130,7 @@
   <!-- PROYECTOS -->
   <!-- ========================================= -->
 
-  <!-- CALCULADORA IRPF -->
+  <!-- IRPF -->
 
   <url>
 
@@ -97,7 +139,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -110,7 +152,7 @@
 
   </url>
 
-  <!-- CALCULADORA AUTÓNOMOS -->
+  <!-- AUTÓNOMOS -->
 
   <url>
 
@@ -119,7 +161,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -141,7 +183,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -163,7 +205,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -176,7 +218,7 @@
 
   </url>
 
-  <!-- LEXORIA ABOGADOS -->
+  <!-- LEXORIA -->
 
   <url>
 
@@ -185,7 +227,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10
+      2026-05-10T12:00:00+00:00
     </lastmod>
 
     <changefreq>

@@ -27,12 +27,54 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#020617">
 
+<meta name="geo.region" content="ES">
+<meta name="geo.placename" content="España">
+
 <link
   rel="canonical"
   href="https://viniciusbugarin.github.io/pages/desarrollador-web-freelance.html"
 >
 
 <link rel="icon" href="../images/VB.png">
+
+<!-- ========================================= -->
+<!-- PERFORMANCE -->
+<!-- ========================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  rel="preload"
+  as="image"
+  href="../images/VB.png"
+>
+
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+  rel="stylesheet"
+>
+
+<!-- ========================================= -->
+<!-- CSS -->
+<!-- ========================================= -->
+
+<link rel="stylesheet" href="../styles/main.css">
+<link rel="stylesheet" href="../styles/navbar.css">
+<link rel="stylesheet" href="../styles/footer.css">
+<link rel="stylesheet" href="../styles/chatbot.css">
+<link rel="stylesheet" href="../styles/animations.css">
 
 <!-- ========================================= -->
 <!-- OPEN GRAPH -->
@@ -60,6 +102,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="Vinicius Bugarin">
 
 <!-- ========================================= -->
 <!-- TWITTER -->
@@ -83,39 +126,6 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
 >
 
 <!-- ========================================= -->
-<!-- PERFORMANCE -->
-<!-- ========================================= -->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link
-  rel="preconnect"
-  href="https://fonts.gstatic.com"
-  crossorigin
->
-
-<link
-  rel="preload"
-  as="style"
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
->
-
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-  rel="stylesheet"
->
-
-<!-- ========================================= -->
-<!-- CSS -->
-<!-- ========================================= -->
-
-<link rel="stylesheet" href="../styles/main.css">
-<link rel="stylesheet" href="../styles/navbar.css">
-<link rel="stylesheet" href="../styles/footer.css">
-<link rel="stylesheet" href="../styles/chatbot.css">
-<link rel="stylesheet" href="../styles/animations.css">
-
-<!-- ========================================= -->
 <!-- SCHEMA -->
 <!-- ========================================= -->
 
@@ -127,7 +137,8 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
   "url": "https://viniciusbugarin.github.io",
   "logo": "https://viniciusbugarin.github.io/images/VB.png",
   "image": "https://viniciusbugarin.github.io/images/VB.png",
-  "description": "Desarrollo web moderno, SEO técnico y automatización enfocados en generar clientes y optimizar negocios.",
+  "description": "Desarrollador web freelance especializado en SEO técnico, automatización y desarrollo web moderno.",
+  "priceRange": "€€",
   "areaServed": {
     "@type": "Country",
     "name": "España"
@@ -143,8 +154,68 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
     "Desarrollo web",
     "SEO técnico",
     "Automatización",
-    "Aplicaciones web"
+    "Aplicaciones web",
+    "Landing pages",
+    "Optimización web"
   ]
+}
+</script>
+
+<!-- FAQ SCHEMA -->
+
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[
+{
+"@type":"Question",
+"name":"¿Cuánto cuesta una página web profesional?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"El precio depende del tipo de proyecto, funcionalidades y automatizaciones necesarias."
+}
+},
+{
+"@type":"Question",
+"name":"¿También haces SEO técnico?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Sí. Desarrollo páginas optimizadas para velocidad, posicionamiento y conversión."
+}
+},
+{
+"@type":"Question",
+"name":"¿Trabajas con clientes fuera de España?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Sí. Trabajo tanto con clientes de España como proyectos remotos internacionales."
+}
+}
+]
+}
+</script>
+
+<!-- BREADCRUMB -->
+
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"BreadcrumbList",
+"itemListElement":[
+{
+"@type":"ListItem",
+"position":1,
+"name":"Inicio",
+"item":"https://viniciusbugarin.github.io"
+},
+{
+"@type":"ListItem",
+"position":2,
+"name":"Desarrollador Web Freelance",
+"item":"https://viniciusbugarin.github.io/pages/desarrollador-web-freelance.html"
+}
+]
 }
 </script>
 
@@ -208,6 +279,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
         <a
           href="#contact"
           class="btn primary magnetic"
+          aria-label="Solicitar propuesta"
         >
           🚀 Solicitar propuesta
         </a>
@@ -215,6 +287,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
         <a
           href="../index.html#projects"
           class="btn secondary magnetic"
+          aria-label="Ver proyectos"
         >
           Ver proyectos
         </a>
@@ -271,6 +344,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           name="name"
           placeholder="Nombre"
           autocomplete="name"
+          aria-label="Nombre"
           required
         >
 
@@ -279,10 +353,14 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           name="email"
           placeholder="Email"
           autocomplete="email"
+          aria-label="Email"
           required
         >
 
-        <select name="service">
+        <select
+          name="service"
+          aria-label="Servicio"
+        >
 
           <option value="">
             ¿Qué necesitas?
@@ -305,6 +383,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
         <button
           type="submit"
           class="btn primary full magnetic"
+          aria-label="Solicitar análisis"
         >
           👉 Solicitar análisis
         </button>
@@ -545,6 +624,43 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
 </section>
 
 <!-- ========================================= -->
+<!-- TECNOLOGÍAS -->
+<!-- ========================================= -->
+
+<section class="section">
+
+  <div class="container center">
+
+    <div class="section-heading reveal">
+
+      <span class="section-badge">
+        Tecnologías
+      </span>
+
+      <h2>
+        Tecnologías y herramientas
+      </h2>
+
+    </div>
+
+    <div class="project-stack">
+
+      <span>HTML5</span>
+      <span>CSS3</span>
+      <span>JavaScript</span>
+      <span>SEO Técnico</span>
+      <span>GitHub</span>
+      <span>Responsive Design</span>
+      <span>APIs</span>
+      <span>Automatización</span>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ========================================= -->
 <!-- PROYECTOS -->
 <!-- ========================================= -->
 
@@ -589,6 +705,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           target="_blank"
           rel="noopener noreferrer"
           class="btn secondary magnetic"
+          aria-label="Ver proyecto Calculadora IRPF"
         >
           Ver proyecto
         </a>
@@ -614,6 +731,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           target="_blank"
           rel="noopener noreferrer"
           class="btn secondary magnetic"
+          aria-label="Ver proyecto Calculadora Autónomos"
         >
           Ver proyecto
         </a>
@@ -639,11 +757,67 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           target="_blank"
           rel="noopener noreferrer"
           class="btn secondary magnetic"
+          aria-label="Ver proyecto Lexoria Abogados"
         >
           Ver proyecto
         </a>
 
       </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- FAQ -->
+<!-- ========================================= -->
+
+<section class="section faq-section">
+
+  <div class="container">
+
+    <div class="section-heading reveal">
+
+      <span class="section-badge">
+        FAQ
+      </span>
+
+      <h2>
+        Preguntas frecuentes
+      </h2>
+
+    </div>
+
+    <div class="faq-grid">
+
+      <details class="card">
+        <summary>
+          ¿Cuánto tarda una página web profesional?
+        </summary>
+        <p>
+          Depende del proyecto, aunque normalmente entre 1 y 4 semanas.
+        </p>
+      </details>
+
+      <details class="card">
+        <summary>
+          ¿Incluyes SEO técnico?
+        </summary>
+        <p>
+          Sí. Todas las webs están optimizadas para rendimiento y posicionamiento.
+        </p>
+      </details>
+
+      <details class="card">
+        <summary>
+          ¿Trabajas proyectos remotos?
+        </summary>
+        <p>
+          Sí. Trabajo con clientes de toda España y también proyectos internacionales.
+        </p>
+      </details>
 
     </div>
 
@@ -680,7 +854,15 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
     </p>
 
     <p>
-      Puedes explorar más proyectos en la página principal o solicitar una propuesta personalizada.
+      Desarrollo páginas rápidas, responsive y optimizadas para Google utilizando estructuras modernas y estrategias orientadas a conversión.
+    </p>
+
+    <p>
+      También puedes explorar mi página sobre
+      <a href="desarrollador-web-barcelona.html">
+        desarrollo web en Barcelona
+      </a>
+      o revisar más proyectos en la página principal.
     </p>
 
   </div>
@@ -710,6 +892,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
     <a
       href="#contact"
       class="btn primary magnetic"
+      aria-label="Hablar conmigo"
     >
       🚀 Hablar conmigo
     </a>
@@ -758,6 +941,7 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           name="name"
           placeholder="Nombre"
           autocomplete="name"
+          aria-label="Nombre"
           required
         >
 
@@ -766,12 +950,16 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
           name="email"
           placeholder="Email"
           autocomplete="email"
+          aria-label="Email"
           required
         >
 
       </div>
 
-      <select name="budget">
+      <select
+        name="budget"
+        aria-label="Presupuesto"
+      >
 
         <option value="">
           Presupuesto estimado
@@ -794,12 +982,14 @@ Desarrollador Web Freelance en España | SEO, Automatización y Webs Profesional
       <textarea
         name="message"
         placeholder="Cuéntame qué necesitas..."
+        aria-label="Mensaje"
         required
       ></textarea>
 
       <button
         type="submit"
         class="btn primary full magnetic"
+        aria-label="Solicitar propuesta"
       >
         🚀 Solicitar propuesta
       </button>

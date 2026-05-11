@@ -1,6 +1,6 @@
 // =========================================
 // VINICIUS BUGARIN — PROJECT SYSTEM FINAL
-// ESCALABLE + SEO + PERFORMANCE + UX
+// ULTRA SEO + PERFORMANCE + SCALABLE
 // =========================================
 
 const PROJECTS_CONFIG = {
@@ -15,13 +15,14 @@ const PROJECTS_CONFIG = {
 
   ENABLE_SEARCH: true,
 
-  ENABLE_FILTERS: true
+  ENABLE_FILTERS: true,
+
+  ENABLE_SORTING: true
 
 };
 
 // =========================================
-// DATA
-// FUTURO: API / CMS / JSON
+// PROJECT DATA
 // =========================================
 
 const projects = [
@@ -32,7 +33,7 @@ const projects = [
     title: "Calculadora IRPF España",
 
     description:
-      "Herramienta fiscal optimizada para calcular IRPF automáticamente y generar tráfico SEO.",
+      "Herramienta fiscal optimizada para calcular IRPF automáticamente y captar tráfico SEO cualificado.",
 
     tech: [
       "JavaScript",
@@ -44,7 +45,10 @@ const projects = [
     category: "herramienta",
 
     image:
-      "images/projects/irpf.jpg",
+      "../images/projects/irpf.jpg",
+
+    fallbackImage:
+      "../images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/tax-calculator-spain/",
@@ -80,7 +84,10 @@ const projects = [
     category: "herramienta",
 
     image:
-      "images/projects/autonomos.jpg",
+      "../images/projects/autonomos.jpg",
+
+    fallbackImage:
+      "../images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/autonomos-calculator/",
@@ -117,10 +124,13 @@ const projects = [
     category: "web",
 
     image:
-      "images/projects/lexoria.jpg",
+      "../images/projects/lexoria.jpg",
+
+    fallbackImage:
+      "../images/projects/fallback.webp",
 
     link:
-      "https://viniciusbugarin.github.io/lexoria-abogados",
+      "https://viniciusbugarin.github.io/lexoria-abogados/",
 
     featured: true,
 
@@ -133,6 +143,86 @@ const projects = [
       "seo local",
       "landing abogados",
       "web legal"
+    ]
+  },
+
+  {
+    id: 4,
+
+    title: "Iron Forge Gym",
+
+    description:
+      "Landing moderna para gimnasio enfocada en captación de clientes y branding premium.",
+
+    tech: [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "SEO"
+    ],
+
+    category: "web",
+
+    image:
+      "../images/projects/ironforge.jpg",
+
+    fallbackImage:
+      "../images/projects/fallback.webp",
+
+    link:
+      "https://viniciusbugarin.github.io/iron-forge-gym/",
+
+    featured: false,
+
+    status: "Online",
+
+    year: "2026",
+
+    keywords: [
+      "gym",
+      "fitness",
+      "landing gimnasio",
+      "seo"
+    ]
+  },
+
+  {
+    id: 5,
+
+    title: "La Plaza Gourmet",
+
+    description:
+      "Página web profesional para restaurante optimizada para reservas y SEO local.",
+
+    tech: [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "SEO Local"
+    ],
+
+    category: "web",
+
+    image:
+      "../images/projects/laplaza.jpg",
+
+    fallbackImage:
+      "../images/projects/fallback.webp",
+
+    link:
+      "https://viniciusbugarin.github.io/La-Plaza-Gourmet/",
+
+    featured: false,
+
+    status: "Online",
+
+    year: "2026",
+
+    keywords: [
+      "restaurante",
+      "seo local",
+      "gourmet",
+      "food"
     ]
   }
 
@@ -154,12 +244,16 @@ document.addEventListener("DOMContentLoaded", () => {
     initSearch();
   }
 
+  if (PROJECTS_CONFIG.ENABLE_SORTING) {
+    initSorting();
+  }
+
   initReveal();
 
 });
 
 // =========================================
-// RENDER
+// RENDER PROJECTS
 // =========================================
 
 function renderProjects(filter = "all") {
@@ -199,16 +293,25 @@ function renderProjects(filter = "all") {
   if (!filtered.length) {
 
     container.innerHTML = `
-      <div class="empty-projects">
-        <h3>No hay proyectos encontrados</h3>
-        <p>Prueba otra búsqueda o categoría.</p>
+
+      <div class="empty-projects card">
+
+        <h3>
+          No hay proyectos encontrados
+        </h3>
+
+        <p>
+          Prueba otra categoría o búsqueda.
+        </p>
+
       </div>
+
     `;
 
     return;
+
   }
 
-  // PERFORMANCE
   const fragment =
     document.createDocumentFragment();
 
@@ -222,10 +325,12 @@ function renderProjects(filter = "all") {
 
   container.appendChild(fragment);
 
+  initReveal();
+
 }
 
 // =========================================
-// CREATE CARD
+// CREATE PROJECT CARD
 // =========================================
 
 function createProjectCard(project) {
@@ -234,14 +339,8 @@ function createProjectCard(project) {
     document.createElement("article");
 
   card.className =
-    `
-      project-card
-      card
-      reveal
-      hover-lift
-    `;
+    "project-card card reveal";
 
-  // SEO DATASET
   card.dataset.category =
     project.category;
 
@@ -260,6 +359,7 @@ function createProjectCard(project) {
         alt="${project.title}"
         class="project-image"
         loading="lazy"
+        decoding="async"
       >
 
       <div class="project-overlay"></div>
@@ -268,7 +368,11 @@ function createProjectCard(project) {
 
         ${
           project.featured
-          ? `<span class="project-badge featured">★ Destacado</span>`
+          ? `
+            <span class="project-badge featured">
+              ★ Destacado
+            </span>
+          `
           : ""
         }
 
@@ -333,6 +437,17 @@ function createProjectCard(project) {
 
   `;
 
+  // IMAGE FALLBACK
+  const image =
+    card.querySelector(".project-image");
+
+  image.addEventListener("error", () => {
+
+    image.src =
+      project.fallbackImage;
+
+  });
+
   // TRACKING
   if (PROJECTS_CONFIG.TRACK_CLICKS) {
 
@@ -364,20 +479,16 @@ function trackProjectClick(project) {
     `[PROJECT CLICK] ${project.title}`
   );
 
-  // FUTURO:
+  // FUTURE:
   // Google Analytics
   // Plausible
-  // Hotjar
   // Meta Pixel
 
-  if (typeof trackEvent === "function") {
+  if (typeof gtag === "function") {
 
-    trackEvent("project_click", {
+    gtag("event", "project_click", {
 
-      project_id:
-        project.id,
-
-      project_title:
+      project_name:
         project.title,
 
       project_category:
@@ -468,6 +579,48 @@ function initSearch() {
 }
 
 // =========================================
+// SORTING
+// =========================================
+
+function initSorting() {
+
+  const select =
+    document.getElementById("projectSort");
+
+  if (!select) return;
+
+  select.addEventListener("change", () => {
+
+    const value =
+      select.value;
+
+    if (value === "newest") {
+
+      projects.sort(
+        (a, b) =>
+          Number(b.year) -
+          Number(a.year)
+      );
+
+    }
+
+    if (value === "featured") {
+
+      projects.sort(
+        (a, b) =>
+          Number(b.featured) -
+          Number(a.featured)
+      );
+
+    }
+
+    renderProjects();
+
+  });
+
+}
+
+// =========================================
 // REVEAL ANIMATIONS
 // =========================================
 
@@ -511,8 +664,10 @@ function initReveal() {
 
 function capitalize(text) {
 
-  return text.charAt(0).toUpperCase() +
-         text.slice(1);
+  return (
+    text.charAt(0).toUpperCase() +
+    text.slice(1)
+  );
 
 }
 
@@ -522,9 +677,11 @@ function capitalize(text) {
 
 // async function loadProjectsFromAPI() {
 //
-//   const response = await fetch("/api/projects");
+//   const response =
+//     await fetch("/api/projects");
 //
-//   const data = await response.json();
+//   const data =
+//     await response.json();
 //
 //   projects.push(...data);
 //

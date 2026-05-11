@@ -29,6 +29,11 @@
     content="dark"
   >
 
+  <meta
+    name="format-detection"
+    content="telephone=no"
+  >
+
   <!-- ========================================= -->
   <!-- SEO -->
   <!-- ========================================= -->
@@ -162,8 +167,23 @@
   >
 
   <link
+    rel="icon"
+    type="image/svg+xml"
+    href="images/favicon.svg"
+  >
+
+  <link
     rel="apple-touch-icon"
     href="images/VB.png"
+  >
+
+  <!-- ========================================= -->
+  <!-- MANIFEST -->
+  <!-- ========================================= -->
+
+  <link
+    rel="manifest"
+    href="manifest.json"
   >
 
   <!-- ========================================= -->
@@ -238,6 +258,89 @@
 }
 </script>
 
+  <!-- ========================================= -->
+  <!-- PERSON SCHEMA -->
+  <!-- ========================================= -->
+
+  <script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Person",
+  "name":"Vinicius Bugarin",
+  "url":"https://viniciusbugarin.github.io",
+  "image":"https://viniciusbugarin.github.io/images/VB.png",
+  "jobTitle":"Desarrollador Web Freelance",
+  "knowsAbout":[
+    "Desarrollo Web",
+    "SEO Técnico",
+    "Automatización",
+    "JavaScript",
+    "Frontend Development",
+    "UX/UI",
+    "Performance Web"
+  ],
+  "sameAs":[
+    "https://github.com/viniciusbugarin"
+  ]
+}
+</script>
+
+  <!-- ========================================= -->
+  <!-- BREADCRUMB SCHEMA -->
+  <!-- ========================================= -->
+
+  <script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {
+      "@type":"ListItem",
+      "position":1,
+      "name":"Inicio",
+      "item":"https://viniciusbugarin.github.io"
+    }
+  ]
+}
+</script>
+
+  <!-- ========================================= -->
+  <!-- FAQ SCHEMA -->
+  <!-- ========================================= -->
+
+  <script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"FAQPage",
+ "mainEntity":[
+   {
+     "@type":"Question",
+     "name":"¿Cuánto cuesta una página web?",
+     "acceptedAnswer":{
+       "@type":"Answer",
+       "text":"Depende del proyecto y funcionalidades necesarias."
+     }
+   },
+   {
+     "@type":"Question",
+     "name":"¿Las webs incluyen SEO?",
+     "acceptedAnswer":{
+       "@type":"Answer",
+       "text":"Sí, todas las webs incluyen optimización SEO técnica."
+     }
+   },
+   {
+     "@type":"Question",
+     "name":"¿Trabajas con clientes fuera de Barcelona?",
+     "acceptedAnswer":{
+       "@type":"Answer",
+       "text":"Sí, trabajo con clientes de toda España."
+     }
+   }
+ ]
+}
+</script>
+
 </head>
 
 <body>
@@ -289,7 +392,7 @@
           </span>
 
           <h1>
-            Desarrollo sistemas digitales modernos que generan clientes y automatizan procesos
+            Desarrollador Web en Barcelona especializado en SEO, automatización y aplicaciones web modernas
           </h1>
 
           <p class="subtitle">
@@ -377,10 +480,16 @@
             >
 
             <input
+              type="hidden"
+              name="_captcha"
+              value="false"
+            >
+
+            <input
               type="text"
               name="name"
               placeholder="Nombre"
-              autocomplete="name"
+              autocomplete="off"
               required
             >
 
@@ -388,7 +497,7 @@
               type="email"
               name="email"
               placeholder="Email"
-              autocomplete="email"
+              autocomplete="off"
               required
             >
 
@@ -475,105 +584,7 @@
 
         </div>
 
-        <div class="projects-grid">
-
-          <!-- PROJECT -->
-
-          <article class="project-card reveal">
-
-            <div class="project-image">
-
-              <img
-                src="images/projects/lexoria.webp"
-                alt="Proyecto Lexoria Abogados"
-                loading="lazy"
-                decoding="async"
-              >
-
-            </div>
-
-            <span class="project-category">
-              SEO + Conversión
-            </span>
-
-            <h3>
-              Lexoria Abogados
-            </h3>
-
-            <p>
-              Web profesional optimizada para transmitir autoridad y captar clientes desde Google.
-            </p>
-
-            <div class="project-stack">
-              <span>HTML</span>
-              <span>CSS</span>
-              <span>SEO</span>
-              <span>Responsive</span>
-            </div>
-
-            <div class="project-actions">
-
-              <a
-                href="https://viniciusbugarin.github.io/lexoria-abogados"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn secondary magnetic"
-              >
-                Ver proyecto
-              </a>
-
-            </div>
-
-          </article>
-
-          <!-- PROJECT -->
-
-          <article class="project-card reveal">
-
-            <div class="project-image">
-
-              <img
-                src="images/projects/irpf.webp"
-                alt="Calculadora IRPF"
-                loading="lazy"
-                decoding="async"
-              >
-
-            </div>
-
-            <span class="project-category">
-              Automatización
-            </span>
-
-            <h3>
-              Calculadora IRPF
-            </h3>
-
-            <p>
-              Herramienta optimizada para generar tráfico orgánico mediante automatización y SEO técnico.
-            </p>
-
-            <div class="project-stack">
-              <span>JavaScript</span>
-              <span>SEO</span>
-              <span>UX</span>
-              <span>Automation</span>
-            </div>
-
-            <div class="project-actions">
-
-              <a
-                href="#"
-                class="btn secondary magnetic"
-              >
-                Ver herramienta
-              </a>
-
-            </div>
-
-          </article>
-
-        </div>
+        <div class="projects-grid"></div>
 
       </div>
 
@@ -720,6 +731,152 @@
     </section>
 
     <!-- ========================================= -->
+    <!-- TECHNOLOGIES -->
+    <!-- ========================================= -->
+
+    <section class="section dark">
+
+      <div class="container">
+
+        <div class="section-heading reveal">
+
+          <span class="section-badge">
+            Tecnologías
+          </span>
+
+          <h2>
+            Tecnologías con las que trabajo
+          </h2>
+
+        </div>
+
+        <div class="tech-grid reveal">
+
+          <span>HTML5</span>
+          <span>CSS3</span>
+          <span>JavaScript</span>
+          <span>SEO Técnico</span>
+          <span>GitHub</span>
+          <span>Responsive Design</span>
+          <span>Automatización</span>
+          <span>Performance Web</span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================= -->
+    <!-- FAQ -->
+    <!-- ========================================= -->
+
+    <section class="section">
+
+      <div class="container">
+
+        <div class="section-heading reveal">
+
+          <span class="section-badge">
+            FAQ
+          </span>
+
+          <h2>
+            Preguntas frecuentes
+          </h2>
+
+        </div>
+
+        <div class="faq-container">
+
+          <article class="faq-item reveal">
+
+            <h3>
+              ¿Cuánto cuesta una página web?
+            </h3>
+
+            <p>
+              Depende del proyecto, funcionalidades y automatizaciones necesarias.
+            </p>
+
+          </article>
+
+          <article class="faq-item reveal">
+
+            <h3>
+              ¿Las webs incluyen SEO?
+            </h3>
+
+            <p>
+              Sí. Todas las webs incluyen optimización SEO técnica desde el inicio.
+            </p>
+
+          </article>
+
+          <article class="faq-item reveal">
+
+            <h3>
+              ¿Trabajas con clientes fuera de Barcelona?
+            </h3>
+
+            <p>
+              Sí. Trabajo con clientes de toda España.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================= -->
+    <!-- INTERNAL SEO -->
+    <!-- ========================================= -->
+
+    <section class="section dark">
+
+      <div class="container center">
+
+        <span class="section-badge">
+          Especialidades
+        </span>
+
+        <h2>
+          Explora más servicios
+        </h2>
+
+        <div class="hero-buttons">
+
+          <a
+            href="pages/desarrollador-web-barcelona.html"
+            class="btn secondary"
+          >
+            Desarrollador web Barcelona
+          </a>
+
+          <a
+            href="pages/desarrollador-web-freelance.html"
+            class="btn secondary"
+          >
+            Desarrollador freelance
+          </a>
+
+          <a
+            href="pages/desarrollador-web-seo.html"
+            class="btn secondary"
+          >
+            Desarrollo web SEO
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================= -->
     <!-- CTA -->
     <!-- ========================================= -->
 
@@ -783,13 +940,19 @@
           class="contact-form reveal"
         >
 
+          <input
+            type="hidden"
+            name="_captcha"
+            value="false"
+          >
+
           <div class="form-grid">
 
             <input
               type="text"
               name="name"
               placeholder="Nombre"
-              autocomplete="name"
+              autocomplete="off"
               required
             >
 
@@ -797,7 +960,7 @@
               type="email"
               name="email"
               placeholder="Email"
-              autocomplete="email"
+              autocomplete="off"
               required
             >
 
