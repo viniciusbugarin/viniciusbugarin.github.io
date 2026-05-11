@@ -1,24 +1,51 @@
 # =========================================
-# ROBOTS.TXT — ULTRA SEO FINAL
+# ROBOTS.TXT — VINICIUS BUGARIN
+# PROFESSIONAL SEO CONFIG
 # =========================================
 
 User-agent: *
 
-# ALLOW MAIN SITE
+# =========================================
+# MAIN ACCESS
+# =========================================
+
 Allow: /
 
-# BLOCK SYSTEM FILES
-Disallow: /components/
-Disallow: /js/
-Disallow: /styles/
+# =========================================
+# BLOCK PRIVATE / SYSTEM AREAS
+# =========================================
 
-# BLOCK PRIVATE / TEMP
-Disallow: /tmp/
-Disallow: /drafts/
 Disallow: /private/
+Disallow: /drafts/
+Disallow: /tmp/
 
+# =========================================
+# IMPORTANT NOTE
+# =========================================
+
+# DO NOT BLOCK:
+# /js/
+# /styles/
+# /components/
+#
+# Google needs access to CSS and JS files
+# to properly render and evaluate the site
+# for SEO, Core Web Vitals and mobile usability.
+
+# =========================================
+# CRAWL OPTIMIZATION
+# =========================================
+
+Crawl-delay: 2
+
+# =========================================
 # HOST
+# =========================================
+
 Host: https://viniciusbugarin.github.io
 
+# =========================================
 # SITEMAP
+# =========================================
+
 Sitemap: https://viniciusbugarin.github.io/sitemap.xml
