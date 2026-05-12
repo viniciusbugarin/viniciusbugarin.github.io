@@ -1,6 +1,6 @@
 /* =========================================
    VINICIUS BUGARIN — AI CHAT SYSTEM
-   ULTRA PRO FINAL VERSION
+   STABLE + SEO + SAFE VERSION
 ========================================= */
 
 /* =========================================
@@ -8,12 +8,11 @@
 ========================================= */
 
 const CHAT_CONFIG = {
-
   webhook:
     "https://hook.eu1.make.com/XXXXXXXX",
 
   storageKey:
-    "vb_ultra_chat_v4",
+    "vb_ultra_chat_v5",
 
   autoOpenDelay:
     5000,
@@ -25,45 +24,69 @@ const CHAT_CONFIG = {
     1200,
 
   debug:
-    true
+    false
 };
 
 /* =========================================
-   STATE
+   SAFE STORAGE
 ========================================= */
 
-const state =
-  JSON.parse(
-    localStorage.getItem(CHAT_CONFIG.storageKey)
-  ) || {
-
-    isOpen: false,
-
-    leadSent: false,
-
-    lastInteraction: Date.now(),
-
-    sessionId:
-      crypto.randomUUID(),
-
-    messages: [],
-
-    lead: {
-
-      need: null,
-      budget: null,
-      urgency: null,
-      contact: null,
-      score: 0
-    }
+const defaultState = {
+  isOpen: false,
+  leadSent: false,
+  lastInteraction: Date.now(),
+  sessionId:
+    crypto.randomUUID(),
+  messages: [],
+  lead: {
+    need: null,
+    budget: null,
+    urgency: null,
+    contact: null,
+    score: 0
+  }
 };
+
+let state = defaultState;
+
+try {
+
+  const saved =
+    localStorage.getItem(
+      CHAT_CONFIG.storageKey
+    );
+
+  if (saved) {
+
+    state = JSON.parse(saved);
+  }
+
+} catch (error) {
+
+  console.error(
+    "Chat storage error:",
+    error
+  );
+
+  state = defaultState;
+}
 
 function saveState() {
 
-  localStorage.setItem(
-    CHAT_CONFIG.storageKey,
-    JSON.stringify(state)
-  );
+  try {
+
+    localStorage.setItem(
+      CHAT_CONFIG.storageKey,
+      JSON.stringify(state)
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Save state error:",
+      error
+    );
+  }
 }
 
 /* =========================================
@@ -71,7 +94,6 @@ function saveState() {
 ========================================= */
 
 const el = {
-
   chatbot:
     document.getElementById("vb-chatbot"),
 
@@ -98,13 +120,70 @@ const el = {
 };
 
 /* =========================================
+   VALIDATION
+========================================= */
+
+/*
+  THIS FIXES YOUR ERROR:
+
+  Cannot read properties of null
+  (reading 'addEventListener')
+
+  If chatbot HTML does not exist,
+  JS stops safely.
+*/
+
+const chatbotReady =
+  el.container &&
+  el.toggle &&
+  el.close &&
+  el.messages &&
+  el.options &&
+  el.input &&
+  el.send;
+
+if (!chatbotReady) {
+
+  console.warn(
+    "[VB CHAT] Chatbot HTML not found."
+  );
+
+} else {
+
+  initChatbot();
+}
+
+/* =========================================
+   INIT
+========================================= */
+
+function initChatbot() {
+
+  log("Chat initialized");
+
+  bindEvents();
+
+  restoreChat();
+
+  autoOpen();
+
+  inactivitySystem();
+
+  startFlow();
+}
+
+/* =========================================
    HELPERS
 ========================================= */
 
 function log(...msg) {
 
   if (CHAT_CONFIG.debug) {
-    console.log("[VB CHAT]", ...msg);
+
+    console.log(
+      "[VB CHAT]",
+      ...msg
+    );
   }
 }
 
@@ -120,7 +199,8 @@ function scrollBottom() {
 
 function sanitize(text) {
 
-  const div = document.createElement("div");
+  const div =
+    document.createElement("div");
 
   div.textContent = text;
 
@@ -131,14 +211,24 @@ function sanitize(text) {
    TRACKING
 ========================================= */
 
-function track(event, data = {}) {
+function track(
+  event,
+  data = {}
+) {
 
-  log("TRACK:", event, data);
+  log(
+    "TRACK:",
+    event,
+    data
+  );
 
   if (window.gtag) {
 
-    gtag("event", event, data);
-
+    gtag(
+      "event",
+      event,
+      data
+    );
   }
 }
 
@@ -146,11 +236,16 @@ function track(event, data = {}) {
    RENDER MESSAGE
 ========================================= */
 
-function renderMessage(text, type = "bot") {
+function renderMessage(
+  text,
+  type = "bot"
+) {
 
-  const div = document.createElement("div");
+  const div =
+    document.createElement("div");
 
-  div.className = `msg ${type}`;
+  div.className =
+    `msg ${type}`;
 
   div.innerHTML = `
     <div class="bubble">
@@ -163,13 +258,23 @@ function renderMessage(text, type = "bot") {
   scrollBottom();
 }
 
-function addMessage(text, type = "bot") {
+function addMessage(
+  text,
+  type = "bot"
+) {
 
-  state.messages.push({ text, type });
+  state.messages.push({
+    text,
+    type
+  });
 
-  renderMessage(text, type);
+  renderMessage(
+    text,
+    type
+  );
 
-  state.lastInteraction = Date.now();
+  state.lastInteraction =
+    Date.now();
 
   saveState();
 }
@@ -180,9 +285,11 @@ function addMessage(text, type = "bot") {
 
 function botTyping(callback) {
 
-  const typing = document.createElement("div");
+  const typing =
+    document.createElement("div");
 
-  typing.className = "msg bot typing";
+  typing.className =
+    "msg bot typing";
 
   typing.innerHTML = `
     <div class="bubble">
@@ -211,11 +318,17 @@ function openChat() {
 
   state.isOpen = true;
 
-  el.container.classList.add("active");
+  el.container.classList.add(
+    "active"
+  );
 
-  el.toggle.classList.add("active");
+  el.toggle.classList.add(
+    "active"
+  );
 
-  document.body.classList.add("chat-open");
+  document.body.classList.add(
+    "chat-open"
+  );
 
   saveState();
 
@@ -232,11 +345,17 @@ function closeChat() {
 
   state.isOpen = false;
 
-  el.container.classList.remove("active");
+  el.container.classList.remove(
+    "active"
+  );
 
-  el.toggle.classList.remove("active");
+  el.toggle.classList.remove(
+    "active"
+  );
 
-  document.body.classList.remove("chat-open");
+  document.body.classList.remove(
+    "chat-open"
+  );
 
   saveState();
 
@@ -254,21 +373,33 @@ function toggleChat() {
    OPTIONS
 ========================================= */
 
-function showOptions(options = []) {
+function showOptions(
+  options = []
+) {
 
   el.options.innerHTML = "";
 
   options.forEach(option => {
 
     const btn =
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
-    btn.innerText = option.label;
+    btn.type = "button";
+
+    btn.className =
+      "chat-option-btn";
+
+    btn.innerText =
+      option.label;
 
     btn.onclick = () => {
 
       addMessage(
-        sanitize(option.label),
+        sanitize(
+          option.label
+        ),
         "user"
       );
 
@@ -289,20 +420,39 @@ function scoreLead() {
 
   let score = 0;
 
-  if (state.lead.need === "automation")
+  if (
+    state.lead.need ===
+    "automation"
+  ) {
     score += 5;
+  }
 
-  if (state.lead.need === "web")
+  if (
+    state.lead.need ===
+    "web"
+  ) {
     score += 3;
+  }
 
-  if (state.lead.budget >= 1500)
+  if (
+    state.lead.budget >=
+    1500
+  ) {
     score += 4;
+  }
 
-  if (state.lead.urgency === "urgent")
+  if (
+    state.lead.urgency ===
+    "urgent"
+  ) {
     score += 3;
+  }
 
-  if (state.lead.contact)
+  if (
+    state.lead.contact
+  ) {
     score += 5;
+  }
 
   state.lead.score = score;
 }
@@ -313,8 +463,11 @@ function scoreLead() {
 
 function startFlow() {
 
-  if (state.messages.length > 0)
+  if (
+    state.messages.length > 0
+  ) {
     return;
+  }
 
   botTyping(() => {
 
@@ -334,20 +487,30 @@ function startFlow() {
     `);
 
     showOptions([
-
       {
-        label: "Quiero más clientes",
-        action: () => stepNeed("web")
+        label:
+          "Quiero más clientes",
+
+        action: () =>
+          stepNeed("web")
       },
 
       {
-        label: "Automatizar negocio",
-        action: () => stepNeed("automation")
+        label:
+          "Automatizar negocio",
+
+        action: () =>
+          stepNeed(
+            "automation"
+          )
       },
 
       {
-        label: "Mejorar SEO",
-        action: () => stepNeed("seo")
+        label:
+          "Mejorar SEO",
+
+        action: () =>
+          stepNeed("seo")
       }
     ]);
   });
@@ -364,20 +527,26 @@ function stepNeed(type) {
     `);
 
     showOptions([
-
       {
         label: "< 500€",
-        action: () => stepBudget(500)
+
+        action: () =>
+          stepBudget(500)
       },
 
       {
-        label: "500€ - 1500€",
-        action: () => stepBudget(1500)
+        label:
+          "500€ - 1500€",
+
+        action: () =>
+          stepBudget(1500)
       },
 
       {
         label: "+1500€",
-        action: () => stepBudget(3000)
+
+        action: () =>
+          stepBudget(3000)
       }
     ]);
   });
@@ -394,20 +563,29 @@ function stepBudget(value) {
     `);
 
     showOptions([
-
       {
         label: "Urgente",
-        action: () => stepUrgency("urgent")
+
+        action: () =>
+          stepUrgency(
+            "urgent"
+          )
       },
 
       {
         label: "Este mes",
-        action: () => stepUrgency("medium")
+
+        action: () =>
+          stepUrgency(
+            "medium"
+          )
       },
 
       {
         label: "Sin prisa",
-        action: () => stepUrgency("low")
+
+        action: () =>
+          stepUrgency("low")
       }
     ]);
   });
@@ -432,6 +610,7 @@ function askContact() {
       Déjame tu email o WhatsApp
       y te responderé personalmente.
     `);
+
   });
 }
 
@@ -442,14 +621,20 @@ function askContact() {
 function extractContact(text) {
 
   const email =
-    text.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
+    text.match(
+      /[^\s@]+@[^\s@]+\.[^\s@]+/
+    );
 
   const phone =
-    text.match(/\b\d{9,15}\b/);
+    text.match(
+      /\b\d{9,15}\b/
+    );
 
-  return email?.[0] ||
-         phone?.[0] ||
-         null;
+  return (
+    email?.[0] ||
+    phone?.[0] ||
+    null
+  );
 }
 
 /* =========================================
@@ -458,16 +643,19 @@ function extractContact(text) {
 
 async function sendLead() {
 
-  if (state.leadSent)
+  if (
+    state.leadSent
+  ) {
     return;
+  }
 
   const payload = {
-
     sessionId:
       state.sessionId,
 
     createdAt:
-      new Date().toISOString(),
+      new Date()
+        .toISOString(),
 
     lead:
       state.lead,
@@ -478,21 +666,30 @@ async function sendLead() {
 
   try {
 
-    await fetch(
-      CHAT_CONFIG.webhook,
-      {
+    const response =
+      await fetch(
+        CHAT_CONFIG.webhook,
+        {
+          method: "POST",
 
-        method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
+          body:
+            JSON.stringify(
+              payload
+            )
+        }
+      );
 
-        body:
-          JSON.stringify(payload)
-      }
-    );
+    if (!response.ok) {
+
+      throw new Error(
+        "Webhook error"
+      );
+    }
 
     state.leadSent = true;
 
@@ -500,7 +697,9 @@ async function sendLead() {
 
     track("lead_sent");
 
-    log("Lead enviado");
+    log(
+      "Lead enviado"
+    );
 
   } catch (error) {
 
@@ -519,8 +718,9 @@ async function handleMessage() {
   const text =
     el.input.value.trim();
 
-  if (!text)
+  if (!text) {
     return;
+  }
 
   addMessage(
     sanitize(text),
@@ -542,18 +742,20 @@ async function handleMessage() {
 
     scoreLead();
 
-    botTyping(async () => {
+    botTyping(
+      async () => {
 
-      addMessage(`
-        🚀 Perfecto.
+        addMessage(`
+          🚀 Perfecto.
 
-        He recibido tu contacto.
+          He recibido tu contacto.
 
-        Te responderé lo antes posible.
-      `);
+          Te responderé lo antes posible.
+        `);
 
-      await sendLead();
-    });
+        await sendLead();
+      }
+    );
 
     return;
   }
@@ -573,124 +775,136 @@ async function handleMessage() {
    EVENTS
 ========================================= */
 
-el.toggle.addEventListener(
-  "click",
-  toggleChat
-);
+function bindEvents() {
 
-el.close.addEventListener(
-  "click",
-  closeChat
-);
+  el.toggle.addEventListener(
+    "click",
+    toggleChat
+  );
 
-el.send.addEventListener(
-  "click",
-  handleMessage
-);
+  el.close.addEventListener(
+    "click",
+    closeChat
+  );
 
-el.input.addEventListener(
-  "keydown",
-  (e) => {
+  el.send.addEventListener(
+    "click",
+    handleMessage
+  );
 
-    if (e.key === "Enter") {
+  el.input.addEventListener(
+    "keydown",
+    (e) => {
 
-      e.preventDefault();
+      if (
+        e.key === "Enter"
+      ) {
 
-      handleMessage();
+        e.preventDefault();
+
+        handleMessage();
+      }
     }
-  }
-);
+  );
 
-/* =========================================
-   ESC CLOSE
-========================================= */
+  document.addEventListener(
+    "keydown",
+    (e) => {
 
-document.addEventListener(
-  "keydown",
-  (e) => {
+      if (
+        e.key ===
+          "Escape" &&
+        state.isOpen
+      ) {
 
-    if (
-      e.key === "Escape" &&
-      state.isOpen
-    ) {
-
-      closeChat();
+        closeChat();
+      }
     }
-  }
-);
+  );
+}
 
 /* =========================================
    AUTO OPEN
 ========================================= */
 
-setTimeout(() => {
+function autoOpen() {
 
-  if (
-    !state.isOpen &&
-    state.messages.length === 0
-  ) {
+  setTimeout(() => {
 
-    openChat();
+    if (
+      !state.isOpen &&
+      state.messages.length === 0
+    ) {
 
-    startFlow();
-  }
+      openChat();
+    }
 
-}, CHAT_CONFIG.autoOpenDelay);
+  }, CHAT_CONFIG.autoOpenDelay);
+}
 
 /* =========================================
-   INACTIVITY REMINDER
+   INACTIVITY
 ========================================= */
 
-setInterval(() => {
+function inactivitySystem() {
 
-  const inactiveTime =
-    Date.now() -
-    state.lastInteraction;
+  setInterval(() => {
 
-  if (
-    state.isOpen &&
-    inactiveTime >
-    CHAT_CONFIG.inactivityDelay
-  ) {
+    const inactiveTime =
+      Date.now() -
+      state.lastInteraction;
 
-    botTyping(() => {
+    if (
+      state.isOpen &&
+      inactiveTime >
+        CHAT_CONFIG.inactivityDelay
+    ) {
 
-      addMessage(`
-        👋 ¿Sigues ahí?
+      botTyping(() => {
 
-        Puedo ayudarte a mejorar
-        tu web o automatizar tareas.
-      `);
+        addMessage(`
+          👋 ¿Sigues ahí?
 
-    });
+          Puedo ayudarte a mejorar
+          tu web o automatizar tareas.
+        `);
 
-    state.lastInteraction =
-      Date.now();
+      });
 
-    saveState();
-  }
+      state.lastInteraction =
+        Date.now();
 
-}, 15000);
+      saveState();
+    }
+
+  }, 15000);
+}
 
 /* =========================================
    RESTORE CHAT
 ========================================= */
 
-if (state.isOpen) {
+function restoreChat() {
 
-  openChat();
-}
+  if (state.isOpen) {
 
-if (state.messages.length > 0) {
+    openChat();
+  }
 
-  state.messages.forEach(msg => {
+  if (
+    state.messages.length > 0
+  ) {
 
-    renderMessage(
-      msg.text,
-      msg.type
+    state.messages.forEach(
+      msg => {
+
+        renderMessage(
+          msg.text,
+          msg.type
+        );
+      }
     );
 
-  });
-
-  scrollBottom();
+    scrollBottom();
+  }
 }

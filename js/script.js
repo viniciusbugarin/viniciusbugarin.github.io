@@ -1,9 +1,12 @@
 // =========================================
-// VINICIUS BUGARIN — CORE SYSTEM FINAL
-// ULTRA PRO VERSION
+// VINICIUS BUGARIN — CORE SYSTEM
+// ULTRA PERFORMANCE + SEO + UX VERSION
+// FINAL OPTIMIZED ARCHITECTURE
 // =========================================
 
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
+
+  "use strict";
 
   // =========================================
   // CONFIG
@@ -13,21 +16,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     scrollOffset: 90,
 
-    revealThreshold: 0.14,
+    revealThreshold: 0.12,
 
-    revealDelay: 100,
+    revealDelay: 80,
 
     navbarScroll: 60,
+
+    backToTopOffset: 500,
+
+    scrollProgressThrottle: 10,
 
     enableTracking: true,
 
     enableLazyLoad: true,
 
-    enablePageTransitions: true,
+    enableReveal: true,
 
     enableScrollProgress: true,
 
-    enableBackToTop: true
+    enableBackToTop: true,
+
+    enableSmoothScroll: true,
+
+    debug: false
 
   };
 
@@ -39,33 +50,111 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ticking: false,
 
-    loaded: false
+    loaded: false,
+
+    observers: []
 
   };
 
   // =========================================
-  // INIT
+  // HELPERS
   // =========================================
 
-  initRevealAnimations();
+  const $ = selector =>
+    document.querySelector(selector);
 
-  initSmoothScroll();
+  const $$ = selector =>
+    [...document.querySelectorAll(selector)];
 
-  initNavbarEffects();
+  function log(...args) {
 
-  initLazyLoad();
+    if (CONFIG.debug) {
 
-  initTracking();
+      console.log(
+        "[VB CORE]",
+        ...args
+      );
 
-  initForms();
+    }
 
-  initScrollProgress();
+  }
 
-  initBackToTop();
+  function safeTrack(event, data = {}) {
 
-  initExternalLinks();
+    if (!CONFIG.enableTracking)
+      return;
 
-  initPageLoaded();
+    log("TRACK:", event, data);
+
+    // Google Analytics
+    if (typeof window.gtag === "function") {
+
+      window.gtag(
+        "event",
+        event,
+        data
+      );
+
+    }
+
+    // Meta Pixel
+    if (typeof window.fbq === "function") {
+
+      window.fbq(
+        "trackCustom",
+        event,
+        data
+      );
+
+    }
+
+  }
+
+  // =========================================
+  // THROTTLE
+  // =========================================
+
+  function throttle(fn, wait = 100) {
+
+    let last = 0;
+
+    return (...args) => {
+
+      const now = Date.now();
+
+      if (now - last >= wait) {
+
+        last = now;
+
+        fn(...args);
+
+      }
+
+    };
+
+  }
+
+  // =========================================
+  // DEBOUNCE
+  // =========================================
+
+  function debounce(fn, delay = 200) {
+
+    let timeout;
+
+    return (...args) => {
+
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+
+        fn(...args);
+
+      }, delay);
+
+    };
+
+  }
 
   // =========================================
   // REVEAL ANIMATIONS
@@ -73,27 +162,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initRevealAnimations() {
 
-    const revealItems =
-      document.querySelectorAll(`
+    if (!CONFIG.enableReveal)
+      return;
 
-        .reveal,
-        .card,
-        .project-card,
-        .value-card,
-        .stat-card,
-        .about-item,
-        .hero-card,
-        .section-head
+    const revealItems = $$(`
 
-      `);
+      .reveal,
+      .card,
+      .project-card,
+      .value-card,
+      .stat-card,
+      .about-item,
+      .hero-card,
+      .section-head
 
-    // fallback
-    if (
-      !("IntersectionObserver" in window)
-    ) {
+    `);
+
+    if (!revealItems.length)
+      return;
+
+    // Fallback
+    if (!("IntersectionObserver" in window)) {
 
       revealItems.forEach(el => {
+
         el.classList.add("active");
+
       });
 
       return;
@@ -108,15 +202,18 @@ document.addEventListener("DOMContentLoaded", () => {
           entries.forEach(
             (entry, index) => {
 
-              if (
-                !entry.isIntersecting
-              ) return;
+              if (!entry.isIntersecting)
+                return;
 
               setTimeout(() => {
 
-                entry.target.classList.add(
-                  "active"
-                );
+                requestAnimationFrame(() => {
+
+                  entry.target.classList.add(
+                    "active"
+                  );
+
+                });
 
               }, index * CONFIG.revealDelay);
 
@@ -131,14 +228,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
           threshold:
-            CONFIG.revealThreshold
+            CONFIG.revealThreshold,
+
+          rootMargin:
+            "0px 0px -60px 0px"
         }
 
       );
 
     revealItems.forEach(el => {
+
       observer.observe(el);
+
     });
+
+    STATE.observers.push(observer);
 
   }
 
@@ -148,24 +252,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initSmoothScroll() {
 
-    document
-      .querySelectorAll(
-        'a[href^="#"]'
-      )
+    if (!CONFIG.enableSmoothScroll)
+      return;
+
+    $$('a[href^="#"]')
       .forEach(anchor => {
 
         anchor.addEventListener(
           "click",
-          function(e) {
+          e => {
 
-            const target =
-              document.querySelector(
-                this.getAttribute(
-                  "href"
-                )
+            const href =
+              anchor.getAttribute(
+                "href"
               );
 
-            if (!target) return;
+            if (
+              !href ||
+              href === "#"
+            ) return;
+
+            const target =
+              $(href);
+
+            if (!target)
+              return;
 
             e.preventDefault();
 
@@ -183,17 +294,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
               top,
 
-              behavior: "smooth"
+              behavior:
+                "smooth"
 
             });
 
-            trackEvent(
+            safeTrack(
               "scroll_to_section",
               {
-                section:
-                  this.getAttribute(
-                    "href"
-                  )
+                section: href
               }
             );
 
@@ -211,70 +320,76 @@ document.addEventListener("DOMContentLoaded", () => {
   function initNavbarEffects() {
 
     const navbar =
-      document.querySelector(
-        ".navbar"
-      );
+      $(".navbar");
 
-    if (!navbar) return;
+    if (!navbar)
+      return;
 
-    window.addEventListener(
-      "scroll",
-      () => {
+    let lastScroll = 0;
 
-        if (!STATE.ticking) {
+    const handleScroll =
+      throttle(() => {
 
-          requestAnimationFrame(
-            () => {
+        const current =
+          window.scrollY;
 
-              navbar.classList.toggle(
-                "scrolled",
-                window.scrollY >
-                CONFIG.navbarScroll
-              );
+        navbar.classList.toggle(
+          "scrolled",
+          current >
+          CONFIG.navbarScroll
+        );
 
-              STATE.ticking =
-                false;
+        // Hide on scroll down
+        if (
+          current > lastScroll &&
+          current > 140
+        ) {
 
-            }
+          navbar.classList.add(
+            "hide"
           );
 
-          STATE.ticking = true;
+        } else {
+
+          navbar.classList.remove(
+            "hide"
+          );
 
         }
 
-      },
+        lastScroll = current;
 
+      }, 10);
+
+    window.addEventListener(
+      "scroll",
+      handleScroll,
       { passive: true }
-
     );
 
   }
 
   // =========================================
-  // LAZY LOAD IMAGES
+  // LAZY LOAD
   // =========================================
 
   function initLazyLoad() {
 
-    if (
-      !CONFIG.enableLazyLoad
-    ) return;
+    if (!CONFIG.enableLazyLoad)
+      return;
 
     const images =
-      document.querySelectorAll(
-        "img[data-src]"
-      );
+      $$("img[data-src]");
 
+    if (!images.length)
+      return;
+
+    // Fallback
     if (
       !("IntersectionObserver" in window)
     ) {
 
-      images.forEach(img => {
-
-        img.src =
-          img.dataset.src;
-
-      });
+      images.forEach(loadImage);
 
       return;
 
@@ -294,16 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const img =
               entry.target;
 
-            img.src =
-              img.dataset.src;
-
-            img.removeAttribute(
-              "data-src"
-            );
-
-            img.classList.add(
-              "loaded"
-            );
+            loadImage(img);
 
             obs.unobserve(img);
 
@@ -313,29 +419,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
           rootMargin:
-            "100px"
+            "200px"
         }
 
       );
 
     images.forEach(img => {
+
       observer.observe(img);
+
     });
+
+    STATE.observers.push(observer);
+
+  }
+
+  function loadImage(img) {
+
+    if (!img.dataset.src)
+      return;
+
+    img.src =
+      img.dataset.src;
+
+    img.onload = () => {
+
+      img.classList.add(
+        "loaded"
+      );
+
+    };
+
+    img.onerror = () => {
+
+      img.classList.add(
+        "image-error"
+      );
+
+    };
+
+    img.removeAttribute(
+      "data-src"
+    );
 
   }
 
   // =========================================
-  // FORM SYSTEM
+  // FORMS
   // =========================================
 
   function initForms() {
 
-    const forms =
-      document.querySelectorAll(
-        "form"
-      );
+    const forms = $$("form");
 
-    if (!forms.length) return;
+    if (!forms.length)
+      return;
 
     forms.forEach(form => {
 
@@ -343,31 +481,35 @@ document.addEventListener("DOMContentLoaded", () => {
         "submit",
         () => {
 
-          trackEvent(
+          safeTrack(
             "form_submit",
             {
               form:
-                form.className
+                form.className ||
+                "unknown"
             }
           );
 
         }
       );
 
-      // UX INPUTS
       form
-        .querySelectorAll(
-          "input, textarea, select"
-        )
+        .querySelectorAll(`
+          input,
+          textarea,
+          select
+        `)
         .forEach(field => {
 
           field.addEventListener(
             "focus",
             () => {
 
-              field.parentElement?.classList.add(
-                "focused"
-              );
+              field
+                .parentElement
+                ?.classList.add(
+                  "focused"
+                );
 
             }
           );
@@ -376,9 +518,11 @@ document.addEventListener("DOMContentLoaded", () => {
             "blur",
             () => {
 
-              field.parentElement?.classList.remove(
-                "focused"
-              );
+              field
+                .parentElement
+                ?.classList.remove(
+                  "focused"
+                );
 
             }
           );
@@ -390,57 +534,50 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================================
-  // TRACKING SYSTEM
+  // TRACKING
   // =========================================
 
   function initTracking() {
 
-    if (
-      !CONFIG.enableTracking
-    ) return;
+    if (!CONFIG.enableTracking)
+      return;
 
-    // BUTTONS
-    document
-      .querySelectorAll(".btn")
-      .forEach(btn => {
-
-        btn.addEventListener(
-          "click",
-          () => {
-
-            trackEvent(
-              "button_click",
-              {
-                text:
-                  btn.textContent
-                    .trim()
-              }
-            );
-
-          }
-        );
-
-      });
-
-    // PROJECTS
     document.addEventListener(
       "click",
       e => {
+
+        const button =
+          e.target.closest(".btn");
+
+        if (button) {
+
+          safeTrack(
+            "button_click",
+            {
+              text:
+                button.textContent
+                  .trim()
+            }
+          );
+
+        }
 
         const project =
           e.target.closest(
             ".project-link"
           );
 
-        if (!project) return;
+        if (project) {
 
-        trackEvent(
-          "project_click",
-          {
-            href:
-              project.href
-          }
-        );
+          safeTrack(
+            "project_click",
+            {
+              href:
+                project.href
+            }
+          );
+
+        }
 
       }
     );
@@ -448,53 +585,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================================
-  // TRACK EVENT
-  // =========================================
-
-  window.trackEvent =
-    function(
-      eventName,
-      data = {}
-    ) {
-
-      console.log(
-        "TRACK:",
-        eventName,
-        data
-      );
-
-      // Google Analytics
-      if (
-        typeof gtag ===
-        "function"
-      ) {
-
-        gtag(
-          "event",
-          eventName,
-          data
-        );
-
-      }
-
-      // Meta Pixel
-      if (
-        typeof fbq ===
-        "function"
-      ) {
-
-        fbq(
-          "trackCustom",
-          eventName,
-          data
-        );
-
-      }
-
-    };
-
-  // =========================================
-  // SCROLL PROGRESS BAR
+  // SCROLL PROGRESS
   // =========================================
 
   function initScrollProgress() {
@@ -515,8 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
       progress
     );
 
-    window.addEventListener(
-      "scroll",
+    const updateProgress =
       throttle(() => {
 
         const scrollTop =
@@ -530,16 +620,26 @@ document.addEventListener("DOMContentLoaded", () => {
           window.innerHeight;
 
         const percent =
-          (scrollTop / height) *
-          100;
+
+          height > 0
+
+            ? (scrollTop / height) * 100
+
+            : 0;
 
         progress.style.width =
           `${percent}%`;
 
-      }, 10),
+      },
 
+      CONFIG
+        .scrollProgressThrottle
+    );
+
+    window.addEventListener(
+      "scroll",
+      updateProgress,
       { passive: true }
-
     );
 
   }
@@ -567,7 +667,9 @@ document.addEventListener("DOMContentLoaded", () => {
       "Volver arriba"
     );
 
-    button.innerHTML = "↑";
+    button.innerHTML = `
+      ↑
+    `;
 
     document.body.appendChild(
       button
@@ -581,26 +683,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
           top: 0,
 
-          behavior: "smooth"
+          behavior:
+            "smooth"
 
         });
 
       }
     );
 
-    window.addEventListener(
-      "scroll",
+    const toggleButton =
       throttle(() => {
 
         button.classList.toggle(
           "visible",
-          window.scrollY > 500
+          window.scrollY >
+          CONFIG.backToTopOffset
         );
 
-      }, 50),
+      }, 50);
 
+    window.addEventListener(
+      "scroll",
+      toggleButton,
       { passive: true }
-
     );
 
   }
@@ -611,10 +716,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initExternalLinks() {
 
-    document
-      .querySelectorAll(
-        'a[target="_blank"]'
-      )
+    $$('a[target="_blank"]')
       .forEach(link => {
 
         link.setAttribute(
@@ -648,36 +750,144 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================================
-  // THROTTLE
+  // GLOBAL ERROR HANDLING
   // =========================================
 
-  function throttle(
-    fn,
-    wait = 100
-  ) {
+  function initGlobalErrorHandling() {
 
-    let lastTime = 0;
+    window.addEventListener(
+      "error",
+      e => {
 
-    return function(...args) {
-
-      const now =
-        Date.now();
-
-      if (
-        now - lastTime >= wait
-      ) {
-
-        lastTime = now;
-
-        fn.apply(
-          this,
-          args
+        console.error(
+          "[GLOBAL ERROR]",
+          e.message
         );
 
       }
+    );
 
-    };
+    window.addEventListener(
+      "unhandledrejection",
+      e => {
+
+        console.error(
+          "[PROMISE ERROR]",
+          e.reason
+        );
+
+      }
+    );
 
   }
 
-});
+  // =========================================
+  // PERFORMANCE
+  // =========================================
+
+  function initPerformanceOptimizations() {
+
+    // Passive touch
+    document.addEventListener(
+      "touchstart",
+      () => {},
+      { passive: true }
+    );
+
+    // Font loaded
+    if (document.fonts) {
+
+      document.fonts.ready
+        .then(() => {
+
+          document.body.classList.add(
+            "fonts-loaded"
+          );
+
+        });
+
+    }
+
+  }
+
+  // =========================================
+  // ACCESSIBILITY
+  // =========================================
+
+  function initAccessibility() {
+
+    // Keyboard navigation
+    document.addEventListener(
+      "keyup",
+      e => {
+
+        if (e.key === "Tab") {
+
+          document.body.classList.add(
+            "using-keyboard"
+          );
+
+        }
+
+      }
+    );
+
+    document.addEventListener(
+      "mousedown",
+      () => {
+
+        document.body.classList.remove(
+          "using-keyboard"
+        );
+
+      }
+    );
+
+  }
+
+  // =========================================
+  // INIT APP
+  // =========================================
+
+  function init() {
+
+    initRevealAnimations();
+
+    initSmoothScroll();
+
+    initNavbarEffects();
+
+    initLazyLoad();
+
+    initForms();
+
+    initTracking();
+
+    initScrollProgress();
+
+    initBackToTop();
+
+    initExternalLinks();
+
+    initPageLoaded();
+
+    initGlobalErrorHandling();
+
+    initPerformanceOptimizations();
+
+    initAccessibility();
+
+    log("CORE INITIALIZED");
+
+  }
+
+  // =========================================
+  // START
+  // =========================================
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    init
+  );
+
+})();

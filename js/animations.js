@@ -1,328 +1,565 @@
 // =========================================
 // VINICIUS BUGARIN — ANIMATIONS SYSTEM
-// FINAL PRODUCTION VERSION
+// STABLE + OPTIMIZED PRODUCTION VERSION
 // =========================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  // =========================================
-  // PAGE LOADED
-  // =========================================
+    // =========================================
+    // PAGE LOADED
+    // =========================================
 
-  requestAnimationFrame(() => {
-    document.body.classList.add("loaded");
-  });
+    requestAnimationFrame(() => {
 
-  // =========================================
-  // CONFIG
-  // =========================================
+      document.body.classList.add(
+        "loaded"
+      );
 
-  const CONFIG = {
+    });
 
-    revealThreshold: 0.12,
+    // =========================================
+    // CONFIG
+    // =========================================
 
-    staggerDelay: 80,
+    const CONFIG = {
 
-    enableParallax: true,
+      revealThreshold: 0.12,
 
-    enableCounters: true,
+      staggerDelay: 80,
 
-    enableMagnetic: true,
+      enableParallax: true,
 
-    reduceMotion:
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      enableCounters: true,
 
-  };
+      enableMagnetic: true,
 
-  // =========================================
-  // EXIT IF REDUCED MOTION
-  // =========================================
+      enableCardGlow: true,
 
-  if (CONFIG.reduceMotion) {
+      navbarScroll: true,
 
-    document
-      .querySelectorAll(`
+      reduceMotion:
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches
+    };
+
+    // =========================================
+    // SAFE QUERY
+    // =========================================
+
+    const $ = (selector) =>
+      document.querySelector(selector);
+
+    const $$ = (selector) =>
+      document.querySelectorAll(selector);
+
+    // =========================================
+    // REDUCED MOTION
+    // =========================================
+
+    if (CONFIG.reduceMotion) {
+
+      $$(
+        `
         .reveal,
         .card,
         .project-card,
         .value-card,
         .section-heading
-      `)
-      .forEach(el => {
+        `
+      ).forEach(el => {
+
         el.classList.add("active");
+
       });
 
-    return;
-  }
+      return;
+    }
 
-  // =========================================
-  // REVEAL ELEMENTS
-  // =========================================
+    // =========================================
+    // REVEAL ANIMATION
+    // =========================================
 
-  const revealElements = document.querySelectorAll(`
-    .reveal,
-    .card,
-    .project-card,
-    .value-card,
-    .section-heading
-  `);
+    const revealElements = $$(
+      `
+      .reveal,
+      .card,
+      .project-card,
+      .value-card,
+      .section-heading
+      `
+    );
 
-  const revealObserver = new IntersectionObserver((entries) => {
+    if (revealElements.length > 0) {
 
-    entries.forEach((entry, index) => {
+      const revealObserver =
+        new IntersectionObserver(
+          (entries) => {
 
-      if (!entry.isIntersecting) return;
+            entries.forEach(
+              (entry, index) => {
 
-      const el = entry.target;
+                if (
+                  !entry.isIntersecting
+                ) {
+                  return;
+                }
 
-      setTimeout(() => {
+                const el =
+                  entry.target;
 
-        requestAnimationFrame(() => {
-          el.classList.add("active");
-        });
+                const delay =
+                  parseInt(
+                    el.dataset.delay
+                  ) ||
+                  index *
+                    CONFIG.staggerDelay;
 
-      }, index * CONFIG.staggerDelay);
+                setTimeout(() => {
 
-      revealObserver.unobserve(el);
+                  requestAnimationFrame(
+                    () => {
 
-    });
+                      el.classList.add(
+                        "active"
+                      );
 
-  }, {
-    threshold: CONFIG.revealThreshold
-  });
+                    }
+                  );
 
-  revealElements.forEach(el => {
-    revealObserver.observe(el);
-  });
+                }, delay);
 
-  // =========================================
-  // PARALLAX HERO
-  // =========================================
+                revealObserver.unobserve(
+                  el
+                );
+              }
+            );
 
-  if (CONFIG.enableParallax) {
-
-    const heroGlow = document.querySelector(".hero::before");
-    const hero = document.querySelector(".hero");
-
-    let ticking = false;
-
-    window.addEventListener("scroll", () => {
-
-      if (!hero || ticking) return;
-
-      ticking = true;
-
-      requestAnimationFrame(() => {
-
-        const scrollY = window.scrollY;
-
-        hero.style.setProperty(
-          "--parallax-offset",
-          `${scrollY * 0.12}px`
+          },
+          {
+            threshold:
+              CONFIG.revealThreshold
+          }
         );
 
-        ticking = false;
+      revealElements.forEach(el => {
+
+        revealObserver.observe(el);
 
       });
+    }
 
-    }, { passive: true });
+    // =========================================
+    // HERO PARALLAX
+    // =========================================
 
-  }
+    if (CONFIG.enableParallax) {
 
-  // =========================================
-  // COUNTERS
-  // =========================================
+      const hero =
+        $(".hero");
 
-  if (CONFIG.enableCounters) {
+      if (hero) {
 
-    const counters =
-      document.querySelectorAll("[data-counter]");
+        let ticking = false;
 
-    const counterObserver =
-      new IntersectionObserver((entries) => {
+        window.addEventListener(
+          "scroll",
+          () => {
 
-        entries.forEach(entry => {
-
-          if (!entry.isIntersecting) return;
-
-          const el = entry.target;
-
-          const target =
-            parseInt(el.dataset.counter);
-
-          const duration = 1400;
-
-          let start = null;
-
-          function animateCounter(timestamp) {
-
-            if (!start) start = timestamp;
-
-            const progress =
-              Math.min((timestamp - start) / duration, 1);
-
-            const value =
-              Math.floor(progress * target);
-
-            el.textContent =
-              value.toLocaleString();
-
-            if (progress < 1) {
-              requestAnimationFrame(animateCounter);
-            } else {
-              el.textContent =
-                target.toLocaleString();
+            if (ticking) {
+              return;
             }
 
+            ticking = true;
+
+            requestAnimationFrame(
+              () => {
+
+                const scrollY =
+                  window.scrollY;
+
+                hero.style.setProperty(
+                  "--parallax-offset",
+                  `${scrollY * 0.12}px`
+                );
+
+                ticking = false;
+
+              }
+            );
+
+          },
+          {
+            passive: true
           }
+        );
+      }
+    }
 
-          requestAnimationFrame(animateCounter);
+    // =========================================
+    // COUNTERS
+    // =========================================
 
-          counterObserver.unobserve(el);
+    if (CONFIG.enableCounters) {
+
+      const counters =
+        $$("[data-counter]");
+
+      if (counters.length > 0) {
+
+        const counterObserver =
+          new IntersectionObserver(
+            (entries) => {
+
+              entries.forEach(
+                entry => {
+
+                  if (
+                    !entry.isIntersecting
+                  ) {
+                    return;
+                  }
+
+                  const el =
+                    entry.target;
+
+                  const target =
+                    parseInt(
+                      el.dataset.counter
+                    );
+
+                  if (
+                    isNaN(target)
+                  ) {
+                    return;
+                  }
+
+                  const duration =
+                    1400;
+
+                  let start =
+                    null;
+
+                  function animateCounter(
+                    timestamp
+                  ) {
+
+                    if (!start) {
+
+                      start =
+                        timestamp;
+                    }
+
+                    const progress =
+                      Math.min(
+                        (
+                          timestamp -
+                          start
+                        ) / duration,
+                        1
+                      );
+
+                    const value =
+                      Math.floor(
+                        progress *
+                          target
+                      );
+
+                    el.textContent =
+                      value.toLocaleString();
+
+                    if (
+                      progress < 1
+                    ) {
+
+                      requestAnimationFrame(
+                        animateCounter
+                      );
+
+                    } else {
+
+                      el.textContent =
+                        target.toLocaleString();
+                    }
+                  }
+
+                  requestAnimationFrame(
+                    animateCounter
+                  );
+
+                  counterObserver.unobserve(
+                    el
+                  );
+                }
+              );
+
+            },
+            {
+              threshold: 0.45
+            }
+          );
+
+        counters.forEach(counter => {
+
+          counterObserver.observe(
+            counter
+          );
 
         });
+      }
+    }
 
-      }, {
-        threshold: 0.45
-      });
+    // =========================================
+    // MAGNETIC BUTTONS
+    // =========================================
 
-    counters.forEach(counter => {
-      counterObserver.observe(counter);
-    });
+    if (
+      CONFIG.enableMagnetic &&
+      window.innerWidth > 768
+    ) {
 
-  }
+      $$(".btn").forEach(button => {
 
-  // =========================================
-  // MAGNETIC BUTTONS
-  // =========================================
+        let frame =
+          null;
 
-  if (CONFIG.enableMagnetic) {
+        button.addEventListener(
+          "mousemove",
+          (e) => {
 
-    document.querySelectorAll(".btn").forEach(button => {
+            const rect =
+              button.getBoundingClientRect();
 
-      let frame = null;
+            const x =
+              e.clientX -
+              rect.left -
+              rect.width / 2;
 
-      button.addEventListener("mousemove", (e) => {
+            const y =
+              e.clientY -
+              rect.top -
+              rect.height / 2;
 
-        if (window.innerWidth <= 768) return;
+            if (frame) {
 
-        const rect =
-          button.getBoundingClientRect();
+              cancelAnimationFrame(
+                frame
+              );
+            }
 
-        const x =
-          e.clientX - rect.left - rect.width / 2;
+            frame =
+              requestAnimationFrame(
+                () => {
 
-        const y =
-          e.clientY - rect.top - rect.height / 2;
+                  button.style.transform =
+                    `
+                    translate3d(
+                      ${x * 0.08}px,
+                      ${y * 0.08}px,
+                      0
+                    )
+                    `;
 
-        if (frame) cancelAnimationFrame(frame);
-
-        frame = requestAnimationFrame(() => {
-
-          button.style.transform =
-            `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
-
-        });
-
-      });
-
-      button.addEventListener("mouseleave", () => {
-
-        button.style.transform =
-          "translate3d(0,0,0)";
-
-      });
-
-    });
-
-  }
-
-  // =========================================
-  // CARD GLOW FOLLOW
-  // =========================================
-
-  document.querySelectorAll(`
-    .card,
-    .project-card,
-    .value-card
-  `).forEach(card => {
-
-    let frame = null;
-
-    card.addEventListener("mousemove", (e) => {
-
-      const rect =
-        card.getBoundingClientRect();
-
-      const x =
-        e.clientX - rect.left;
-
-      const y =
-        e.clientY - rect.top;
-
-      if (frame) cancelAnimationFrame(frame);
-
-      frame = requestAnimationFrame(() => {
-
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
-
-      });
-
-    });
-
-  });
-
-  // =========================================
-  // NAVBAR SCROLL EFFECT
-  // =========================================
-
-  const navbar =
-    document.querySelector(".navbar");
-
-  if (navbar) {
-
-    let lastScroll = 0;
-
-    let ticking = false;
-
-    window.addEventListener("scroll", () => {
-
-      if (ticking) return;
-
-      ticking = true;
-
-      requestAnimationFrame(() => {
-
-        const current =
-          window.scrollY;
-
-        navbar.classList.toggle(
-          "scrolled",
-          current > 40
+                }
+              );
+          }
         );
 
-        if (
-          current > lastScroll &&
-          current > 140
-        ) {
+        button.addEventListener(
+          "mouseleave",
+          () => {
 
-          navbar.classList.add("hide");
+            button.style.transform =
+              "translate3d(0,0,0)";
+          }
+        );
+      });
+    }
 
-        } else {
+    // =========================================
+    // CARD GLOW FOLLOW
+    // =========================================
 
-          navbar.classList.remove("hide");
+    if (CONFIG.enableCardGlow) {
 
-        }
+      $$(
+        `
+        .card,
+        .project-card,
+        .value-card
+        `
+      ).forEach(card => {
 
-        lastScroll = current;
+        let frame =
+          null;
 
-        ticking = false;
+        card.addEventListener(
+          "mousemove",
+          (e) => {
+
+            const rect =
+              card.getBoundingClientRect();
+
+            const x =
+              e.clientX -
+              rect.left;
+
+            const y =
+              e.clientY -
+              rect.top;
+
+            if (frame) {
+
+              cancelAnimationFrame(
+                frame
+              );
+            }
+
+            frame =
+              requestAnimationFrame(
+                () => {
+
+                  card.style.setProperty(
+                    "--mouse-x",
+                    `${x}px`
+                  );
+
+                  card.style.setProperty(
+                    "--mouse-y",
+                    `${y}px`
+                  );
+
+                }
+              );
+          }
+        );
+      });
+    }
+
+    // =========================================
+    // NAVBAR EFFECT
+    // =========================================
+
+    if (CONFIG.navbarScroll) {
+
+      const navbar =
+        $(".navbar");
+
+      if (navbar) {
+
+        let lastScroll = 0;
+
+        let ticking = false;
+
+        window.addEventListener(
+          "scroll",
+          () => {
+
+            if (ticking) {
+              return;
+            }
+
+            ticking = true;
+
+            requestAnimationFrame(
+              () => {
+
+                const current =
+                  window.scrollY;
+
+                // Blur background
+
+                navbar.classList.toggle(
+                  "scrolled",
+                  current > 40
+                );
+
+                // Hide on scroll down
+
+                if (
+                  current >
+                    lastScroll &&
+                  current > 140
+                ) {
+
+                  navbar.classList.add(
+                    "hide"
+                  );
+
+                } else {
+
+                  navbar.classList.remove(
+                    "hide"
+                  );
+                }
+
+                lastScroll =
+                  current;
+
+                ticking = false;
+
+              }
+            );
+
+          },
+          {
+            passive: true
+          }
+        );
+      }
+    }
+
+    // =========================================
+    // SMOOTH SCROLL
+    // =========================================
+
+    document
+      .querySelectorAll(
+        'a[href^="#"]'
+      )
+      .forEach(anchor => {
+
+        anchor.addEventListener(
+          "click",
+          function (e) {
+
+            const target =
+              document.querySelector(
+                this.getAttribute(
+                  "href"
+                )
+              );
+
+            if (!target) {
+              return;
+            }
+
+            e.preventDefault();
+
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+
+          }
+        );
 
       });
 
-    }, { passive: true });
+    // =========================================
+    // DEBUG
+    // =========================================
+
+    console.log(
+      "%cVB Animations Loaded",
+      `
+      color:#38bdf8;
+      font-weight:bold;
+      font-size:14px;
+      `
+    );
 
   }
-
-});
+);

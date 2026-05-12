@@ -1,6 +1,12 @@
 // =========================================
-// VINICIUS BUGARIN — PROJECT SYSTEM FINAL
-// ULTRA SEO + PERFORMANCE + SCALABLE
+// VINICIUS BUGARIN — PROJECT SYSTEM
+// ULTRA SEO + PERFORMANCE + SCALABLE v2
+// =========================================
+
+"use strict";
+
+// =========================================
+// CONFIG
 // =========================================
 
 const PROJECTS_CONFIG = {
@@ -17,7 +23,67 @@ const PROJECTS_CONFIG = {
 
   ENABLE_FILTERS: true,
 
-  ENABLE_SORTING: true
+  ENABLE_SORTING: true,
+
+  ENABLE_LOCAL_STORAGE: true,
+
+  DEBUG: false
+
+};
+
+// =========================================
+// HELPERS
+// =========================================
+
+const log = (...msg) => {
+
+  if (PROJECTS_CONFIG.DEBUG) {
+    console.log("[PROJECTS]", ...msg);
+  }
+
+};
+
+const sanitizeHTML = (text = "") => {
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+};
+
+const capitalize = (text = "") => {
+
+  return (
+    text.charAt(0).toUpperCase() +
+    text.slice(1)
+  );
+
+};
+
+const normalizeText = (text = "") => {
+
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+};
+
+const savePreference = (key, value) => {
+
+  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) return;
+
+  localStorage.setItem(key, value);
+
+};
+
+const getPreference = (key) => {
+
+  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) return null;
+
+  return localStorage.getItem(key);
 
 };
 
@@ -32,6 +98,8 @@ const projects = [
 
     title: "Calculadora IRPF España",
 
+    slug: "calculadora-irpf-espana",
+
     description:
       "Herramienta fiscal optimizada para calcular IRPF automáticamente y captar tráfico SEO cualificado.",
 
@@ -45,10 +113,10 @@ const projects = [
     category: "herramienta",
 
     image:
-      "../images/projects/irpf.jpg",
+      "./images/projects/irpf.jpg",
 
     fallbackImage:
-      "../images/projects/fallback.webp",
+      "./images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/tax-calculator-spain/",
@@ -72,6 +140,8 @@ const projects = [
 
     title: "Calculadora Autónomos España",
 
+    slug: "calculadora-autonomos-espana",
+
     description:
       "Sistema diseñado para calcular cuota, impuestos y beneficio real para autónomos.",
 
@@ -84,10 +154,10 @@ const projects = [
     category: "herramienta",
 
     image:
-      "../images/projects/autonomos.jpg",
+      "./images/projects/autonomos.jpg",
 
     fallbackImage:
-      "../images/projects/fallback.webp",
+      "./images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/autonomos-calculator/",
@@ -111,6 +181,8 @@ const projects = [
 
     title: "Lexoria Abogados",
 
+    slug: "lexoria-abogados",
+
     description:
       "Landing profesional para despacho jurídico optimizada para conversión y SEO local.",
 
@@ -124,10 +196,10 @@ const projects = [
     category: "web",
 
     image:
-      "../images/projects/lexoria.jpg",
+      "./images/projects/lexoria.jpg",
 
     fallbackImage:
-      "../images/projects/fallback.webp",
+      "./images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/lexoria-abogados/",
@@ -151,6 +223,8 @@ const projects = [
 
     title: "Iron Forge Gym",
 
+    slug: "iron-forge-gym",
+
     description:
       "Landing moderna para gimnasio enfocada en captación de clientes y branding premium.",
 
@@ -164,10 +238,10 @@ const projects = [
     category: "web",
 
     image:
-      "../images/projects/ironforge.jpg",
+      "./images/projects/ironforge.jpg",
 
     fallbackImage:
-      "../images/projects/fallback.webp",
+      "./images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/iron-forge-gym/",
@@ -191,6 +265,8 @@ const projects = [
 
     title: "La Plaza Gourmet",
 
+    slug: "la-plaza-gourmet",
+
     description:
       "Página web profesional para restaurante optimizada para reservas y SEO local.",
 
@@ -204,10 +280,10 @@ const projects = [
     category: "web",
 
     image:
-      "../images/projects/laplaza.jpg",
+      "./images/projects/laplaza.jpg",
 
     fallbackImage:
-      "../images/projects/fallback.webp",
+      "./images/projects/fallback.webp",
 
     link:
       "https://viniciusbugarin.github.io/La-Plaza-Gourmet/",
@@ -229,10 +305,26 @@ const projects = [
 ];
 
 // =========================================
+// STATE
+// =========================================
+
+const PROJECT_STATE = {
+
+  currentFilter: "all",
+
+  currentSearch: "",
+
+  currentSort: "featured"
+
+};
+
+// =========================================
 // DOM READY
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  restorePreferences();
 
   renderProjects();
 
@@ -256,52 +348,123 @@ document.addEventListener("DOMContentLoaded", () => {
 // RENDER PROJECTS
 // =========================================
 
-function renderProjects(filter = "all") {
+function renderProjects() {
 
   const container =
     document.querySelector(".projects-grid");
 
-  if (!container) return;
+  if (!container) {
+    log("No existe .projects-grid");
+    return;
+  }
 
   container.innerHTML = "";
 
   let filtered = [...projects];
 
-  // FEATURED FIRST
-  if (PROJECTS_CONFIG.FEATURED_FIRST) {
+  // =========================================
+  // FILTER
+  // =========================================
 
-    filtered.sort(
-      (a, b) =>
-        Number(b.featured) -
-        Number(a.featured)
+  if (PROJECT_STATE.currentFilter !== "all") {
+
+    filtered = filtered.filter(project =>
+      project.category === PROJECT_STATE.currentFilter
     );
 
   }
 
-  // FILTER
-  if (filter !== "all") {
+  // =========================================
+  // SEARCH
+  // =========================================
 
-    filtered =
-      filtered.filter(
-        project =>
-          project.category === filter
-      );
+  if (PROJECT_STATE.currentSearch) {
+
+    const term =
+      normalizeText(PROJECT_STATE.currentSearch);
+
+    filtered = filtered.filter(project => {
+
+      const searchable =
+        normalizeText(`
+          ${project.title}
+          ${project.description}
+          ${project.keywords.join(" ")}
+          ${project.tech.join(" ")}
+        `);
+
+      return searchable.includes(term);
+
+    });
 
   }
 
+  // =========================================
+  // SORT
+  // =========================================
+
+  switch (PROJECT_STATE.currentSort) {
+
+    case "newest":
+
+      filtered.sort(
+        (a, b) =>
+          Number(b.year) - Number(a.year)
+      );
+
+      break;
+
+    case "featured":
+
+      filtered.sort(
+        (a, b) =>
+          Number(b.featured) - Number(a.featured)
+      );
+
+      break;
+
+    case "alphabetical":
+
+      filtered.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+
+      break;
+
+  }
+
+  // =========================================
+  // FEATURED FIRST
+  // =========================================
+
+  if (
+    PROJECTS_CONFIG.FEATURED_FIRST &&
+    PROJECT_STATE.currentSort !== "alphabetical"
+  ) {
+
+    filtered.sort(
+      (a, b) =>
+        Number(b.featured) - Number(a.featured)
+    );
+
+  }
+
+  // =========================================
   // EMPTY STATE
+  // =========================================
+
   if (!filtered.length) {
 
     container.innerHTML = `
 
-      <div class="empty-projects card">
+      <div class="empty-projects card active">
 
         <h3>
           No hay proyectos encontrados
         </h3>
 
         <p>
-          Prueba otra categoría o búsqueda.
+          Prueba otra búsqueda o categoría.
         </p>
 
       </div>
@@ -311,6 +474,10 @@ function renderProjects(filter = "all") {
     return;
 
   }
+
+  // =========================================
+  // CREATE CARDS
+  // =========================================
 
   const fragment =
     document.createDocumentFragment();
@@ -344,22 +511,26 @@ function createProjectCard(project) {
   card.dataset.category =
     project.category;
 
-  card.dataset.keywords =
-    project.keywords.join(",");
-
   card.dataset.projectId =
     project.id;
+
+  card.setAttribute(
+    "aria-label",
+    project.title
+  );
 
   card.innerHTML = `
 
     <div class="project-image-wrapper">
 
       <img
-        src="${project.image}"
-        alt="${project.title}"
+        src="${sanitizeHTML(project.image)}"
+        alt="${sanitizeHTML(project.title)}"
         class="project-image"
         loading="lazy"
         decoding="async"
+        width="800"
+        height="500"
       >
 
       <div class="project-overlay"></div>
@@ -368,16 +539,16 @@ function createProjectCard(project) {
 
         ${
           project.featured
-          ? `
-            <span class="project-badge featured">
-              ★ Destacado
-            </span>
-          `
-          : ""
+            ? `
+              <span class="project-badge featured">
+                ★ Destacado
+              </span>
+            `
+            : ""
         }
 
         <span class="project-badge status">
-          ${project.status}
+          ${sanitizeHTML(project.status)}
         </span>
 
       </div>
@@ -393,17 +564,17 @@ function createProjectCard(project) {
         </span>
 
         <span class="project-year">
-          ${project.year}
+          ${sanitizeHTML(project.year)}
         </span>
 
       </div>
 
       <h3 class="project-title">
-        ${project.title}
+        ${sanitizeHTML(project.title)}
       </h3>
 
       <p class="project-description">
-        ${project.description}
+        ${sanitizeHTML(project.description)}
       </p>
 
       <div class="project-tech">
@@ -411,7 +582,7 @@ function createProjectCard(project) {
         ${project.tech.map(tech => `
 
           <span class="tech-badge">
-            ${tech}
+            ${sanitizeHTML(tech)}
           </span>
 
         `).join("")}
@@ -421,12 +592,12 @@ function createProjectCard(project) {
       <div class="project-actions">
 
         <a
-          href="${project.link}"
+          href="${sanitizeHTML(project.link)}"
           target="_blank"
           rel="noopener noreferrer"
           class="btn primary project-link"
           data-id="${project.id}"
-          aria-label="Abrir ${project.title}"
+          aria-label="Abrir ${sanitizeHTML(project.title)}"
         >
           Ver proyecto →
         </a>
@@ -437,18 +608,28 @@ function createProjectCard(project) {
 
   `;
 
+  // =========================================
   // IMAGE FALLBACK
+  // =========================================
+
   const image =
     card.querySelector(".project-image");
 
-  image.addEventListener("error", () => {
+  if (image) {
 
-    image.src =
-      project.fallbackImage;
+    image.addEventListener("error", () => {
 
-  });
+      image.src =
+        project.fallbackImage;
 
+    });
+
+  }
+
+  // =========================================
   // TRACKING
+  // =========================================
+
   if (PROJECTS_CONFIG.TRACK_CLICKS) {
 
     const link =
@@ -475,14 +656,7 @@ function createProjectCard(project) {
 
 function trackProjectClick(project) {
 
-  console.log(
-    `[PROJECT CLICK] ${project.title}`
-  );
-
-  // FUTURE:
-  // Google Analytics
-  // Plausible
-  // Meta Pixel
+  log("CLICK:", project.title);
 
   if (typeof gtag === "function") {
 
@@ -515,8 +689,13 @@ function initFilters() {
 
     button.addEventListener("click", () => {
 
-      const filter =
+      PROJECT_STATE.currentFilter =
         button.dataset.filter;
+
+      savePreference(
+        "vb_project_filter",
+        PROJECT_STATE.currentFilter
+      );
 
       buttons.forEach(btn => {
         btn.classList.remove("active");
@@ -524,7 +703,7 @@ function initFilters() {
 
       button.classList.add("active");
 
-      renderProjects(filter);
+      renderProjects();
 
     });
 
@@ -543,36 +722,20 @@ function initSearch() {
 
   if (!input) return;
 
+  input.value =
+    PROJECT_STATE.currentSearch;
+
   input.addEventListener("input", () => {
 
-    const term =
-      input.value
-        .trim()
-        .toLowerCase();
+    PROJECT_STATE.currentSearch =
+      input.value.trim();
 
-    document
-      .querySelectorAll(".project-card")
-      .forEach(card => {
+    savePreference(
+      "vb_project_search",
+      PROJECT_STATE.currentSearch
+    );
 
-        const keywords =
-          card.dataset.keywords
-            .toLowerCase();
-
-        const title =
-          card.querySelector("h3")
-            .textContent
-            .toLowerCase();
-
-        const visible =
-          keywords.includes(term) ||
-          title.includes(term);
-
-        card.style.display =
-          visible
-            ? "flex"
-            : "none";
-
-      });
+    renderProjects();
 
   });
 
@@ -589,30 +752,18 @@ function initSorting() {
 
   if (!select) return;
 
+  select.value =
+    PROJECT_STATE.currentSort;
+
   select.addEventListener("change", () => {
 
-    const value =
+    PROJECT_STATE.currentSort =
       select.value;
 
-    if (value === "newest") {
-
-      projects.sort(
-        (a, b) =>
-          Number(b.year) -
-          Number(a.year)
-      );
-
-    }
-
-    if (value === "featured") {
-
-      projects.sort(
-        (a, b) =>
-          Number(b.featured) -
-          Number(a.featured)
-      );
-
-    }
+    savePreference(
+      "vb_project_sort",
+      PROJECT_STATE.currentSort
+    );
 
     renderProjects();
 
@@ -659,32 +810,47 @@ function initReveal() {
 }
 
 // =========================================
-// HELPERS
+// RESTORE PREFERENCES
 // =========================================
 
-function capitalize(text) {
+function restorePreferences() {
 
-  return (
-    text.charAt(0).toUpperCase() +
-    text.slice(1)
-  );
+  PROJECT_STATE.currentFilter =
+    getPreference("vb_project_filter") || "all";
+
+  PROJECT_STATE.currentSearch =
+    getPreference("vb_project_search") || "";
+
+  PROJECT_STATE.currentSort =
+    getPreference("vb_project_sort") || "featured";
 
 }
 
 // =========================================
-// FUTURE CMS READY
+// OPTIONAL API CMS READY
 // =========================================
 
 // async function loadProjectsFromAPI() {
 //
-//   const response =
-//     await fetch("/api/projects");
+//   try {
 //
-//   const data =
-//     await response.json();
+//     const response =
+//       await fetch("/api/projects");
 //
-//   projects.push(...data);
+//     const data =
+//       await response.json();
 //
-//   renderProjects();
+//     projects.push(...data);
+//
+//     renderProjects();
+//
+//   } catch (error) {
+//
+//     console.error(
+//       "Error cargando proyectos",
+//       error
+//     );
+//
+//   }
 //
 // }
