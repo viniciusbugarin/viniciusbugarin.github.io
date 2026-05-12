@@ -1,6 +1,6 @@
 # =========================================
 # ROBOTS.TXT — VINICIUS BUGARIN
-# PROFESSIONAL SEO CONFIG
+# PROFESSIONAL SEO CONFIGURATION
 # =========================================
 
 User-agent: *
@@ -12,31 +12,80 @@ User-agent: *
 Allow: /
 
 # =========================================
-# BLOCK PRIVATE / SYSTEM AREAS
+# IMPORTANT PUBLIC ASSETS
+# Google needs access to render the website
+# correctly for SEO and Core Web Vitals
+# =========================================
+
+Allow: /styles/
+Allow: /js/
+Allow: /images/
+Allow: /components/
+Allow: /fonts/
+
+# =========================================
+# BLOCK PRIVATE / SYSTEM DIRECTORIES
 # =========================================
 
 Disallow: /private/
 Disallow: /drafts/
 Disallow: /tmp/
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /node_modules/
+Disallow: /backup/
+Disallow: /cache/
+Disallow: /logs/
 
 # =========================================
-# IMPORTANT NOTE
+# BLOCK DEVELOPMENT FILES
 # =========================================
 
-# DO NOT BLOCK:
-# /js/
-# /styles/
-# /components/
-#
-# Google needs access to CSS and JS files
-# to properly render and evaluate the site
-# for SEO, Core Web Vitals and mobile usability.
+Disallow: /test/
+Disallow: /sandbox/
+Disallow: /dev/
+Disallow: /staging/
 
 # =========================================
-# CRAWL OPTIMIZATION
+# BLOCK LOW VALUE FILES
 # =========================================
 
-Crawl-delay: 2
+Disallow: /README.md
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /.env
+
+# =========================================
+# BLOCK DUPLICATE URL PARAMETERS
+# Helps prevent duplicate indexing
+# =========================================
+
+Disallow: /*?replytocom=
+Disallow: /*?utm_
+Disallow: /*&utm_
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+Disallow: /*?ref=
+Disallow: /*?source=
+
+# =========================================
+# OPTIONAL BOT CONTROL
+# =========================================
+
+Crawl-delay: 1
+
+# =========================================
+# BLOCK AGGRESSIVE / LOW VALUE BOTS
+# =========================================
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
 
 # =========================================
 # HOST
@@ -49,3 +98,7 @@ Host: https://viniciusbugarin.github.io
 # =========================================
 
 Sitemap: https://viniciusbugarin.github.io/sitemap.xml
+
+# =========================================
+# END OF FILE
+# =========================================

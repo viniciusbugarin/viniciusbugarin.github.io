@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- ========================================= -->
+<!-- SITEMAP.XML — VINICIUS BUGARIN -->
+<!-- PROFESSIONAL SEO STRUCTURE -->
+<!-- ========================================= -->
+
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
@@ -17,7 +22,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -37,12 +42,16 @@
     <image:image>
 
       <image:loc>
-        https://viniciusbugarin.github.io/images/VB.png
+        https://viniciusbugarin.github.io/images/VB.webp
       </image:loc>
 
       <image:title>
-        Vinicius Bugarin - Desarrollador Web
+        Vinicius Bugarin - Desarrollador Web Freelance
       </image:title>
+
+      <image:caption>
+        Desarrollo web moderno, SEO técnico y automatización
+      </image:caption>
 
     </image:image>
 
@@ -52,7 +61,7 @@
   <!-- SERVICIOS -->
   <!-- ========================================= -->
 
-  <!-- BARCELONA -->
+  <!-- DESARROLLADOR WEB BARCELONA -->
 
   <url>
 
@@ -61,7 +70,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -75,14 +84,18 @@
     <image:image>
 
       <image:loc>
-        https://viniciusbugarin.github.io/images/VB.png
+        https://viniciusbugarin.github.io/images/VB.webp
       </image:loc>
+
+      <image:title>
+        Desarrollo Web en Barcelona
+      </image:title>
 
     </image:image>
 
   </url>
 
-  <!-- FREELANCE -->
+  <!-- DESARROLLADOR WEB FREELANCE -->
 
   <url>
 
@@ -91,7 +104,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -102,18 +115,30 @@
       0.95
     </priority>
 
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/VB.webp
+      </image:loc>
+
+      <image:title>
+        Desarrollador Web Freelance
+      </image:title>
+
+    </image:image>
+
   </url>
 
-  <!-- SEO -->
+  <!-- DESARROLLADOR WEB SEO -->
 
   <url>
 
     <loc>
-      https://viniciusbugarin.github.io/desarrollador-web-seo.html
+      https://viniciusbugarin.github.io/pages/desarrollador-web-seo.html
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -123,6 +148,18 @@
     <priority>
       0.95
     </priority>
+
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/VB.webp
+      </image:loc>
+
+      <image:title>
+        Desarrollo Web SEO
+      </image:title>
+
+    </image:image>
 
   </url>
 
@@ -130,7 +167,7 @@
   <!-- PROYECTOS -->
   <!-- ========================================= -->
 
-  <!-- IRPF -->
+  <!-- TAX CALCULATOR SPAIN -->
 
   <url>
 
@@ -139,7 +176,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -150,9 +187,21 @@
       0.90
     </priority>
 
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/projects/tax-calculator.webp
+      </image:loc>
+
+      <image:title>
+        Tax Calculator Spain
+      </image:title>
+
+    </image:image>
+
   </url>
 
-  <!-- AUTÓNOMOS -->
+  <!-- AUTONOMOS CALCULATOR -->
 
   <url>
 
@@ -161,7 +210,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -171,6 +220,18 @@
     <priority>
       0.90
     </priority>
+
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/projects/autonomos-calculator.webp
+      </image:loc>
+
+      <image:title>
+        Autónomos Calculator
+      </image:title>
+
+    </image:image>
 
   </url>
 
@@ -183,7 +244,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -193,6 +254,18 @@
     <priority>
       0.85
     </priority>
+
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/projects/iron-forge-gym.webp
+      </image:loc>
+
+      <image:title>
+        Iron Forge Gym
+      </image:title>
+
+    </image:image>
 
   </url>
 
@@ -205,7 +278,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -216,9 +289,21 @@
       0.85
     </priority>
 
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/projects/la-plaza-gourmet.webp
+      </image:loc>
+
+      <image:title>
+        La Plaza Gourmet
+      </image:title>
+
+    </image:image>
+
   </url>
 
-  <!-- LEXORIA -->
+  <!-- LEXORIA ABOGADOS -->
 
   <url>
 
@@ -227,7 +312,7 @@
     </loc>
 
     <lastmod>
-      2026-05-10T12:00:00+00:00
+      2026-05-12T10:00:00+00:00
     </lastmod>
 
     <changefreq>
@@ -237,6 +322,18 @@
     <priority>
       0.90
     </priority>
+
+    <image:image>
+
+      <image:loc>
+        https://viniciusbugarin.github.io/images/projects/lexoria.webp
+      </image:loc>
+
+      <image:title>
+        Lexoria Abogados
+      </image:title>
+
+    </image:image>
 
   </url>
 

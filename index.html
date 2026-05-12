@@ -4,7 +4,7 @@
 <head>
 
   <!-- ========================================= -->
-  <!-- BASIC -->
+  <!-- BASIC SEO + PERFORMANCE -->
   <!-- ========================================= -->
 
   <meta charset="UTF-8">
@@ -34,8 +34,23 @@
     content="telephone=no"
   >
 
+  <meta
+    name="googlebot"
+    content="index,follow,max-video-preview:-1,max-image-preview:large,max-snippet:-1"
+  >
+
+  <meta
+    name="robots"
+    content="index, follow, max-image-preview:large"
+  >
+
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
   <!-- ========================================= -->
-  <!-- SEO -->
+  <!-- TITLE + SEO -->
   <!-- ========================================= -->
 
   <title>
@@ -44,12 +59,12 @@
 
   <meta
     name="description"
-    content="Desarrollador web freelance en Barcelona especializado en SEO técnico, automatización y aplicaciones web modernas. Desarrollo sistemas digitales rápidos, escalables y optimizados para negocio."
+    content="Desarrollador web freelance en Barcelona especializado en SEO técnico, automatización y aplicaciones web modernas. Desarrollo webs rápidas, optimizadas para Google y enfocadas en conversión."
   >
 
   <meta
     name="keywords"
-    content="desarrollador web barcelona, desarrollador freelance, automatización negocios, seo técnico, aplicaciones web, desarrollo frontend, webs modernas, desarrollador full stack"
+    content="desarrollador web barcelona, desarrollador freelance, automatización negocios, seo técnico, aplicaciones web, desarrollo frontend, webs modernas, desarrollador full stack, desarrollo web seo"
   >
 
   <meta
@@ -57,14 +72,9 @@
     content="Vinicius Bugarin"
   >
 
-  <meta
-    name="robots"
-    content="index, follow, max-image-preview:large"
-  >
-
   <link
     rel="canonical"
-    href="https://viniciusbugarin.github.io"
+    href="https://viniciusbugarin.github.io/"
   >
 
   <!-- ========================================= -->
@@ -82,6 +92,11 @@
   >
 
   <meta
+    property="og:site_name"
+    content="Vinicius Bugarin"
+  >
+
+  <meta
     property="og:title"
     content="Desarrollador Web en Barcelona | Vinicius Bugarin"
   >
@@ -93,7 +108,7 @@
 
   <meta
     property="og:url"
-    content="https://viniciusbugarin.github.io"
+    content="https://viniciusbugarin.github.io/"
   >
 
   <meta
@@ -102,8 +117,8 @@
   >
 
   <meta
-    property="og:site_name"
-    content="Vinicius Bugarin"
+    property="og:image:alt"
+    content="Vinicius Bugarin - Desarrollador Web"
   >
 
   <!-- ========================================= -->
@@ -146,6 +161,22 @@
   >
 
   <link
+    rel="dns-prefetch"
+    href="//fonts.googleapis.com"
+  >
+
+  <link
+    rel="dns-prefetch"
+    href="//fonts.gstatic.com"
+  >
+
+  <link
+    rel="preload"
+    as="image"
+    href="images/VB.png"
+  >
+
+  <link
     rel="preload"
     as="style"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -178,7 +209,7 @@
   >
 
   <!-- ========================================= -->
-  <!-- MANIFEST -->
+  <!-- PWA -->
   <!-- ========================================= -->
 
   <link
@@ -216,128 +247,58 @@
   >
 
   <!-- ========================================= -->
-  <!-- PRELOAD IMAGES -->
-  <!-- ========================================= -->
-
-  <link
-    rel="preload"
-    as="image"
-    href="images/VB.png"
-  >
-
-  <!-- ========================================= -->
   <!-- SCHEMA -->
   <!-- ========================================= -->
 
   <script type="application/ld+json">
 {
   "@context":"https://schema.org",
-  "@type":"ProfessionalService",
-  "name":"Vinicius Bugarin",
-  "url":"https://viniciusbugarin.github.io",
-  "logo":"https://viniciusbugarin.github.io/images/VB.png",
-  "image":"https://viniciusbugarin.github.io/images/VB.png",
-  "description":"Desarrollador web especializado en automatización, SEO técnico y aplicaciones web modernas.",
-  "areaServed":{
-    "@type":"Place",
-    "name":"Barcelona"
-  },
-  "founder":{
-    "@type":"Person",
-    "name":"Vinicius Bugarin"
-  },
-  "sameAs":[
-    "https://github.com/viniciusbugarin"
-  ],
-  "serviceType":[
-    "Desarrollo web",
-    "SEO técnico",
-    "Automatización",
-    "Aplicaciones web"
-  ]
-}
-</script>
-
-  <!-- ========================================= -->
-  <!-- PERSON SCHEMA -->
-  <!-- ========================================= -->
-
-  <script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"Person",
-  "name":"Vinicius Bugarin",
-  "url":"https://viniciusbugarin.github.io",
-  "image":"https://viniciusbugarin.github.io/images/VB.png",
-  "jobTitle":"Desarrollador Web Freelance",
-  "knowsAbout":[
-    "Desarrollo Web",
-    "SEO Técnico",
-    "Automatización",
-    "JavaScript",
-    "Frontend Development",
-    "UX/UI",
-    "Performance Web"
-  ],
-  "sameAs":[
-    "https://github.com/viniciusbugarin"
-  ]
-}
-</script>
-
-  <!-- ========================================= -->
-  <!-- BREADCRUMB SCHEMA -->
-  <!-- ========================================= -->
-
-  <script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@graph":[
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Inicio",
-      "item":"https://viniciusbugarin.github.io"
+      "@type":"ProfessionalService",
+      "name":"Vinicius Bugarin",
+      "url":"https://viniciusbugarin.github.io",
+      "logo":"https://viniciusbugarin.github.io/images/VB.png",
+      "image":"https://viniciusbugarin.github.io/images/VB.png",
+      "description":"Desarrollador web especializado en automatización, SEO técnico y aplicaciones web modernas.",
+      "areaServed":{
+        "@type":"City",
+        "name":"Barcelona"
+      },
+      "founder":{
+        "@type":"Person",
+        "name":"Vinicius Bugarin"
+      },
+      "sameAs":[
+        "https://github.com/viniciusbugarin"
+      ],
+      "serviceType":[
+        "Desarrollo web",
+        "SEO técnico",
+        "Automatización",
+        "Aplicaciones web"
+      ]
+    },
+    {
+      "@type":"Person",
+      "name":"Vinicius Bugarin",
+      "url":"https://viniciusbugarin.github.io",
+      "image":"https://viniciusbugarin.github.io/images/VB.png",
+      "jobTitle":"Desarrollador Web Freelance",
+      "knowsAbout":[
+        "Desarrollo Web",
+        "SEO Técnico",
+        "Automatización",
+        "JavaScript",
+        "Frontend Development",
+        "UX/UI",
+        "Performance Web"
+      ],
+      "sameAs":[
+        "https://github.com/viniciusbugarin"
+      ]
     }
   ]
-}
-</script>
-
-  <!-- ========================================= -->
-  <!-- FAQ SCHEMA -->
-  <!-- ========================================= -->
-
-  <script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"FAQPage",
- "mainEntity":[
-   {
-     "@type":"Question",
-     "name":"¿Cuánto cuesta una página web?",
-     "acceptedAnswer":{
-       "@type":"Answer",
-       "text":"Depende del proyecto y funcionalidades necesarias."
-     }
-   },
-   {
-     "@type":"Question",
-     "name":"¿Las webs incluyen SEO?",
-     "acceptedAnswer":{
-       "@type":"Answer",
-       "text":"Sí, todas las webs incluyen optimización SEO técnica."
-     }
-   },
-   {
-     "@type":"Question",
-     "name":"¿Trabajas con clientes fuera de Barcelona?",
-     "acceptedAnswer":{
-       "@type":"Answer",
-       "text":"Sí, trabajo con clientes de toda España."
-     }
-   }
- ]
 }
 </script>
 
@@ -396,11 +357,11 @@
           </h1>
 
           <p class="subtitle">
-            Desarrollo web moderno, automatización inteligente y SEO técnico orientado a negocio.
+            Desarrollo webs rápidas, escalables y optimizadas para Google.
           </p>
 
           <p class="hero-description">
-            Ayudo a empresas y profesionales a mejorar resultados mediante webs rápidas, herramientas digitales optimizadas y automatizaciones enfocadas en crecimiento real.
+            Ayudo a empresas y profesionales a captar más clientes mediante desarrollo web moderno, SEO técnico y automatización inteligente.
           </p>
 
           <!-- BUTTONS -->
@@ -410,6 +371,7 @@
             <a
               href="#contact"
               class="btn primary magnetic"
+              aria-label="Solicitar propuesta"
             >
               🚀 Solicitar propuesta
             </a>
@@ -417,6 +379,7 @@
             <a
               href="#projects"
               class="btn secondary magnetic"
+              aria-label="Ver proyectos"
             >
               Ver proyectos
             </a>
@@ -485,11 +448,21 @@
               value="false"
             >
 
+            <!-- HONEYPOT -->
+
+            <input
+              type="text"
+              name="_gotcha"
+              style="display:none"
+              tabindex="-1"
+              autocomplete="off"
+            >
+
             <input
               type="text"
               name="name"
               placeholder="Nombre"
-              autocomplete="off"
+              autocomplete="name"
               required
             >
 
@@ -497,7 +470,7 @@
               type="email"
               name="email"
               placeholder="Email"
-              autocomplete="off"
+              autocomplete="email"
               required
             >
 
@@ -655,7 +628,7 @@
             </h3>
 
             <p>
-              Arquitecturas optimizadas para mejorar posicionamiento y rendimiento.
+              Arquitecturas optimizadas para mejorar posicionamiento y Core Web Vitals.
             </p>
 
           </article>
@@ -768,146 +741,6 @@
     </section>
 
     <!-- ========================================= -->
-    <!-- FAQ -->
-    <!-- ========================================= -->
-
-    <section class="section">
-
-      <div class="container">
-
-        <div class="section-heading reveal">
-
-          <span class="section-badge">
-            FAQ
-          </span>
-
-          <h2>
-            Preguntas frecuentes
-          </h2>
-
-        </div>
-
-        <div class="faq-container">
-
-          <article class="faq-item reveal">
-
-            <h3>
-              ¿Cuánto cuesta una página web?
-            </h3>
-
-            <p>
-              Depende del proyecto, funcionalidades y automatizaciones necesarias.
-            </p>
-
-          </article>
-
-          <article class="faq-item reveal">
-
-            <h3>
-              ¿Las webs incluyen SEO?
-            </h3>
-
-            <p>
-              Sí. Todas las webs incluyen optimización SEO técnica desde el inicio.
-            </p>
-
-          </article>
-
-          <article class="faq-item reveal">
-
-            <h3>
-              ¿Trabajas con clientes fuera de Barcelona?
-            </h3>
-
-            <p>
-              Sí. Trabajo con clientes de toda España.
-            </p>
-
-          </article>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- ========================================= -->
-    <!-- INTERNAL SEO -->
-    <!-- ========================================= -->
-
-    <section class="section dark">
-
-      <div class="container center">
-
-        <span class="section-badge">
-          Especialidades
-        </span>
-
-        <h2>
-          Explora más servicios
-        </h2>
-
-        <div class="hero-buttons">
-
-          <a
-            href="pages/desarrollador-web-barcelona.html"
-            class="btn secondary"
-          >
-            Desarrollador web Barcelona
-          </a>
-
-          <a
-            href="pages/desarrollador-web-freelance.html"
-            class="btn secondary"
-          >
-            Desarrollador freelance
-          </a>
-
-          <a
-            href="pages/desarrollador-web-seo.html"
-            class="btn secondary"
-          >
-            Desarrollo web SEO
-          </a>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- ========================================= -->
-    <!-- CTA -->
-    <!-- ========================================= -->
-
-    <section class="section cta-section">
-
-      <div class="container center reveal">
-
-        <span class="section-badge">
-          ¿Tienes un proyecto?
-        </span>
-
-        <h2>
-          Transformemos tu idea en una herramienta digital real
-        </h2>
-
-        <p>
-          Cuéntame qué necesitas y te propondré una solución moderna y optimizada.
-        </p>
-
-        <a
-          href="#contact"
-          class="btn primary magnetic"
-        >
-          🚀 Hablar conmigo
-        </a>
-
-      </div>
-
-    </section>
-
-    <!-- ========================================= -->
     <!-- CONTACT -->
     <!-- ========================================= -->
 
@@ -946,13 +779,21 @@
             value="false"
           >
 
+          <input
+            type="text"
+            name="_gotcha"
+            style="display:none"
+            tabindex="-1"
+            autocomplete="off"
+          >
+
           <div class="form-grid">
 
             <input
               type="text"
               name="name"
               placeholder="Nombre"
-              autocomplete="off"
+              autocomplete="name"
               required
             >
 
@@ -960,7 +801,7 @@
               type="email"
               name="email"
               placeholder="Email"
-              autocomplete="off"
+              autocomplete="email"
               required
             >
 
@@ -1063,10 +904,10 @@
     defer
   ></script>
 
-  <script
+ <!-- <script
     src="js/projects.js"
     defer
-  ></script>
+  ></script>-->
 
   <script
     src="js/animations.js"
