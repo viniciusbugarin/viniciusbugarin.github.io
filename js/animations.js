@@ -1,23 +1,18 @@
 // =========================================
 // VINICIUS BUGARIN — ANIMATIONS SYSTEM
-// STABLE + OPTIMIZED PRODUCTION VERSION
+// OPTIMIZED + STABLE + NO DUPLICATES
+// PRODUCTION READY VERSION
 // =========================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+(() => {
 
-    // =========================================
-    // PAGE LOADED
-    // =========================================
+  "use strict";
 
-    requestAnimationFrame(() => {
+  // =========================================
+  // DOM READY
+  // =========================================
 
-      document.body.classList.add(
-        "loaded"
-      );
-
-    });
+  document.addEventListener("DOMContentLoaded", () => {
 
     // =========================================
     // CONFIG
@@ -27,7 +22,7 @@ document.addEventListener(
 
       revealThreshold: 0.12,
 
-      staggerDelay: 80,
+      staggerDelay: 100,
 
       enableParallax: true,
 
@@ -37,23 +32,47 @@ document.addEventListener(
 
       enableCardGlow: true,
 
-      navbarScroll: true,
-
       reduceMotion:
         window.matchMedia(
           "(prefers-reduced-motion: reduce)"
         ).matches
+
     };
 
     // =========================================
-    // SAFE QUERY
+    // HELPERS
     // =========================================
 
-    const $ = (selector) =>
+    const $ = selector =>
       document.querySelector(selector);
 
-    const $$ = (selector) =>
-      document.querySelectorAll(selector);
+    const $$ = selector =>
+      [...document.querySelectorAll(selector)];
+
+    // =========================================
+    // PAGE LOADED
+    // =========================================
+
+    requestAnimationFrame(() => {
+
+      document.body.classList.add("loaded");
+
+      const loader =
+        $(".page-loader");
+
+      if (loader) {
+
+        loader.classList.add("hidden");
+
+        setTimeout(() => {
+
+          loader.remove();
+
+        }, 600);
+
+      }
+
+    });
 
     // =========================================
     // REDUCED MOTION
@@ -67,6 +86,8 @@ document.addEventListener(
         .card,
         .project-card,
         .value-card,
+        .hero-card,
+        .stat-card,
         .section-heading
         `
       ).forEach(el => {
@@ -79,27 +100,171 @@ document.addEventListener(
     }
 
     // =========================================
-    // REVEAL ANIMATION
+    // REVEAL ANIMATIONS
     // =========================================
 
-    const revealElements = $$(
-      `
-      .reveal,
-      .card,
-      .project-card,
-      .value-card,
-      .section-heading
-      `
-    );
+    function initRevealAnimations() {
 
-    if (revealElements.length > 0) {
+      const revealElements = $$(
+        `
+        .reveal,
+        .card,
+        .project-card,
+        .value-card,
+        .hero-card,
+        .stat-card,
+        .section-heading
+        `
+      );
 
-      const revealObserver =
+      if (!revealElements.length) {
+        return;
+      }
+
+      if (!("IntersectionObserver" in window)) {
+
+        revealElements.forEach(el => {
+
+          el.classList.add("active");
+
+        });
+
+        return;
+      }
+
+      const observer =
         new IntersectionObserver(
-          (entries) => {
+
+          (entries, obs) => {
 
             entries.forEach(
               (entry, index) => {
+
+                if (!entry.isIntersecting) {
+                  return;
+                }
+
+                const el =
+                  entry.target;
+
+                const delay =
+                  Number(
+                    el.dataset.delay
+                  ) ||
+                  index *
+                    CONFIG.staggerDelay;
+
+                setTimeout(() => {
+
+                  requestAnimationFrame(() => {
+
+                    el.classList.add(
+                      "active"
+                    );
+
+                  });
+
+                }, delay);
+
+                obs.unobserve(el);
+
+              }
+            );
+
+          },
+
+          {
+            threshold:
+              CONFIG.revealThreshold,
+
+            rootMargin:
+              "0px 0px -60px 0px"
+          }
+
+        );
+
+      revealElements.forEach(el => {
+
+        observer.observe(el);
+
+      });
+
+    }
+
+    // =========================================
+    // HERO PARALLAX
+    // =========================================
+
+    function initParallax() {
+
+      if (!CONFIG.enableParallax) {
+        return;
+      }
+
+      const hero =
+        $(".hero");
+
+      if (!hero) {
+        return;
+      }
+
+      let ticking =
+        false;
+
+      window.addEventListener(
+        "scroll",
+        () => {
+
+          if (ticking) {
+            return;
+          }
+
+          ticking = true;
+
+          requestAnimationFrame(() => {
+
+            const scrollY =
+              window.scrollY;
+
+            hero.style.setProperty(
+              "--parallax-offset",
+              `${scrollY * 0.12}px`
+            );
+
+            ticking = false;
+
+          });
+
+        },
+        { passive: true }
+      );
+
+    }
+
+    // =========================================
+    // COUNTERS
+    // =========================================
+
+    function initCounters() {
+
+      if (!CONFIG.enableCounters) {
+        return;
+      }
+
+      const counters =
+        $$("[data-counter]");
+
+      if (!counters.length) {
+        return;
+      }
+
+      const observer =
+        new IntersectionObserver(
+
+          entries => {
+
+            entries.forEach(
+              entry => {
 
                 if (
                   !entry.isIntersecting
@@ -110,224 +275,119 @@ document.addEventListener(
                 const el =
                   entry.target;
 
-                const delay =
+                const target =
                   parseInt(
-                    el.dataset.delay
-                  ) ||
-                  index *
-                    CONFIG.staggerDelay;
-
-                setTimeout(() => {
-
-                  requestAnimationFrame(
-                    () => {
-
-                      el.classList.add(
-                        "active"
-                      );
-
-                    }
+                    el.dataset.counter
                   );
 
-                }, delay);
+                if (
+                  Number.isNaN(
+                    target
+                  )
+                ) {
+                  return;
+                }
 
-                revealObserver.unobserve(
-                  el
-                );
-              }
-            );
+                let start =
+                  null;
 
-          },
-          {
-            threshold:
-              CONFIG.revealThreshold
-          }
-        );
+                const duration =
+                  1400;
 
-      revealElements.forEach(el => {
+                function updateCounter(
+                  timestamp
+                ) {
 
-        revealObserver.observe(el);
-
-      });
-    }
-
-    // =========================================
-    // HERO PARALLAX
-    // =========================================
-
-    if (CONFIG.enableParallax) {
-
-      const hero =
-        $(".hero");
-
-      if (hero) {
-
-        let ticking = false;
-
-        window.addEventListener(
-          "scroll",
-          () => {
-
-            if (ticking) {
-              return;
-            }
-
-            ticking = true;
-
-            requestAnimationFrame(
-              () => {
-
-                const scrollY =
-                  window.scrollY;
-
-                hero.style.setProperty(
-                  "--parallax-offset",
-                  `${scrollY * 0.12}px`
-                );
-
-                ticking = false;
-
-              }
-            );
-
-          },
-          {
-            passive: true
-          }
-        );
-      }
-    }
-
-    // =========================================
-    // COUNTERS
-    // =========================================
-
-    if (CONFIG.enableCounters) {
-
-      const counters =
-        $$("[data-counter]");
-
-      if (counters.length > 0) {
-
-        const counterObserver =
-          new IntersectionObserver(
-            (entries) => {
-
-              entries.forEach(
-                entry => {
-
-                  if (
-                    !entry.isIntersecting
-                  ) {
-                    return;
+                  if (!start) {
+                    start =
+                      timestamp;
                   }
 
-                  const el =
-                    entry.target;
-
-                  const target =
-                    parseInt(
-                      el.dataset.counter
+                  const progress =
+                    Math.min(
+                      (
+                        timestamp -
+                        start
+                      ) / duration,
+                      1
                     );
 
+                  const value =
+                    Math.floor(
+                      progress *
+                        target
+                    );
+
+                  el.textContent =
+                    value.toLocaleString();
+
                   if (
-                    isNaN(target)
-                  ) {
-                    return;
-                  }
-
-                  const duration =
-                    1400;
-
-                  let start =
-                    null;
-
-                  function animateCounter(
-                    timestamp
+                    progress < 1
                   ) {
 
-                    if (!start) {
+                    requestAnimationFrame(
+                      updateCounter
+                    );
 
-                      start =
-                        timestamp;
-                    }
-
-                    const progress =
-                      Math.min(
-                        (
-                          timestamp -
-                          start
-                        ) / duration,
-                        1
-                      );
-
-                    const value =
-                      Math.floor(
-                        progress *
-                          target
-                      );
+                  } else {
 
                     el.textContent =
-                      value.toLocaleString();
+                      target.toLocaleString();
 
-                    if (
-                      progress < 1
-                    ) {
-
-                      requestAnimationFrame(
-                        animateCounter
-                      );
-
-                    } else {
-
-                      el.textContent =
-                        target.toLocaleString();
-                    }
                   }
 
-                  requestAnimationFrame(
-                    animateCounter
-                  );
-
-                  counterObserver.unobserve(
-                    el
-                  );
                 }
-              );
 
-            },
-            {
-              threshold: 0.45
-            }
-          );
+                requestAnimationFrame(
+                  updateCounter
+                );
 
-        counters.forEach(counter => {
+                observer.unobserve(
+                  el
+                );
 
-          counterObserver.observe(
-            counter
-          );
+              }
+            );
 
-        });
-      }
+          },
+
+          {
+            threshold: 0.45
+          }
+
+        );
+
+      counters.forEach(counter => {
+
+        observer.observe(
+          counter
+        );
+
+      });
+
     }
 
     // =========================================
     // MAGNETIC BUTTONS
     // =========================================
 
-    if (
-      CONFIG.enableMagnetic &&
-      window.innerWidth > 768
-    ) {
+    function initMagneticButtons() {
 
-      $$(".btn").forEach(button => {
+      if (
+        !CONFIG.enableMagnetic ||
+        window.innerWidth < 768
+      ) {
+        return;
+      }
+
+      $$(".magnetic").forEach(button => {
 
         let frame =
           null;
 
         button.addEventListener(
           "mousemove",
-          (e) => {
+          e => {
 
             const rect =
               button.getBoundingClientRect();
@@ -347,6 +407,7 @@ document.addEventListener(
               cancelAnimationFrame(
                 frame
               );
+
             }
 
             frame =
@@ -364,6 +425,7 @@ document.addEventListener(
 
                 }
               );
+
           }
         );
 
@@ -373,22 +435,30 @@ document.addEventListener(
 
             button.style.transform =
               "translate3d(0,0,0)";
+
           }
         );
+
       });
+
     }
 
     // =========================================
-    // CARD GLOW FOLLOW
+    // CARD GLOW
     // =========================================
 
-    if (CONFIG.enableCardGlow) {
+    function initCardGlow() {
+
+      if (!CONFIG.enableCardGlow) {
+        return;
+      }
 
       $$(
         `
         .card,
         .project-card,
-        .value-card
+        .value-card,
+        .hero-card
         `
       ).forEach(card => {
 
@@ -397,7 +467,7 @@ document.addEventListener(
 
         card.addEventListener(
           "mousemove",
-          (e) => {
+          e => {
 
             const rect =
               card.getBoundingClientRect();
@@ -415,6 +485,7 @@ document.addEventListener(
               cancelAnimationFrame(
                 frame
               );
+
             }
 
             frame =
@@ -433,104 +504,40 @@ document.addEventListener(
 
                 }
               );
+
           }
         );
+
       });
-    }
 
-    // =========================================
-    // NAVBAR EFFECT
-    // =========================================
-
-    if (CONFIG.navbarScroll) {
-
-      const navbar =
-        $(".navbar");
-
-      if (navbar) {
-
-        let lastScroll = 0;
-
-        let ticking = false;
-
-        window.addEventListener(
-          "scroll",
-          () => {
-
-            if (ticking) {
-              return;
-            }
-
-            ticking = true;
-
-            requestAnimationFrame(
-              () => {
-
-                const current =
-                  window.scrollY;
-
-                // Blur background
-
-                navbar.classList.toggle(
-                  "scrolled",
-                  current > 40
-                );
-
-                // Hide on scroll down
-
-                if (
-                  current >
-                    lastScroll &&
-                  current > 140
-                ) {
-
-                  navbar.classList.add(
-                    "hide"
-                  );
-
-                } else {
-
-                  navbar.classList.remove(
-                    "hide"
-                  );
-                }
-
-                lastScroll =
-                  current;
-
-                ticking = false;
-
-              }
-            );
-
-          },
-          {
-            passive: true
-          }
-        );
-      }
     }
 
     // =========================================
     // SMOOTH SCROLL
     // =========================================
 
-    document
-      .querySelectorAll(
-        'a[href^="#"]'
-      )
-      .forEach(anchor => {
+    function initSmoothScroll() {
+
+      $$('a[href^="#"]').forEach(anchor => {
 
         anchor.addEventListener(
           "click",
-          function (e) {
+          e => {
+
+            const href =
+              anchor.getAttribute(
+                "href"
+              );
+
+            if (
+              !href ||
+              href === "#"
+            ) {
+              return;
+            }
 
             const target =
-              document.querySelector(
-                this.getAttribute(
-                  "href"
-                )
-              );
+              $(href);
 
             if (!target) {
               return;
@@ -538,15 +545,38 @@ document.addEventListener(
 
             e.preventDefault();
 
-            target.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
+            window.scrollTo({
+
+              top:
+                target.offsetTop - 80,
+
+              behavior:
+                "smooth"
+
             });
 
           }
         );
 
       });
+
+    }
+
+    // =========================================
+    // INIT
+    // =========================================
+
+    initRevealAnimations();
+
+    initParallax();
+
+    initCounters();
+
+    initMagneticButtons();
+
+    initCardGlow();
+
+    initSmoothScroll();
 
     // =========================================
     // DEBUG
@@ -561,5 +591,6 @@ document.addEventListener(
       `
     );
 
-  }
-);
+  });
+
+})();

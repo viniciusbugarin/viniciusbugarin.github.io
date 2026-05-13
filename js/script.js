@@ -1,7 +1,7 @@
 // =========================================
 // VINICIUS BUGARIN — CORE SYSTEM
-// ULTRA PERFORMANCE + SEO + UX VERSION
-// FINAL OPTIMIZED ARCHITECTURE
+// STABLE + PERFORMANCE + SEO + UX v3
+// FIXED LOADER + SAFE OBSERVERS
 // =========================================
 
 (() => {
@@ -26,6 +26,8 @@
 
     scrollProgressThrottle: 10,
 
+    loaderTimeout: 3500,
+
     enableTracking: true,
 
     enableLazyLoad: true,
@@ -48,8 +50,6 @@
 
   const STATE = {
 
-    ticking: false,
-
     loaded: false,
 
     observers: []
@@ -66,7 +66,7 @@
   const $$ = selector =>
     [...document.querySelectorAll(selector)];
 
-  function log(...args) {
+  const log = (...args) => {
 
     if (CONFIG.debug) {
 
@@ -77,33 +77,53 @@
 
     }
 
-  }
+  };
 
-  function safeTrack(event, data = {}) {
+  // =========================================
+  // TRACKING
+  // =========================================
+
+  function safeTrack(
+    event,
+    data = {}
+  ) {
 
     if (!CONFIG.enableTracking)
       return;
 
-    log("TRACK:", event, data);
+    try {
 
-    // Google Analytics
-    if (typeof window.gtag === "function") {
+      if (
+        typeof window.gtag ===
+        "function"
+      ) {
 
-      window.gtag(
-        "event",
-        event,
-        data
-      );
+        window.gtag(
+          "event",
+          event,
+          data
+        );
 
-    }
+      }
 
-    // Meta Pixel
-    if (typeof window.fbq === "function") {
+      if (
+        typeof window.fbq ===
+        "function"
+      ) {
 
-      window.fbq(
-        "trackCustom",
-        event,
-        data
+        window.fbq(
+          "trackCustom",
+          event,
+          data
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "[TRACK ERROR]",
+        error
       );
 
     }
@@ -114,15 +134,21 @@
   // THROTTLE
   // =========================================
 
-  function throttle(fn, wait = 100) {
+  function throttle(
+    fn,
+    wait = 100
+  ) {
 
     let last = 0;
 
     return (...args) => {
 
-      const now = Date.now();
+      const now =
+        Date.now();
 
-      if (now - last >= wait) {
+      if (
+        now - last >= wait
+      ) {
 
         last = now;
 
@@ -135,24 +161,64 @@
   }
 
   // =========================================
-  // DEBOUNCE
+  // PAGE LOADER FIX
   // =========================================
 
-  function debounce(fn, delay = 200) {
+  function removeLoader() {
 
-    let timeout;
+    const loader =
+      $(".page-loader");
 
-    return (...args) => {
+    document.body.classList.add(
+      "loaded"
+    );
 
-      clearTimeout(timeout);
+    document.body.style.overflow =
+      "auto";
 
-      timeout = setTimeout(() => {
+    if (!loader)
+      return;
 
-        fn(...args);
+    loader.classList.add(
+      "hide"
+    );
 
-      }, delay);
+    setTimeout(() => {
 
-    };
+      loader.remove();
+
+    }, 500);
+
+  }
+
+  function initLoader() {
+
+    // Window loaded
+    window.addEventListener(
+      "load",
+      () => {
+
+        STATE.loaded = true;
+
+        removeLoader();
+
+      }
+    );
+
+    // Emergency fallback
+    setTimeout(() => {
+
+      if (!STATE.loaded) {
+
+        log(
+          "Emergency loader fallback"
+        );
+
+        removeLoader();
+
+      }
+
+    }, CONFIG.loaderTimeout);
 
   }
 
@@ -165,7 +231,7 @@
     if (!CONFIG.enableReveal)
       return;
 
-    const revealItems = $$(`
+    const elements = $$(`
 
       .reveal,
       .card,
@@ -174,19 +240,26 @@
       .stat-card,
       .about-item,
       .hero-card,
-      .section-head
+      .section-heading
 
     `);
 
-    if (!revealItems.length)
+    if (!elements.length)
       return;
 
     // Fallback
-    if (!("IntersectionObserver" in window)) {
+    if (
+      !(
+        "IntersectionObserver" in
+        window
+      )
+    ) {
 
-      revealItems.forEach(el => {
+      elements.forEach(el => {
 
-        el.classList.add("active");
+        el.classList.add(
+          "active"
+        );
 
       });
 
@@ -197,25 +270,31 @@
     const observer =
       new IntersectionObserver(
 
-        (entries, obs) => {
+        (
+          entries,
+          obs
+        ) => {
 
           entries.forEach(
-            (entry, index) => {
+            (
+              entry,
+              index
+            ) => {
 
-              if (!entry.isIntersecting)
+              if (
+                !entry.isIntersecting
+              ) {
                 return;
+              }
 
               setTimeout(() => {
 
-                requestAnimationFrame(() => {
+                entry.target.classList.add(
+                  "active"
+                );
 
-                  entry.target.classList.add(
-                    "active"
-                  );
-
-                });
-
-              }, index * CONFIG.revealDelay);
+              }, index *
+                CONFIG.revealDelay);
 
               obs.unobserve(
                 entry.target
@@ -236,13 +315,15 @@
 
       );
 
-    revealItems.forEach(el => {
+    elements.forEach(el => {
 
       observer.observe(el);
 
     });
 
-    STATE.observers.push(observer);
+    STATE.observers.push(
+      observer
+    );
 
   }
 
@@ -252,8 +333,11 @@
 
   function initSmoothScroll() {
 
-    if (!CONFIG.enableSmoothScroll)
+    if (
+      !CONFIG.enableSmoothScroll
+    ) {
       return;
+    }
 
     $$('a[href^="#"]')
       .forEach(anchor => {
@@ -270,7 +354,9 @@
             if (
               !href ||
               href === "#"
-            ) return;
+            ) {
+              return;
+            }
 
             const target =
               $(href);
@@ -302,7 +388,8 @@
             safeTrack(
               "scroll_to_section",
               {
-                section: href
+                section:
+                  href
               }
             );
 
@@ -339,9 +426,9 @@
           CONFIG.navbarScroll
         );
 
-        // Hide on scroll down
         if (
-          current > lastScroll &&
+          current >
+            lastScroll &&
           current > 140
         ) {
 
@@ -359,7 +446,7 @@
 
         lastScroll = current;
 
-      }, 10);
+      }, 16);
 
     window.addEventListener(
       "scroll",
@@ -375,8 +462,11 @@
 
   function initLazyLoad() {
 
-    if (!CONFIG.enableLazyLoad)
+    if (
+      !CONFIG.enableLazyLoad
+    ) {
       return;
+    }
 
     const images =
       $$("img[data-src]");
@@ -384,9 +474,11 @@
     if (!images.length)
       return;
 
-    // Fallback
     if (
-      !("IntersectionObserver" in window)
+      !(
+        "IntersectionObserver" in
+        window
+      )
     ) {
 
       images.forEach(loadImage);
@@ -398,22 +490,30 @@
     const observer =
       new IntersectionObserver(
 
-        (entries, obs) => {
+        (
+          entries,
+          obs
+        ) => {
 
-          entries.forEach(entry => {
+          entries.forEach(
+            entry => {
 
-            if (
-              !entry.isIntersecting
-            ) return;
+              if (
+                !entry.isIntersecting
+              ) {
+                return;
+              }
 
-            const img =
-              entry.target;
+              loadImage(
+                entry.target
+              );
 
-            loadImage(img);
+              obs.unobserve(
+                entry.target
+              );
 
-            obs.unobserve(img);
-
-          });
+            }
+          );
 
         },
 
@@ -430,13 +530,15 @@
 
     });
 
-    STATE.observers.push(observer);
+    STATE.observers.push(
+      observer
+    );
 
   }
 
   function loadImage(img) {
 
-    if (!img.dataset.src)
+    if (!img?.dataset?.src)
       return;
 
     img.src =
@@ -456,6 +558,11 @@
         "image-error"
       );
 
+      console.warn(
+        "Image failed:",
+        img.src
+      );
+
     };
 
     img.removeAttribute(
@@ -470,117 +577,25 @@
 
   function initForms() {
 
-    const forms = $$("form");
+    $$("form")
+      .forEach(form => {
 
-    if (!forms.length)
-      return;
+        form.addEventListener(
+          "submit",
+          () => {
 
-    forms.forEach(form => {
+            safeTrack(
+              "form_submit",
+              {
+                form:
+                  form.className
+              }
+            );
 
-      form.addEventListener(
-        "submit",
-        () => {
+          }
+        );
 
-          safeTrack(
-            "form_submit",
-            {
-              form:
-                form.className ||
-                "unknown"
-            }
-          );
-
-        }
-      );
-
-      form
-        .querySelectorAll(`
-          input,
-          textarea,
-          select
-        `)
-        .forEach(field => {
-
-          field.addEventListener(
-            "focus",
-            () => {
-
-              field
-                .parentElement
-                ?.classList.add(
-                  "focused"
-                );
-
-            }
-          );
-
-          field.addEventListener(
-            "blur",
-            () => {
-
-              field
-                .parentElement
-                ?.classList.remove(
-                  "focused"
-                );
-
-            }
-          );
-
-        });
-
-    });
-
-  }
-
-  // =========================================
-  // TRACKING
-  // =========================================
-
-  function initTracking() {
-
-    if (!CONFIG.enableTracking)
-      return;
-
-    document.addEventListener(
-      "click",
-      e => {
-
-        const button =
-          e.target.closest(".btn");
-
-        if (button) {
-
-          safeTrack(
-            "button_click",
-            {
-              text:
-                button.textContent
-                  .trim()
-            }
-          );
-
-        }
-
-        const project =
-          e.target.closest(
-            ".project-link"
-          );
-
-        if (project) {
-
-          safeTrack(
-            "project_click",
-            {
-              href:
-                project.href
-            }
-          );
-
-        }
-
-      }
-    );
+      });
 
   }
 
@@ -592,7 +607,9 @@
 
     if (
       !CONFIG.enableScrollProgress
-    ) return;
+    ) {
+      return;
+    }
 
     const progress =
       document.createElement(
@@ -606,7 +623,7 @@
       progress
     );
 
-    const updateProgress =
+    const update =
       throttle(() => {
 
         const scrollTop =
@@ -623,7 +640,9 @@
 
           height > 0
 
-            ? (scrollTop / height) * 100
+            ? (scrollTop /
+                height) *
+              100
 
             : 0;
 
@@ -638,7 +657,7 @@
 
     window.addEventListener(
       "scroll",
-      updateProgress,
+      update,
       { passive: true }
     );
 
@@ -652,28 +671,39 @@
 
     if (
       !CONFIG.enableBackToTop
-    ) return;
+    ) {
+      return;
+    }
+
+    const existing =
+      $(".back-to-top");
 
     const button =
+
+      existing ||
+
       document.createElement(
         "button"
       );
 
-    button.className =
-      "back-to-top";
+    if (!existing) {
 
-    button.setAttribute(
-      "aria-label",
-      "Volver arriba"
-    );
+      button.className =
+        "back-to-top";
 
-    button.innerHTML = `
-      ↑
-    `;
+      button.innerHTML =
+        "↑";
 
-    document.body.appendChild(
-      button
-    );
+      button.setAttribute(
+        "aria-label",
+        "Volver arriba"
+      );
+
+      document.body.appendChild(
+        button
+      );
+
+    }
 
     button.addEventListener(
       "click",
@@ -691,7 +721,7 @@
       }
     );
 
-    const toggleButton =
+    const toggle =
       throttle(() => {
 
         button.classList.toggle(
@@ -704,7 +734,7 @@
 
     window.addEventListener(
       "scroll",
-      toggleButton,
+      toggle,
       { passive: true }
     );
 
@@ -729,99 +759,18 @@
   }
 
   // =========================================
-  // PAGE LOADED
-  // =========================================
-
-  function initPageLoaded() {
-
-    window.addEventListener(
-      "load",
-      () => {
-
-        STATE.loaded = true;
-
-        document.body.classList.add(
-          "loaded"
-        );
-
-      }
-    );
-
-  }
-
-  // =========================================
-  // GLOBAL ERROR HANDLING
-  // =========================================
-
-  function initGlobalErrorHandling() {
-
-    window.addEventListener(
-      "error",
-      e => {
-
-        console.error(
-          "[GLOBAL ERROR]",
-          e.message
-        );
-
-      }
-    );
-
-    window.addEventListener(
-      "unhandledrejection",
-      e => {
-
-        console.error(
-          "[PROMISE ERROR]",
-          e.reason
-        );
-
-      }
-    );
-
-  }
-
-  // =========================================
-  // PERFORMANCE
-  // =========================================
-
-  function initPerformanceOptimizations() {
-
-    // Passive touch
-    document.addEventListener(
-      "touchstart",
-      () => {},
-      { passive: true }
-    );
-
-    // Font loaded
-    if (document.fonts) {
-
-      document.fonts.ready
-        .then(() => {
-
-          document.body.classList.add(
-            "fonts-loaded"
-          );
-
-        });
-
-    }
-
-  }
-
-  // =========================================
   // ACCESSIBILITY
   // =========================================
 
   function initAccessibility() {
 
-    // Keyboard navigation
     document.addEventListener(
       "keyup",
       e => {
 
-        if (e.key === "Tab") {
+        if (
+          e.key === "Tab"
+        ) {
 
           document.body.classList.add(
             "using-keyboard"
@@ -846,10 +795,75 @@
   }
 
   // =========================================
-  // INIT APP
+  // ERROR HANDLING
+  // =========================================
+
+  function initErrorHandling() {
+
+    window.addEventListener(
+      "error",
+      e => {
+
+        console.error(
+          "[VB ERROR]",
+          e.message
+        );
+
+      }
+    );
+
+    window.addEventListener(
+      "unhandledrejection",
+      e => {
+
+        console.error(
+          "[VB PROMISE ERROR]",
+          e.reason
+        );
+
+      }
+    );
+
+  }
+
+  // =========================================
+  // PERFORMANCE
+  // =========================================
+
+  function initPerformance() {
+
+    document.addEventListener(
+      "touchstart",
+      () => {},
+      { passive: true }
+    );
+
+    if (document.fonts) {
+
+      document.fonts.ready
+        .then(() => {
+
+          document.body.classList.add(
+            "fonts-loaded"
+          );
+
+        });
+
+    }
+
+  }
+
+  // =========================================
+  // INIT
   // =========================================
 
   function init() {
+
+    log(
+      "Initializing core..."
+    );
+
+    initLoader();
 
     initRevealAnimations();
 
@@ -861,23 +875,21 @@
 
     initForms();
 
-    initTracking();
-
     initScrollProgress();
 
     initBackToTop();
 
     initExternalLinks();
 
-    initPageLoaded();
-
-    initGlobalErrorHandling();
-
-    initPerformanceOptimizations();
-
     initAccessibility();
 
-    log("CORE INITIALIZED");
+    initErrorHandling();
+
+    initPerformance();
+
+    log(
+      "Core initialized"
+    );
 
   }
 
