@@ -4,7 +4,7 @@
 <head>
 
   <!-- ========================================= -->
-  <!-- BASIC SEO + PERFORMANCE -->
+  <!-- META -->
   <!-- ========================================= -->
 
   <meta charset="UTF-8">
@@ -30,8 +30,8 @@
   >
 
   <meta
-    name="format-detection"
-    content="telephone=no"
+    name="robots"
+    content="index,follow,max-image-preview:large"
   >
 
   <meta
@@ -40,36 +40,31 @@
   >
 
   <meta
-    name="robots"
-    content="index, follow, max-image-preview:large"
-  >
-
-  <meta
     name="referrer"
     content="strict-origin-when-cross-origin"
   >
 
   <meta
-    name="application-name"
-    content="Vinicius Bugarin Portfolio"
+    name="format-detection"
+    content="telephone=no"
   >
 
   <!-- ========================================= -->
-  <!-- TITLE + SEO -->
+  <!-- SEO -->
   <!-- ========================================= -->
 
   <title>
-    Desarrollador Web Freelance en Barcelona | SEO, Automatización y Apps | Vinicius Bugarin
+    Vinicius Bugarin | Desarrollador Web Freelance en Barcelona
   </title>
 
   <meta
     name="description"
-    content="Desarrollador web freelance en Barcelona especializado en SEO técnico, automatización y aplicaciones web modernas. Desarrollo webs rápidas, optimizadas para Google y enfocadas en conversión."
+    content="Desarrollador web freelance en Barcelona especializado en SEO técnico, automatización y aplicaciones web modernas. Webs rápidas, optimizadas para Google y enfocadas en conversión."
   >
 
   <meta
     name="keywords"
-    content="desarrollador web barcelona, desarrollador freelance, automatización negocios, seo técnico, aplicaciones web, desarrollo frontend, webs modernas, desarrollador full stack"
+    content="desarrollador web barcelona, freelance barcelona, seo técnico, automatización, frontend developer, javascript, portfolio desarrollador"
   >
 
   <meta
@@ -103,12 +98,12 @@
 
   <meta
     property="og:title"
-    content="Desarrollador Web Freelance en Barcelona | Vinicius Bugarin"
+    content="Vinicius Bugarin | Desarrollador Web Freelance"
   >
 
   <meta
     property="og:description"
-    content="Webs modernas, SEO técnico y automatización orientada a negocio."
+    content="SEO técnico, automatización y desarrollo web moderno orientado a negocio."
   >
 
   <meta
@@ -116,9 +111,11 @@
     content="https://viniciusbugarin.github.io/"
   >
 
+  <!-- IMPORTANTE:
+       ASEGÚRATE DE QUE ESTA IMAGEN EXISTA -->
   <meta
     property="og:image"
-    content="https://viniciusbugarin.github.io/images/VB.webp"
+    content="https://viniciusbugarin.github.io/images/og-cover.webp"
   >
 
   <meta
@@ -129,11 +126,6 @@
   <meta
     property="og:image:height"
     content="630"
-  >
-
-  <meta
-    property="og:image:alt"
-    content="Vinicius Bugarin - Desarrollador Web"
   >
 
   <!-- ========================================= -->
@@ -147,17 +139,17 @@
 
   <meta
     name="twitter:title"
-    content="Desarrollador Web Freelance en Barcelona | Vinicius Bugarin"
+    content="Vinicius Bugarin | Desarrollador Web Freelance"
   >
 
   <meta
     name="twitter:description"
-    content="Desarrollo web moderno, SEO técnico y automatización."
+    content="Desarrollo web moderno, automatización y SEO técnico."
   >
 
   <meta
     name="twitter:image"
-    content="https://viniciusbugarin.github.io/images/VB.webp"
+    content="https://viniciusbugarin.github.io/images/og-cover.webp"
   >
 
   <!-- ========================================= -->
@@ -185,35 +177,9 @@
     href="//fonts.gstatic.com"
   >
 
-  <!-- HERO IMAGE -->
-
-  <link
-    rel="preload"
-    as="image"
-    href="images/VB.webp"
-  >
-
-  <!-- CSS PRELOAD -->
-
-  <link
-    rel="preload"
-    href="styles/main.css"
-    as="style"
-  >
-
-  <link
-    rel="preload"
-    href="styles/animations.css"
-    as="style"
-  >
-
+  <!-- ========================================= -->
   <!-- FONTS -->
-
-  <link
-    rel="preload"
-    as="style"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-  >
+  <!-- ========================================= -->
 
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -227,27 +193,12 @@
   <link
     rel="icon"
     type="image/png"
-    href="images/VB.png"
-  >
-
-  <link
-    rel="icon"
-    type="image/svg+xml"
-    href="images/favicon.svg"
+    href="./images/VB.png"
   >
 
   <link
     rel="apple-touch-icon"
-    href="images/VB.png"
-  >
-
-  <!-- ========================================= -->
-  <!-- PWA -->
-  <!-- ========================================= -->
-
-  <link
-    rel="manifest"
-    href="/SEO/manifest.json"
+    href="./images/VB.png"
   >
 
   <!-- ========================================= -->
@@ -256,27 +207,27 @@
 
   <link
     rel="stylesheet"
-    href="styles/main.css"
+    href="./styles/main.css"
   >
 
   <link
     rel="stylesheet"
-    href="styles/navbar.css"
+    href="./styles/navbar.css"
   >
 
   <link
     rel="stylesheet"
-    href="styles/footer.css"
+    href="./styles/footer.css"
   >
 
   <link
     rel="stylesheet"
-    href="styles/chatbot.css"
+    href="./styles/chatbot.css"
   >
 
   <link
     rel="stylesheet"
-    href="styles/animations.css"
+    href="./styles/animations.css"
   >
 
   <!-- ========================================= -->
@@ -288,44 +239,35 @@
   "@context":"https://schema.org",
   "@graph":[
     {
+      "@type":"Person",
+      "name":"Vinicius Bugarin",
+      "url":"https://viniciusbugarin.github.io/",
+      "image":"https://viniciusbugarin.github.io/images/og-cover.webp",
+      "jobTitle":"Desarrollador Web Freelance",
+      "sameAs":[
+        "https://github.com/viniciusbugarin"
+      ],
+      "knowsAbout":[
+        "JavaScript",
+        "SEO Técnico",
+        "Frontend Development",
+        "Automatización",
+        "Performance Web"
+      ]
+    },
+    {
       "@type":"ProfessionalService",
       "name":"Vinicius Bugarin",
-      "url":"https://viniciusbugarin.github.io",
-      "logo":"https://viniciusbugarin.github.io/images/VB.webp",
-      "image":"https://viniciusbugarin.github.io/images/VB.webp",
-      "description":"Desarrollador web especializado en automatización, SEO técnico y aplicaciones web modernas.",
+      "url":"https://viniciusbugarin.github.io/",
       "areaServed":{
         "@type":"City",
         "name":"Barcelona"
       },
-      "founder":{
-        "@type":"Person",
-        "name":"Vinicius Bugarin"
-      },
-      "sameAs":[
-        "https://github.com/viniciusbugarin"
-      ],
       "serviceType":[
-        "Desarrollo web",
-        "SEO técnico",
-        "Automatización",
-        "Aplicaciones web"
-      ]
-    },
-    {
-      "@type":"Person",
-      "name":"Vinicius Bugarin",
-      "url":"https://viniciusbugarin.github.io",
-      "image":"https://viniciusbugarin.github.io/images/VB.webp",
-      "jobTitle":"Desarrollador Web Freelance",
-      "knowsAbout":[
         "Desarrollo Web",
         "SEO Técnico",
         "Automatización",
-        "JavaScript",
-        "Frontend Development",
-        "UX/UI",
-        "Performance Web"
+        "Aplicaciones Web"
       ]
     }
   ]
@@ -387,36 +329,30 @@
           </h1>
 
           <p class="subtitle">
-            Desarrollador Web Freelance en Barcelona especializado en SEO técnico, automatización y aplicaciones modernas.
+            Desarrollador web freelance en Barcelona especializado en SEO técnico, automatización y aplicaciones modernas.
           </p>
 
           <p class="hero-description">
-            Ayudo a empresas y profesionales a captar más clientes mediante desarrollo web rápido, optimización SEO y automatización inteligente.
+            Ayudo a empresas y profesionales a captar clientes mediante desarrollo web rápido, optimización SEO y automatización inteligente.
           </p>
-
-          <!-- BUTTONS -->
 
           <div class="hero-buttons">
 
             <a
               href="#contact"
               class="btn primary magnetic"
-              aria-label="Solicitar auditoría gratuita"
             >
-              🚀 Solicitar auditoría gratuita
+              🚀 Solicitar propuesta
             </a>
 
             <a
               href="#projects"
               class="btn secondary magnetic"
-              aria-label="Ver proyectos"
             >
               Ver proyectos
             </a>
 
           </div>
-
-          <!-- PROOF -->
 
           <div class="hero-proof">
 
@@ -448,91 +384,15 @@
 
           <div class="hero-card-glow"></div>
 
-          <span class="card-mini-badge">
-            Auditoría gratuita
-          </span>
-
-          <h2>
-            Analizo tu proyecto gratis
-          </h2>
-
-          <p>
-            Descubre cómo mejorar tu web, automatizar procesos y captar más clientes.
-          </p>
-
-          <form
-            action="https://formspree.io/f/mlgpbzre"
-            method="POST"
-            class="hero-form"
+          <img
+            src="./images/og-cover.webp"
+            alt="Vinicius Bugarin"
+            class="hero-avatar"
+            width="500"
+            height="500"
+            loading="eager"
+            decoding="async"
           >
-
-            <input
-              type="hidden"
-              name="_subject"
-              value="Nuevo contacto desde la web"
-            >
-
-            <input
-              type="hidden"
-              name="_captcha"
-              value="false"
-            >
-
-            <input
-              type="text"
-              name="_gotcha"
-              style="display:none"
-              tabindex="-1"
-              autocomplete="off"
-            >
-
-            <input
-              type="text"
-              name="name"
-              placeholder="Nombre"
-              autocomplete="name"
-              required
-            >
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              autocomplete="email"
-              required
-            >
-
-            <select
-              name="service"
-              required
-            >
-
-              <option value="">
-                ¿Qué necesitas?
-              </option>
-
-              <option value="web">
-                Desarrollo web
-              </option>
-
-              <option value="automation">
-                Automatización
-              </option>
-
-              <option value="seo">
-                SEO técnico
-              </option>
-
-            </select>
-
-            <button
-              type="submit"
-              class="btn primary full magnetic"
-            >
-              👉 Solicitar análisis
-            </button>
-
-          </form>
 
         </aside>
 
@@ -553,42 +413,6 @@
         <span>🤖 Automatización</span>
         <span>📱 Responsive</span>
         <span>🔒 Código limpio</span>
-
-      </div>
-
-    </section>
-
-    <!-- ========================================= -->
-    <!-- RESULTS -->
-    <!-- ========================================= -->
-
-    <section class="section results-section">
-
-      <div class="container">
-
-        <div class="results-grid reveal">
-
-          <div class="stat-card">
-            <strong>95+</strong>
-            <span>Lighthouse Score</span>
-          </div>
-
-          <div class="stat-card">
-            <strong>SEO</strong>
-            <span>Optimización técnica</span>
-          </div>
-
-          <div class="stat-card">
-            <strong>100%</strong>
-            <span>Responsive</span>
-          </div>
-
-          <div class="stat-card">
-            <strong>Fast</strong>
-            <span>Core Web Vitals</span>
-          </div>
-
-        </div>
 
       </div>
 
@@ -616,12 +440,12 @@
           </h2>
 
           <p class="section-description">
-            Herramientas digitales creadas para captar clientes, automatizar procesos y mejorar conversiones.
+            Herramientas digitales enfocadas en captación, automatización y SEO.
           </p>
 
         </div>
 
-        <!-- PROJECT CONTROLS -->
+        <!-- CONTROLS -->
 
         <div class="projects-controls reveal">
 
@@ -641,6 +465,7 @@
             <button
               class="filter-btn active"
               data-filter="all"
+              type="button"
             >
               Todos
             </button>
@@ -648,6 +473,7 @@
             <button
               class="filter-btn"
               data-filter="web"
+              type="button"
             >
               Webs
             </button>
@@ -655,6 +481,7 @@
             <button
               class="filter-btn"
               data-filter="herramienta"
+              type="button"
             >
               Herramientas
             </button>
@@ -673,11 +500,17 @@
                 Más recientes
               </option>
 
+              <option value="alphabetical">
+                A-Z
+              </option>
+
             </select>
 
           </div>
 
         </div>
+
+        <!-- GRID -->
 
         <div
           class="projects-grid"
@@ -721,7 +554,7 @@
             </h3>
 
             <p>
-              Páginas modernas, rápidas y optimizadas para convertir visitas en clientes.
+              Webs modernas, rápidas y enfocadas en conversión.
             </p>
 
           </article>
@@ -737,7 +570,7 @@
             </h3>
 
             <p>
-              Sistemas digitales que eliminan tareas repetitivas y optimizan procesos.
+              Optimización de procesos mediante automatización inteligente.
             </p>
 
           </article>
@@ -753,7 +586,7 @@
             </h3>
 
             <p>
-              Arquitecturas optimizadas para mejorar posicionamiento y Core Web Vitals.
+              Arquitecturas optimizadas para Core Web Vitals y Google.
             </p>
 
           </article>
@@ -790,10 +623,6 @@
             Construyo sistemas digitales rápidos, escalables y orientados a resultados reales.
           </p>
 
-          <p>
-            Mi enfoque combina diseño moderno, optimización técnica y experiencia de usuario.
-          </p>
-
         </div>
 
         <div class="about-card reveal">
@@ -811,53 +640,16 @@
           </div>
 
           <div class="about-item">
-            🔥 Conversión
+            📱 Responsive
           </div>
 
           <div class="about-item">
-            📱 Responsive
+            🔥 Conversión
           </div>
 
           <div class="about-item">
             🧠 Estrategia digital
           </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- ========================================= -->
-    <!-- TECHNOLOGIES -->
-    <!-- ========================================= -->
-
-    <section class="section dark">
-
-      <div class="container">
-
-        <div class="section-heading reveal">
-
-          <span class="section-badge">
-            Tecnologías
-          </span>
-
-          <h2>
-            Tecnologías con las que trabajo
-          </h2>
-
-        </div>
-
-        <div class="tech-grid reveal">
-
-          <span>HTML5</span>
-          <span>CSS3</span>
-          <span>JavaScript</span>
-          <span>SEO Técnico</span>
-          <span>GitHub</span>
-          <span>Responsive Design</span>
-          <span>Automatización</span>
-          <span>Performance Web</span>
 
         </div>
 
@@ -932,29 +724,6 @@
 
           </div>
 
-          <select
-            name="budget"
-            required
-          >
-
-            <option value="">
-              Presupuesto estimado
-            </option>
-
-            <option value="low">
-              Menos de 500€
-            </option>
-
-            <option value="mid">
-              500€ - 1500€
-            </option>
-
-            <option value="high">
-              Más de 1500€
-            </option>
-
-          </select>
-
           <textarea
             name="message"
             placeholder="Cuéntame qué necesitas..."
@@ -980,26 +749,65 @@
   <!-- CHATBOT -->
   <!-- ========================================= -->
 
-  <div class="chatbot-container">
+  <!-- ESTA ESTRUCTURA SOLUCIONA:
+       [VB CHAT] Chatbot HTML not found -->
+
+  <div id="vb-chatbot">
 
     <button
-      class="chatbot-toggle"
+      id="chatToggle"
+      class="chat-toggle"
       aria-label="Abrir chat"
     >
       💬
     </button>
 
-    <div class="chatbot-window">
+    <div
+      id="chatContainer"
+      class="chat-container"
+    >
 
-      <div class="chatbot-header">
-        Vinicius Assistant
+      <div class="chat-header">
+
+        <span>
+          Vinicius Assistant
+        </span>
+
+        <button
+          id="chatClose"
+          type="button"
+          aria-label="Cerrar chat"
+        >
+          ✕
+        </button>
+
       </div>
 
-      <div class="chatbot-messages">
+      <div
+        id="chatMessages"
+        class="chat-messages"
+      ></div>
 
-        <div class="chatbot-message bot">
-          👋 Hola, ¿en qué puedo ayudarte?
-        </div>
+      <div
+        id="chatOptions"
+        class="chat-options"
+      ></div>
+
+      <div class="chat-input-wrapper">
+
+        <input
+          type="text"
+          id="chatInput"
+          placeholder="Escribe tu mensaje..."
+          autocomplete="off"
+        >
+
+        <button
+          id="sendBtn"
+          type="button"
+        >
+          Enviar
+        </button>
 
       </div>
 
@@ -1029,6 +837,7 @@
   <!-- ========================================= -->
 
   <noscript>
+
     <p
       style="
       text-align:center;
@@ -1039,6 +848,7 @@
     >
       Esta web requiere JavaScript para funcionar correctamente.
     </p>
+
   </noscript>
 
   <!-- ========================================= -->
@@ -1046,32 +856,32 @@
   <!-- ========================================= -->
 
   <script
-    src="components/navbar.js"
+    src="./components/navbar.js"
     defer
   ></script>
 
   <script
-    src="components/footer.js"
+    src="./components/footer.js"
     defer
   ></script>
 
   <script
-    src="components/chatbot.js"
+    src="./components/chatbot.js"
     defer
   ></script>
 
   <script
-    src="js/projects.js"
+    src="./js/projects.js"
     defer
   ></script>
 
   <script
-    src="js/animations.js"
+    src="./js/animations.js"
     defer
   ></script>
 
   <script
-    src="js/script.js"
+    src="./js/script.js"
     defer
   ></script>
 

@@ -1,21 +1,19 @@
 // =========================================
 // VINICIUS BUGARIN — PROJECT SYSTEM
-// ULTRA SEO + PERFORMANCE + SCALABLE v2
+// ULTRA PERFORMANCE + SEO + SCALABLE v3
 // =========================================
 
 "use strict";
 
-// =========================================
-// CONFIG
-// =========================================
+/* =========================================
+   CONFIG
+========================================= */
 
 const PROJECTS_CONFIG = {
 
   FEATURED_FIRST: true,
 
   TRACK_CLICKS: true,
-
-  LAZY_LOAD_IMAGES: true,
 
   ENABLE_ANIMATIONS: true,
 
@@ -27,25 +25,39 @@ const PROJECTS_CONFIG = {
 
   ENABLE_LOCAL_STORAGE: true,
 
+  ENABLE_IMAGE_FALLBACK: true,
+
   DEBUG: false
 
 };
 
-// =========================================
-// HELPERS
-// =========================================
+/* =========================================
+   SAFE LOGGER
+   FIX:
+   Identifier 'log' has already been declared
+========================================= */
 
-const log = (...msg) => {
+const projectsLog = (...msg) => {
 
   if (PROJECTS_CONFIG.DEBUG) {
-    console.log("[PROJECTS]", ...msg);
+
+    console.log(
+      "[PROJECTS]",
+      ...msg
+    );
+
   }
 
 };
 
+/* =========================================
+   HELPERS
+========================================= */
+
 const sanitizeHTML = (text = "") => {
 
-  const div = document.createElement("div");
+  const div =
+    document.createElement("div");
 
   div.textContent = text;
 
@@ -73,32 +85,64 @@ const normalizeText = (text = "") => {
 
 const savePreference = (key, value) => {
 
-  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) return;
+  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) {
+    return;
+  }
 
-  localStorage.setItem(key, value);
+  try {
+
+    localStorage.setItem(
+      key,
+      value
+    );
+
+  } catch (error) {
+
+    projectsLog(
+      "Storage error:",
+      error
+    );
+
+  }
 
 };
 
 const getPreference = (key) => {
 
-  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) return null;
+  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) {
+    return null;
+  }
 
-  return localStorage.getItem(key);
+  try {
+
+    return localStorage.getItem(key);
+
+  } catch (error) {
+
+    projectsLog(
+      "Get storage error:",
+      error
+    );
+
+    return null;
+  }
 
 };
 
-// =========================================
-// PROJECT DATA
-// =========================================
+/* =========================================
+   PROJECT DATA
+========================================= */
 
 const projects = [
 
   {
     id: 1,
 
-    title: "Calculadora IRPF España",
+    title:
+      "Calculadora IRPF España",
 
-    slug: "calculadora-irpf-espana",
+    slug:
+      "calculadora-irpf-espana",
 
     description:
       "Herramienta fiscal optimizada para calcular IRPF automáticamente y captar tráfico SEO cualificado.",
@@ -110,10 +154,11 @@ const projects = [
       "SEO"
     ],
 
-    category: "herramienta",
+    category:
+      "herramienta",
 
     image:
-      "./images/projects/irpf.jpg",
+      "./images/projects/irpf.webp",
 
     fallbackImage:
       "./images/projects/fallback.webp",
@@ -123,9 +168,11 @@ const projects = [
 
     featured: true,
 
-    status: "Online",
+    status:
+      "Online",
 
-    year: "2026",
+    year:
+      "2026",
 
     keywords: [
       "calculadora irpf",
@@ -138,9 +185,11 @@ const projects = [
   {
     id: 2,
 
-    title: "Calculadora Autónomos España",
+    title:
+      "Calculadora Autónomos España",
 
-    slug: "calculadora-autonomos-espana",
+    slug:
+      "calculadora-autonomos-espana",
 
     description:
       "Sistema diseñado para calcular cuota, impuestos y beneficio real para autónomos.",
@@ -151,10 +200,11 @@ const projects = [
       "CSS"
     ],
 
-    category: "herramienta",
+    category:
+      "herramienta",
 
     image:
-      "./images/projects/autonomos.jpg",
+      "./images/projects/autonomos.webp",
 
     fallbackImage:
       "./images/projects/fallback.webp",
@@ -164,9 +214,11 @@ const projects = [
 
     featured: true,
 
-    status: "Online",
+    status:
+      "Online",
 
-    year: "2026",
+    year:
+      "2026",
 
     keywords: [
       "autónomos",
@@ -179,9 +231,11 @@ const projects = [
   {
     id: 3,
 
-    title: "Lexoria Abogados",
+    title:
+      "Lexoria Abogados",
 
-    slug: "lexoria-abogados",
+    slug:
+      "lexoria-abogados",
 
     description:
       "Landing profesional para despacho jurídico optimizada para conversión y SEO local.",
@@ -193,10 +247,11 @@ const projects = [
       "SEO Local"
     ],
 
-    category: "web",
+    category:
+      "web",
 
     image:
-      "./images/projects/lexoria.jpg",
+      "./images/projects/lexoria.webp",
 
     fallbackImage:
       "./images/projects/fallback.webp",
@@ -206,9 +261,11 @@ const projects = [
 
     featured: true,
 
-    status: "Online",
+    status:
+      "Online",
 
-    year: "2026",
+    year:
+      "2026",
 
     keywords: [
       "abogados",
@@ -221,9 +278,11 @@ const projects = [
   {
     id: 4,
 
-    title: "Iron Forge Gym",
+    title:
+      "Iron Forge Gym",
 
-    slug: "iron-forge-gym",
+    slug:
+      "iron-forge-gym",
 
     description:
       "Landing moderna para gimnasio enfocada en captación de clientes y branding premium.",
@@ -235,10 +294,11 @@ const projects = [
       "SEO"
     ],
 
-    category: "web",
+    category:
+      "web",
 
     image:
-      "./images/projects/ironforge.jpg",
+      "./images/projects/ironforge.webp",
 
     fallbackImage:
       "./images/projects/fallback.webp",
@@ -248,9 +308,11 @@ const projects = [
 
     featured: false,
 
-    status: "Online",
+    status:
+      "Online",
 
-    year: "2026",
+    year:
+      "2026",
 
     keywords: [
       "gym",
@@ -263,9 +325,11 @@ const projects = [
   {
     id: 5,
 
-    title: "La Plaza Gourmet",
+    title:
+      "La Plaza Gourmet",
 
-    slug: "la-plaza-gourmet",
+    slug:
+      "la-plaza-gourmet",
 
     description:
       "Página web profesional para restaurante optimizada para reservas y SEO local.",
@@ -277,10 +341,11 @@ const projects = [
       "SEO Local"
     ],
 
-    category: "web",
+    category:
+      "web",
 
     image:
-      "./images/projects/laplaza.jpg",
+      "./images/projects/laplaza.webp",
 
     fallbackImage:
       "./images/projects/fallback.webp",
@@ -290,9 +355,11 @@ const projects = [
 
     featured: false,
 
-    status: "Online",
+    status:
+      "Online",
 
-    year: "2026",
+    year:
+      "2026",
 
     keywords: [
       "restaurante",
@@ -304,167 +371,169 @@ const projects = [
 
 ];
 
-// =========================================
-// STATE
-// =========================================
+/* =========================================
+   STATE
+========================================= */
 
 const PROJECT_STATE = {
 
-  currentFilter: "all",
+  currentFilter:
+    "all",
 
-  currentSearch: "",
+  currentSearch:
+    "",
 
-  currentSort: "featured"
+  currentSort:
+    "featured"
 
 };
 
-// =========================================
-// DOM READY
-// =========================================
+/* =========================================
+   DOM READY
+========================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  restorePreferences();
+    restorePreferences();
 
-  renderProjects();
+    renderProjects();
 
-  if (PROJECTS_CONFIG.ENABLE_FILTERS) {
     initFilters();
-  }
 
-  if (PROJECTS_CONFIG.ENABLE_SEARCH) {
     initSearch();
-  }
 
-  if (PROJECTS_CONFIG.ENABLE_SORTING) {
     initSorting();
+
+    initReveal();
+
   }
+);
 
-  initReveal();
-
-});
-
-// =========================================
-// RENDER PROJECTS
-// =========================================
+/* =========================================
+   RENDER PROJECTS
+========================================= */
 
 function renderProjects() {
 
   const container =
-    document.querySelector(".projects-grid");
+    document.querySelector(
+      ".projects-grid"
+    );
 
   if (!container) {
-    log("No existe .projects-grid");
+
+    projectsLog(
+      "No existe .projects-grid"
+    );
+
     return;
+
   }
 
   container.innerHTML = "";
 
-  let filtered = [...projects];
+  let filtered =
+    [...projects];
 
-  // =========================================
-  // FILTER
-  // =========================================
+  /* FILTER */
 
-  if (PROJECT_STATE.currentFilter !== "all") {
+  if (
+    PROJECT_STATE.currentFilter !==
+    "all"
+  ) {
 
-    filtered = filtered.filter(project =>
-      project.category === PROJECT_STATE.currentFilter
+    filtered = filtered.filter(
+      project =>
+        project.category ===
+        PROJECT_STATE.currentFilter
     );
 
   }
 
-  // =========================================
-  // SEARCH
-  // =========================================
+  /* SEARCH */
 
-  if (PROJECT_STATE.currentSearch) {
+  if (
+    PROJECT_STATE.currentSearch
+  ) {
 
     const term =
-      normalizeText(PROJECT_STATE.currentSearch);
+      normalizeText(
+        PROJECT_STATE.currentSearch
+      );
 
-    filtered = filtered.filter(project => {
+    filtered = filtered.filter(
+      project => {
 
-      const searchable =
-        normalizeText(`
-          ${project.title}
-          ${project.description}
-          ${project.keywords.join(" ")}
-          ${project.tech.join(" ")}
-        `);
+        const searchable =
+          normalizeText(`
+            ${project.title}
+            ${project.description}
+            ${project.tech.join(" ")}
+            ${project.keywords.join(" ")}
+          `);
 
-      return searchable.includes(term);
+        return searchable.includes(
+          term
+        );
 
-    });
+      }
+    );
 
   }
 
-  // =========================================
-  // SORT
-  // =========================================
+  /* SORT */
 
-  switch (PROJECT_STATE.currentSort) {
+  switch (
+    PROJECT_STATE.currentSort
+  ) {
 
     case "newest":
 
       filtered.sort(
         (a, b) =>
-          Number(b.year) - Number(a.year)
-      );
-
-      break;
-
-    case "featured":
-
-      filtered.sort(
-        (a, b) =>
-          Number(b.featured) - Number(a.featured)
+          Number(b.year) -
+          Number(a.year)
       );
 
       break;
 
     case "alphabetical":
 
-      filtered.sort((a, b) =>
-        a.title.localeCompare(b.title)
+      filtered.sort(
+        (a, b) =>
+          a.title.localeCompare(
+            b.title
+          )
       );
 
       break;
 
-  }
+    default:
 
-  // =========================================
-  // FEATURED FIRST
-  // =========================================
-
-  if (
-    PROJECTS_CONFIG.FEATURED_FIRST &&
-    PROJECT_STATE.currentSort !== "alphabetical"
-  ) {
-
-    filtered.sort(
-      (a, b) =>
-        Number(b.featured) - Number(a.featured)
-    );
+      filtered.sort(
+        (a, b) =>
+          Number(b.featured) -
+          Number(a.featured)
+      );
 
   }
 
-  // =========================================
-  // EMPTY STATE
-  // =========================================
+  /* EMPTY STATE */
 
   if (!filtered.length) {
 
     container.innerHTML = `
 
-      <div class="empty-projects card active">
+      <div class="empty-projects">
 
         <h3>
-          No hay proyectos encontrados
+          No se encontraron proyectos
         </h3>
 
         <p>
-          Prueba otra búsqueda o categoría.
+          Prueba otra búsqueda o filtro.
         </p>
 
       </div>
@@ -475,9 +544,7 @@ function renderProjects() {
 
   }
 
-  // =========================================
-  // CREATE CARDS
-  // =========================================
+  /* RENDER */
 
   const fragment =
     document.createDocumentFragment();
@@ -496,28 +563,22 @@ function renderProjects() {
 
 }
 
-// =========================================
-// CREATE PROJECT CARD
-// =========================================
+/* =========================================
+   CREATE PROJECT CARD
+========================================= */
 
 function createProjectCard(project) {
 
   const card =
-    document.createElement("article");
+    document.createElement(
+      "article"
+    );
 
   card.className =
-    "project-card card reveal";
+    "project-card reveal";
 
   card.dataset.category =
     project.category;
-
-  card.dataset.projectId =
-    project.id;
-
-  card.setAttribute(
-    "aria-label",
-    project.title
-  );
 
   card.innerHTML = `
 
@@ -608,41 +669,47 @@ function createProjectCard(project) {
 
   `;
 
-  // =========================================
-  // IMAGE FALLBACK
-  // =========================================
+  /* IMAGE FALLBACK */
 
   const image =
-    card.querySelector(".project-image");
+    card.querySelector(
+      ".project-image"
+    );
 
-  if (image) {
+  if (
+    image &&
+    PROJECTS_CONFIG.ENABLE_IMAGE_FALLBACK
+  ) {
 
-    image.addEventListener("error", () => {
+    image.addEventListener(
+      "error",
+      () => {
 
-      image.src =
-        project.fallbackImage;
+        image.src =
+          project.fallbackImage;
 
-    });
+      }
+    );
 
   }
 
-  // =========================================
-  // TRACKING
-  // =========================================
+  /* TRACKING */
 
-  if (PROJECTS_CONFIG.TRACK_CLICKS) {
+  const link =
+    card.querySelector(
+      ".project-link"
+    );
 
-    const link =
-      card.querySelector(".project-link");
+  if (
+    link &&
+    PROJECTS_CONFIG.TRACK_CLICKS
+  ) {
 
-    if (link) {
-
-      link.addEventListener(
-        "click",
-        () => trackProjectClick(project)
-      );
-
-    }
+    link.addEventListener(
+      "click",
+      () =>
+        trackProjectClick(project)
+    );
 
   }
 
@@ -650,207 +717,258 @@ function createProjectCard(project) {
 
 }
 
-// =========================================
-// TRACKING
-// =========================================
+/* =========================================
+   TRACKING
+========================================= */
 
 function trackProjectClick(project) {
 
-  log("CLICK:", project.title);
+  projectsLog(
+    "CLICK:",
+    project.title
+  );
 
-  if (typeof gtag === "function") {
+  if (
+    typeof gtag ===
+    "function"
+  ) {
 
-    gtag("event", "project_click", {
+    gtag(
+      "event",
+      "project_click",
+      {
+        project_name:
+          project.title,
 
-      project_name:
-        project.title,
-
-      project_category:
-        project.category
-
-    });
+        project_category:
+          project.category
+      }
+    );
 
   }
 
 }
 
-// =========================================
-// FILTERS
-// =========================================
+/* =========================================
+   FILTERS
+========================================= */
 
 function initFilters() {
 
   const buttons =
-    document.querySelectorAll("[data-filter]");
+    document.querySelectorAll(
+      "[data-filter]"
+    );
 
-  if (!buttons.length) return;
+  if (!buttons.length) {
+    return;
+  }
 
   buttons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      PROJECT_STATE.currentFilter =
-        button.dataset.filter;
+        PROJECT_STATE.currentFilter =
+          button.dataset.filter;
 
-      savePreference(
-        "vb_project_filter",
-        PROJECT_STATE.currentFilter
-      );
+        savePreference(
+          "vb_project_filter",
+          PROJECT_STATE.currentFilter
+        );
 
-      buttons.forEach(btn => {
-        btn.classList.remove("active");
-      });
+        buttons.forEach(btn => {
 
-      button.classList.add("active");
+          btn.classList.remove(
+            "active"
+          );
 
-      renderProjects();
+        });
 
-    });
+        button.classList.add(
+          "active"
+        );
+
+        renderProjects();
+
+      }
+    );
 
   });
 
 }
 
-// =========================================
-// SEARCH
-// =========================================
+/* =========================================
+   SEARCH
+========================================= */
 
 function initSearch() {
 
   const input =
-    document.getElementById("projectSearch");
+    document.getElementById(
+      "projectSearch"
+    );
 
-  if (!input) return;
+  if (!input) {
+    return;
+  }
 
   input.value =
     PROJECT_STATE.currentSearch;
 
-  input.addEventListener("input", () => {
+  input.addEventListener(
+    "input",
+    debounce(() => {
 
-    PROJECT_STATE.currentSearch =
-      input.value.trim();
+      PROJECT_STATE.currentSearch =
+        input.value.trim();
 
-    savePreference(
-      "vb_project_search",
-      PROJECT_STATE.currentSearch
-    );
+      savePreference(
+        "vb_project_search",
+        PROJECT_STATE.currentSearch
+      );
 
-    renderProjects();
+      renderProjects();
 
-  });
+    }, 250)
+  );
 
 }
 
-// =========================================
-// SORTING
-// =========================================
+/* =========================================
+   SORTING
+========================================= */
 
 function initSorting() {
 
   const select =
-    document.getElementById("projectSort");
+    document.getElementById(
+      "projectSort"
+    );
 
-  if (!select) return;
+  if (!select) {
+    return;
+  }
 
   select.value =
     PROJECT_STATE.currentSort;
 
-  select.addEventListener("change", () => {
+  select.addEventListener(
+    "change",
+    () => {
 
-    PROJECT_STATE.currentSort =
-      select.value;
+      PROJECT_STATE.currentSort =
+        select.value;
 
-    savePreference(
-      "vb_project_sort",
-      PROJECT_STATE.currentSort
-    );
+      savePreference(
+        "vb_project_sort",
+        PROJECT_STATE.currentSort
+      );
 
-    renderProjects();
+      renderProjects();
 
-  });
+    }
+  );
 
 }
 
-// =========================================
-// REVEAL ANIMATIONS
-// =========================================
+/* =========================================
+   REVEAL ANIMATION
+========================================= */
 
 function initReveal() {
 
-  if (!PROJECTS_CONFIG.ENABLE_ANIMATIONS) {
+  if (
+    !PROJECTS_CONFIG.ENABLE_ANIMATIONS
+  ) {
     return;
   }
 
-  const reveals =
-    document.querySelectorAll(".reveal");
+  const elements =
+    document.querySelectorAll(
+      ".reveal"
+    );
 
   const observer =
-    new IntersectionObserver(entries => {
+    new IntersectionObserver(
+      entries => {
 
-      entries.forEach(entry => {
+        entries.forEach(entry => {
 
-        if (entry.isIntersecting) {
+          if (
+            entry.isIntersecting
+          ) {
 
-          entry.target.classList.add("active");
+            entry.target.classList.add(
+              "active"
+            );
 
-          observer.unobserve(entry.target);
+            observer.unobserve(
+              entry.target
+            );
 
-        }
+          }
 
-      });
+        });
 
-    }, {
-      threshold: 0.12
-    });
+      },
+      {
+        threshold: 0.12
+      }
+    );
 
-  reveals.forEach(el => {
-    observer.observe(el);
+  elements.forEach(element => {
+
+    observer.observe(element);
+
   });
 
 }
 
-// =========================================
-// RESTORE PREFERENCES
-// =========================================
+/* =========================================
+   RESTORE PREFERENCES
+========================================= */
 
 function restorePreferences() {
 
   PROJECT_STATE.currentFilter =
-    getPreference("vb_project_filter") || "all";
+    getPreference(
+      "vb_project_filter"
+    ) || "all";
 
   PROJECT_STATE.currentSearch =
-    getPreference("vb_project_search") || "";
+    getPreference(
+      "vb_project_search"
+    ) || "";
 
   PROJECT_STATE.currentSort =
-    getPreference("vb_project_sort") || "featured";
+    getPreference(
+      "vb_project_sort"
+    ) || "featured";
 
 }
 
-// =========================================
-// OPTIONAL API CMS READY
-// =========================================
+/* =========================================
+   DEBOUNCE
+========================================= */
 
-// async function loadProjectsFromAPI() {
-//
-//   try {
-//
-//     const response =
-//       await fetch("/api/projects");
-//
-//     const data =
-//       await response.json();
-//
-//     projects.push(...data);
-//
-//     renderProjects();
-//
-//   } catch (error) {
-//
-//     console.error(
-//       "Error cargando proyectos",
-//       error
-//     );
-//
-//   }
-//
-// }
+function debounce(
+  callback,
+  delay = 300
+) {
+
+  let timeout;
+
+  return (...args) => {
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(
+      () => callback(...args),
+      delay
+    );
+
+  };
+
+}
