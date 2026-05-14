@@ -1,7 +1,9 @@
 // =========================================
-// VINICIUS BUGARIN — NAVBAR SYSTEM FINAL
-// ULTRA PRO VERSION
+// VINICIUS BUGARIN — NAVBAR SYSTEM v4
+// PREMIUM • ACCESSIBLE • OPTIMIZED
 // =========================================
+
+"use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -13,15 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mobileBreakpoint: 768,
 
-    navbarScrollOffset: 40,
+    navbarScrollOffset: 24,
 
     navbarHideOffset: 120,
 
     enablePrefetch: true,
 
-    enableSmartActive: true,
+    enableScrollSpy: true,
 
-    enableScrollSpy: true
+    enableSmartActive: true
 
   };
 
@@ -44,12 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
         <a
           href="/"
           class="logo"
-          aria-label="Inicio Vinicius Bugarin"
+          aria-label="Inicio"
         >
 
           <img
             src="/images/VB.png"
-            alt="Logo Vinicius Bugarin"
+            alt="Vinicius Bugarin Logo"
             width="42"
             height="42"
             loading="eager"
@@ -62,10 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </a>
 
-        <!-- MOBILE TOGGLE -->
+        <!-- MOBILE BUTTON -->
         <button
           class="menu-toggle"
           id="menu-toggle"
+          type="button"
           aria-label="Abrir menú"
           aria-expanded="false"
           aria-controls="nav-links"
@@ -77,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </button>
 
-        <!-- MOBILE OVERLAY -->
+        <!-- OVERLAY -->
         <div
           class="nav-overlay"
           id="nav-overlay"
@@ -200,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nav-overlay");
 
   const navAnchors =
-    document.querySelectorAll(".nav-links a");
+    navLinks.querySelectorAll("a");
 
   // =========================================
   // STATE
@@ -208,12 +211,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isMenuOpen = false;
 
-  let lastScroll = 0;
+  let lastScrollY =
+    window.scrollY;
 
   let ticking = false;
 
   // =========================================
-  // MENU SYSTEM
+  // MENU
   // =========================================
 
   function openMenu() {
@@ -234,13 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add(
       "menu-open"
     );
-
-    requestAnimationFrame(() => {
-
-      navLinks.querySelector("a")
-        ?.focus();
-
-    });
 
   }
 
@@ -273,6 +270,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+  // =========================================
+  // EVENTS
+  // =========================================
+
   menuToggle?.addEventListener(
     "click",
     toggleMenu
@@ -283,37 +284,14 @@ document.addEventListener("DOMContentLoaded", () => {
     closeMenu
   );
 
-  // =========================================
-  // CLOSE ON LINK CLICK
-  // =========================================
-
-  navAnchors.forEach(link => {
-
-    link.addEventListener("click", () => {
-
-      if (
-        window.innerWidth <=
-        CONFIG.mobileBreakpoint
-      ) {
-
-        closeMenu();
-
-      }
-
-    });
-
-  });
-
-  // =========================================
   // ESC CLOSE
-  // =========================================
 
   document.addEventListener(
     "keydown",
-    e => {
+    event => {
 
       if (
-        e.key === "Escape" &&
+        event.key === "Escape" &&
         isMenuOpen
       ) {
 
@@ -324,9 +302,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-  // =========================================
-  // RESPONSIVE RESET
-  // =========================================
+  // CLOSE MOBILE MENU ON LINK
+
+  navAnchors.forEach(link => {
+
+    link.addEventListener(
+      "click",
+      () => {
+
+        if (
+          window.innerWidth <=
+          CONFIG.mobileBreakpoint
+        ) {
+
+          closeMenu();
+
+        }
+
+      }
+    );
+
+  });
+
+  // RESET MENU ON DESKTOP
 
   window.addEventListener(
     "resize",
@@ -334,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (
         window.innerWidth >
-        CONFIG.mobileBreakpoint &&
+          CONFIG.mobileBreakpoint &&
         isMenuOpen
       ) {
 
@@ -346,10 +344,16 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   // =========================================
-  // ACTIVE LINK SYSTEM
+  // ACTIVE LINK
   // =========================================
 
   function setActiveLink() {
+
+    if (
+      !CONFIG.enableSmartActive
+    ) {
+      return;
+    }
 
     const currentPath =
       window.location.pathname
@@ -358,7 +362,10 @@ document.addEventListener("DOMContentLoaded", () => {
     navAnchors.forEach(link => {
 
       const linkPath =
-        new URL(link.href)
+        new URL(
+          link.href,
+          window.location.origin
+        )
           .pathname
           .replace(/\/$/, "");
 
@@ -381,9 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  if (CONFIG.enableSmartActive) {
-    setActiveLink();
-  }
+  setActiveLink();
 
   // =========================================
   // SMOOTH SCROLL
@@ -395,23 +400,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       anchor.addEventListener(
         "click",
-        e => {
+        event => {
 
           const href =
             anchor.getAttribute("href");
 
           if (
+            !href ||
             !href.startsWith("#")
-          ) return;
+          ) {
+            return;
+          }
 
           const target =
             document.querySelector(href);
 
-          if (!target) return;
+          if (!target) {
+            return;
+          }
 
-          e.preventDefault();
+          event.preventDefault();
 
-          const offset =
+          const navbarHeight =
             navbar.offsetHeight;
 
           const top =
@@ -419,7 +429,8 @@ document.addEventListener("DOMContentLoaded", () => {
               .getBoundingClientRect()
               .top +
             window.scrollY -
-            offset;
+            navbarHeight -
+            12;
 
           window.scrollTo({
 
@@ -443,21 +454,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentScroll =
       window.scrollY;
 
-    // SCROLLED STATE
+    // SCROLLED STYLE
+
     navbar.classList.toggle(
       "scrolled",
       currentScroll >
-      CONFIG.navbarScrollOffset
+        CONFIG.navbarScrollOffset
     );
 
-    // HIDE ON DOWN
+    // HIDE NAVBAR
+
     if (
 
       currentScroll >
-      lastScroll &&
+        lastScrollY &&
 
       currentScroll >
-      CONFIG.navbarHideOffset
+        CONFIG.navbarHideOffset &&
+
+      !isMenuOpen
 
     ) {
 
@@ -469,7 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    lastScroll =
+    lastScrollY =
       currentScroll;
 
     ticking = false;
@@ -480,22 +495,22 @@ document.addEventListener("DOMContentLoaded", () => {
     "scroll",
     () => {
 
-      if (!ticking) {
+      if (ticking) return;
 
-        requestAnimationFrame(
-          updateNavbar
-        );
+      ticking = true;
 
-        ticking = true;
-
-      }
+      requestAnimationFrame(
+        updateNavbar
+      );
 
     },
-    { passive: true }
+    {
+      passive: true
+    }
   );
 
   // =========================================
-  // PREFETCH
+  // PREFETCH PAGES
   // =========================================
 
   if (CONFIG.enablePrefetch) {
@@ -507,18 +522,17 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll("a[data-link]")
       .forEach(link => {
 
-        function prefetchPage() {
+        const prefetchPage = () => {
 
           const href =
             link.href;
 
           if (
-
             prefetched.has(href) ||
-
             href.includes("#")
-
-          ) return;
+          ) {
+            return;
+          }
 
           const prefetch =
             document.createElement(
@@ -540,7 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           prefetched.add(href);
 
-        }
+        };
 
         link.addEventListener(
           "mouseenter",
@@ -577,48 +591,53 @@ document.addEventListener("DOMContentLoaded", () => {
           entries.forEach(entry => {
 
             if (
-              entry.isIntersecting
+              !entry.isIntersecting
             ) {
+              return;
+            }
 
-              const id =
-                entry.target.id;
+            const id =
+              entry.target.id;
 
-              navAnchors.forEach(
-                link => {
+            navAnchors.forEach(link => {
 
-                  link.classList.remove(
-                    "active-link"
-                  );
+              const href =
+                link.getAttribute(
+                  "href"
+                );
 
-                  if (
-                    link.getAttribute(
-                      "href"
-                    ) === `#${id}`
-                  ) {
+              if (
+                !href?.startsWith("#")
+              ) {
+                return;
+              }
 
-                    link.classList.add(
-                      "active-link"
-                    );
-
-                  }
-
-                }
+              link.classList.toggle(
+                "active-link",
+                href === `#${id}`
               );
 
-            }
+            });
 
           });
 
         },
 
         {
-          threshold: 0.5
+
+          rootMargin:
+            "-40% 0px -40% 0px",
+
+          threshold: 0.1
+
         }
 
       );
 
     sections.forEach(section => {
+
       observer.observe(section);
+
     });
 
   }
@@ -627,15 +646,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // INITIAL STATE
   // =========================================
 
-  if (
-    window.scrollY >
-    CONFIG.navbarScrollOffset
-  ) {
+  updateNavbar();
 
-    navbar.classList.add(
-      "scrolled"
-    );
+  // =========================================
+  // DEBUG
+  // =========================================
 
-  }
+  console.log(
+    "%cVB Navbar Loaded",
+    `
+    color:#60a5fa;
+    font-weight:bold;
+    `
+  );
 
 });

@@ -1,793 +1,841 @@
 // =========================================
-// VINICIUS BUGARIN — PROJECT SYSTEM
-// ULTRA PERFORMANCE + SEO + SCALABLE v3
+// VINICIUS BUGARIN — PROJECT SYSTEM v4
+// PREMIUM PORTFOLIO ENGINE
+// ULTRA PERFORMANCE + SEO + SCALABLE
 // =========================================
 
-"use strict";
+(() => {
 
-/* =========================================
-   CONFIG
-========================================= */
+  "use strict";
 
-const PROJECTS_CONFIG = {
+  // =========================================
+  // CONFIG
+  // =========================================
 
-  FEATURED_FIRST: true,
+  const CONFIG = {
 
-  TRACK_CLICKS: true,
+    ENABLE_TRACKING: true,
 
-  ENABLE_ANIMATIONS: true,
+    ENABLE_ANIMATIONS: true,
 
-  ENABLE_SEARCH: true,
+    ENABLE_SEARCH: true,
 
-  ENABLE_FILTERS: true,
+    ENABLE_FILTERS: true,
 
-  ENABLE_SORTING: true,
+    ENABLE_SORTING: true,
 
-  ENABLE_LOCAL_STORAGE: true,
+    ENABLE_LOCAL_STORAGE: true,
 
-  ENABLE_IMAGE_FALLBACK: true,
+    ENABLE_IMAGE_FALLBACK: true,
 
-  DEBUG: false
+    ENABLE_URL_HASH: true,
 
-};
+    REVEAL_THRESHOLD: 0.12,
 
-/* =========================================
-   SAFE LOGGER
-   FIX:
-   Identifier 'log' has already been declared
-========================================= */
+    DEBUG: false
 
-const projectsLog = (...msg) => {
+  };
 
-  if (PROJECTS_CONFIG.DEBUG) {
+  // =========================================
+  // LOGGER
+  // =========================================
 
-    console.log(
-      "[PROJECTS]",
-      ...msg
-    );
+  const log = (...args) => {
 
-  }
+    if (CONFIG.DEBUG) {
 
-};
-
-/* =========================================
-   HELPERS
-========================================= */
-
-const sanitizeHTML = (text = "") => {
-
-  const div =
-    document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-
-};
-
-const capitalize = (text = "") => {
-
-  return (
-    text.charAt(0).toUpperCase() +
-    text.slice(1)
-  );
-
-};
-
-const normalizeText = (text = "") => {
-
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-
-};
-
-const savePreference = (key, value) => {
-
-  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) {
-    return;
-  }
-
-  try {
-
-    localStorage.setItem(
-      key,
-      value
-    );
-
-  } catch (error) {
-
-    projectsLog(
-      "Storage error:",
-      error
-    );
-
-  }
-
-};
-
-const getPreference = (key) => {
-
-  if (!PROJECTS_CONFIG.ENABLE_LOCAL_STORAGE) {
-    return null;
-  }
-
-  try {
-
-    return localStorage.getItem(key);
-
-  } catch (error) {
-
-    projectsLog(
-      "Get storage error:",
-      error
-    );
-
-    return null;
-  }
-
-};
-
-/* =========================================
-   PROJECT DATA
-========================================= */
-
-const projects = [
-
-  {
-    id: 1,
-
-    title:
-      "Calculadora IRPF España",
-
-    slug:
-      "calculadora-irpf-espana",
-
-    description:
-      "Herramienta fiscal optimizada para calcular IRPF automáticamente y captar tráfico SEO cualificado.",
-
-    tech: [
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "SEO"
-    ],
-
-    category:
-      "herramienta",
-
-    image:
-      "./images/projects/irpf.webp",
-
-    fallbackImage:
-      "./images/projects/fallback.webp",
-
-    link:
-      "https://viniciusbugarin.github.io/tax-calculator-spain/",
-
-    featured: true,
-
-    status:
-      "Online",
-
-    year:
-      "2026",
-
-    keywords: [
-      "calculadora irpf",
-      "impuestos españa",
-      "herramienta fiscal",
-      "seo"
-    ]
-  },
-
-  {
-    id: 2,
-
-    title:
-      "Calculadora Autónomos España",
-
-    slug:
-      "calculadora-autonomos-espana",
-
-    description:
-      "Sistema diseñado para calcular cuota, impuestos y beneficio real para autónomos.",
-
-    tech: [
-      "JavaScript",
-      "HTML",
-      "CSS"
-    ],
-
-    category:
-      "herramienta",
-
-    image:
-      "./images/projects/autonomos.webp",
-
-    fallbackImage:
-      "./images/projects/fallback.webp",
-
-    link:
-      "https://viniciusbugarin.github.io/autonomos-calculator/",
-
-    featured: true,
-
-    status:
-      "Online",
-
-    year:
-      "2026",
-
-    keywords: [
-      "autónomos",
-      "calculadora autónomos",
-      "cuota autónomos",
-      "freelance"
-    ]
-  },
-
-  {
-    id: 3,
-
-    title:
-      "Lexoria Abogados",
-
-    slug:
-      "lexoria-abogados",
-
-    description:
-      "Landing profesional para despacho jurídico optimizada para conversión y SEO local.",
-
-    tech: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "SEO Local"
-    ],
-
-    category:
-      "web",
-
-    image:
-      "./images/projects/lexoria.webp",
-
-    fallbackImage:
-      "./images/projects/fallback.webp",
-
-    link:
-      "https://viniciusbugarin.github.io/lexoria-abogados/",
-
-    featured: true,
-
-    status:
-      "Online",
-
-    year:
-      "2026",
-
-    keywords: [
-      "abogados",
-      "seo local",
-      "landing abogados",
-      "web legal"
-    ]
-  },
-
-  {
-    id: 4,
-
-    title:
-      "Iron Forge Gym",
-
-    slug:
-      "iron-forge-gym",
-
-    description:
-      "Landing moderna para gimnasio enfocada en captación de clientes y branding premium.",
-
-    tech: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "SEO"
-    ],
-
-    category:
-      "web",
-
-    image:
-      "./images/projects/ironforge.webp",
-
-    fallbackImage:
-      "./images/projects/fallback.webp",
-
-    link:
-      "https://viniciusbugarin.github.io/iron-forge-gym/",
-
-    featured: false,
-
-    status:
-      "Online",
-
-    year:
-      "2026",
-
-    keywords: [
-      "gym",
-      "fitness",
-      "landing gimnasio",
-      "seo"
-    ]
-  },
-
-  {
-    id: 5,
-
-    title:
-      "La Plaza Gourmet",
-
-    slug:
-      "la-plaza-gourmet",
-
-    description:
-      "Página web profesional para restaurante optimizada para reservas y SEO local.",
-
-    tech: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "SEO Local"
-    ],
-
-    category:
-      "web",
-
-    image:
-      "./images/projects/laplaza.webp",
-
-    fallbackImage:
-      "./images/projects/fallback.webp",
-
-    link:
-      "https://viniciusbugarin.github.io/La-Plaza-Gourmet/",
-
-    featured: false,
-
-    status:
-      "Online",
-
-    year:
-      "2026",
-
-    keywords: [
-      "restaurante",
-      "seo local",
-      "gourmet",
-      "food"
-    ]
-  }
-
-];
-
-/* =========================================
-   STATE
-========================================= */
-
-const PROJECT_STATE = {
-
-  currentFilter:
-    "all",
-
-  currentSearch:
-    "",
-
-  currentSort:
-    "featured"
-
-};
-
-/* =========================================
-   DOM READY
-========================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    restorePreferences();
-
-    renderProjects();
-
-    initFilters();
-
-    initSearch();
-
-    initSorting();
-
-    initReveal();
-
-  }
-);
-
-/* =========================================
-   RENDER PROJECTS
-========================================= */
-
-function renderProjects() {
-
-  const container =
-    document.querySelector(
-      ".projects-grid"
-    );
-
-  if (!container) {
-
-    projectsLog(
-      "No existe .projects-grid"
-    );
-
-    return;
-
-  }
-
-  container.innerHTML = "";
-
-  let filtered =
-    [...projects];
-
-  /* FILTER */
-
-  if (
-    PROJECT_STATE.currentFilter !==
-    "all"
-  ) {
-
-    filtered = filtered.filter(
-      project =>
-        project.category ===
-        PROJECT_STATE.currentFilter
-    );
-
-  }
-
-  /* SEARCH */
-
-  if (
-    PROJECT_STATE.currentSearch
-  ) {
-
-    const term =
-      normalizeText(
-        PROJECT_STATE.currentSearch
+      console.log(
+        "[VB PROJECTS]",
+        ...args
       );
 
-    filtered = filtered.filter(
-      project => {
+    }
 
-        const searchable =
-          normalizeText(`
-            ${project.title}
-            ${project.description}
-            ${project.tech.join(" ")}
-            ${project.keywords.join(" ")}
-          `);
+  };
 
-        return searchable.includes(
-          term
+  // =========================================
+  // HELPERS
+  // =========================================
+
+  const $ = selector =>
+    document.querySelector(selector);
+
+  const $$ = selector =>
+    [...document.querySelectorAll(selector)];
+
+  const sanitizeHTML = (text = "") => {
+
+    const div =
+      document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+  };
+
+  const normalizeText = (text = "") => {
+
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+  };
+
+  const capitalize = (text = "") => {
+
+    return (
+      text.charAt(0).toUpperCase() +
+      text.slice(1)
+    );
+
+  };
+
+  const debounce = (
+    callback,
+    delay = 300
+  ) => {
+
+    let timeout;
+
+    return (...args) => {
+
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+
+        callback(...args);
+
+      }, delay);
+
+    };
+
+  };
+
+  // =========================================
+  // STORAGE
+  // =========================================
+
+  const storage = {
+
+    save(key, value) {
+
+      if (
+        !CONFIG.ENABLE_LOCAL_STORAGE
+      ) return;
+
+      try {
+
+        localStorage.setItem(
+          key,
+          JSON.stringify(value)
         );
 
+      } catch (error) {
+
+        log("Storage save error", error);
+
       }
-    );
 
-  }
+    },
 
-  /* SORT */
+    get(key, fallback = null) {
 
-  switch (
-    PROJECT_STATE.currentSort
-  ) {
+      if (
+        !CONFIG.ENABLE_LOCAL_STORAGE
+      ) return fallback;
 
-    case "newest":
+      try {
 
-      filtered.sort(
-        (a, b) =>
-          Number(b.year) -
-          Number(a.year)
+        const item =
+          localStorage.getItem(key);
+
+        return item
+          ? JSON.parse(item)
+          : fallback;
+
+      } catch (error) {
+
+        log("Storage get error", error);
+
+        return fallback;
+
+      }
+
+    }
+
+  };
+
+  // =========================================
+  // PROJECT DATA
+  // =========================================
+
+  const projects = [
+
+    {
+      id: 1,
+
+      title:
+        "Calculadora IRPF España",
+
+      slug:
+        "calculadora-irpf-espana",
+
+      description:
+        "Herramienta fiscal optimizada para calcular IRPF automáticamente y captar tráfico SEO cualificado.",
+
+      tech: [
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "SEO"
+      ],
+
+      category:
+        "herramienta",
+
+      image:
+        "./images/projects/irpf.webp",
+
+      fallbackImage:
+        "./images/projects/fallback.webp",
+
+      link:
+        "https://viniciusbugarin.github.io/tax-calculator-spain/",
+
+      featured: true,
+
+      status:
+        "Online",
+
+      year:
+        2026,
+
+      keywords: [
+        "calculadora irpf",
+        "seo",
+        "fiscal"
+      ]
+    },
+
+    {
+      id: 2,
+
+      title:
+        "Calculadora Autónomos España",
+
+      slug:
+        "calculadora-autonomos-espana",
+
+      description:
+        "Sistema diseñado para calcular cuota, impuestos y beneficio real para autónomos.",
+
+      tech: [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+
+      category:
+        "herramienta",
+
+      image:
+        "./images/projects/autonomos.webp",
+
+      fallbackImage:
+        "./images/projects/fallback.webp",
+
+      link:
+        "https://viniciusbugarin.github.io/autonomos-calculator/",
+
+      featured: true,
+
+      status:
+        "Online",
+
+      year:
+        2026,
+
+      keywords: [
+        "autonomos",
+        "freelance",
+        "calculadora"
+      ]
+    },
+
+    {
+      id: 3,
+
+      title:
+        "Lexoria Abogados",
+
+      slug:
+        "lexoria-abogados",
+
+      description:
+        "Landing profesional para despacho jurídico optimizada para conversión y SEO local.",
+
+      tech: [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "SEO Local"
+      ],
+
+      category:
+        "web",
+
+      image:
+        "./images/projects/lexoria.webp",
+
+      fallbackImage:
+        "./images/projects/fallback.webp",
+
+      link:
+        "https://viniciusbugarin.github.io/lexoria-abogados/",
+
+      featured: true,
+
+      status:
+        "Online",
+
+      year:
+        2026,
+
+      keywords: [
+        "abogados",
+        "landing",
+        "seo local"
+      ]
+    },
+
+    {
+      id: 4,
+
+      title:
+        "Iron Forge Gym",
+
+      slug:
+        "iron-forge-gym",
+
+      description:
+        "Landing moderna para gimnasio enfocada en captación de clientes y branding premium.",
+
+      tech: [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+
+      category:
+        "web",
+
+      image:
+        "./images/projects/ironforge.webp",
+
+      fallbackImage:
+        "./images/projects/fallback.webp",
+
+      link:
+        "https://viniciusbugarin.github.io/iron-forge-gym/",
+
+      featured: false,
+
+      status:
+        "Online",
+
+      year:
+        2026,
+
+      keywords: [
+        "gym",
+        "fitness",
+        "branding"
+      ]
+    },
+
+    {
+      id: 5,
+
+      title:
+        "La Plaza Gourmet",
+
+      slug:
+        "la-plaza-gourmet",
+
+      description:
+        "Página web profesional para restaurante optimizada para reservas y SEO local.",
+
+      tech: [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "SEO Local"
+      ],
+
+      category:
+        "web",
+
+      image:
+        "./images/projects/laplaza.webp",
+
+      fallbackImage:
+        "./images/projects/fallback.webp",
+
+      link:
+        "https://viniciusbugarin.github.io/La-Plaza-Gourmet/",
+
+      featured: false,
+
+      status:
+        "Online",
+
+      year:
+        2026,
+
+      keywords: [
+        "restaurante",
+        "gourmet",
+        "food"
+      ]
+    }
+
+  ];
+
+  // =========================================
+  // STATE
+  // =========================================
+
+  const STATE = {
+
+    filter:
+      storage.get(
+        "vb-filter",
+        "all"
+      ),
+
+    search:
+      storage.get(
+        "vb-search",
+        ""
+      ),
+
+    sort:
+      storage.get(
+        "vb-sort",
+        "featured"
+      )
+
+  };
+
+  // =========================================
+  // FILTER + SORT
+  // =========================================
+
+  function getFilteredProjects() {
+
+    let filtered =
+      [...projects];
+
+    // FILTER
+
+    if (STATE.filter !== "all") {
+
+      filtered = filtered.filter(
+        project =>
+          project.category ===
+          STATE.filter
       );
 
-      break;
+    }
 
-    case "alphabetical":
+    // SEARCH
 
-      filtered.sort(
-        (a, b) =>
+    if (STATE.search) {
+
+      const term =
+        normalizeText(
+          STATE.search
+        );
+
+      filtered = filtered.filter(
+        project => {
+
+          const content =
+            normalizeText(`
+
+              ${project.title}
+              ${project.description}
+              ${project.tech.join(" ")}
+              ${project.keywords.join(" ")}
+
+            `);
+
+          return content.includes(term);
+
+        }
+      );
+
+    }
+
+    // SORT
+
+    switch (STATE.sort) {
+
+      case "alphabetical":
+
+        filtered.sort((a, b) =>
           a.title.localeCompare(
             b.title
           )
-      );
+        );
 
-      break;
+        break;
 
-    default:
+      case "newest":
 
-      filtered.sort(
-        (a, b) =>
-          Number(b.featured) -
-          Number(a.featured)
-      );
+        filtered.sort(
+          (a, b) =>
+            b.year - a.year
+        );
+
+        break;
+
+      default:
+
+        filtered.sort(
+          (a, b) =>
+            Number(b.featured) -
+            Number(a.featured)
+        );
+
+    }
+
+    return filtered;
 
   }
 
-  /* EMPTY STATE */
+  // =========================================
+  // RENDER
+  // =========================================
 
-  if (!filtered.length) {
+  function renderProjects() {
 
-    container.innerHTML = `
+    const container =
+      $(".projects-grid");
 
-      <div class="empty-projects">
+    if (!container) {
 
-        <h3>
-          No se encontraron proyectos
-        </h3>
+      log(
+        "Projects grid not found"
+      );
 
-        <p>
-          Prueba otra búsqueda o filtro.
-        </p>
+      return;
 
-      </div>
+    }
+
+    const filtered =
+      getFilteredProjects();
+
+    // EMPTY STATE
+
+    if (!filtered.length) {
+
+      container.innerHTML = `
+
+        <div class="empty-projects">
+
+          <h3>
+            No se encontraron proyectos
+          </h3>
+
+          <p>
+            Prueba otra búsqueda.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+    container.innerHTML =
+      filtered
+        .map(createProjectCard)
+        .join("");
+
+    initImageFallbacks();
+
+    initRevealAnimations();
+
+    initTracking();
+
+  }
+
+  // =========================================
+  // CARD TEMPLATE
+  // =========================================
+
+  function createProjectCard(project) {
+
+    return `
+
+      <article
+        class="project-card reveal"
+        data-category="${sanitizeHTML(project.category)}"
+      >
+
+        <div class="project-image-wrapper">
+
+          <img
+            class="project-image"
+            src="${sanitizeHTML(project.image)}"
+            alt="${sanitizeHTML(project.title)}"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            height="700"
+          >
+
+          <div class="project-overlay"></div>
+
+          <div class="project-badges">
+
+            ${
+              project.featured
+                ? `
+                  <span class="project-badge featured">
+                    ★ Destacado
+                  </span>
+                `
+                : ""
+            }
+
+            <span class="project-badge live">
+              ${sanitizeHTML(project.status)}
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="project-content">
+
+          <div class="project-meta">
+
+            <span class="project-category">
+              ${capitalize(project.category)}
+            </span>
+
+            <span class="project-year">
+              ${sanitizeHTML(project.year)}
+            </span>
+
+          </div>
+
+          <h3 class="project-title">
+            ${sanitizeHTML(project.title)}
+          </h3>
+
+          <p class="project-description">
+            ${sanitizeHTML(project.description)}
+          </p>
+
+          <div class="project-tech">
+
+            ${project.tech.map(tech => `
+
+              <span class="tech-badge">
+                ${sanitizeHTML(tech)}
+              </span>
+
+            `).join("")}
+
+          </div>
+
+          <div class="project-actions">
+
+            <a
+              href="${sanitizeHTML(project.link)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn primary project-link"
+              data-project="${sanitizeHTML(project.title)}"
+            >
+              Ver proyecto →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
 
     `;
 
-    return;
-
   }
 
-  /* RENDER */
+  // =========================================
+  // IMAGE FALLBACK
+  // =========================================
 
-  const fragment =
-    document.createDocumentFragment();
+  function initImageFallbacks() {
 
-  filtered.forEach(project => {
+    if (
+      !CONFIG.ENABLE_IMAGE_FALLBACK
+    ) return;
 
-    fragment.appendChild(
-      createProjectCard(project)
-    );
+    $$(".project-image")
+      .forEach(image => {
 
-  });
+        image.addEventListener(
+          "error",
+          () => {
 
-  container.appendChild(fragment);
+            image.src =
+              "./images/projects/fallback.webp";
 
-  initReveal();
+            image.classList.add(
+              "image-error"
+            );
 
-}
-
-/* =========================================
-   CREATE PROJECT CARD
-========================================= */
-
-function createProjectCard(project) {
-
-  const card =
-    document.createElement(
-      "article"
-    );
-
-  card.className =
-    "project-card reveal";
-
-  card.dataset.category =
-    project.category;
-
-  card.innerHTML = `
-
-    <div class="project-image-wrapper">
-
-      <img
-        src="${sanitizeHTML(project.image)}"
-        alt="${sanitizeHTML(project.title)}"
-        class="project-image"
-        loading="lazy"
-        decoding="async"
-        width="800"
-        height="500"
-      >
-
-      <div class="project-overlay"></div>
-
-      <div class="project-badges">
-
-        ${
-          project.featured
-            ? `
-              <span class="project-badge featured">
-                ★ Destacado
-              </span>
-            `
-            : ""
-        }
-
-        <span class="project-badge status">
-          ${sanitizeHTML(project.status)}
-        </span>
-
-      </div>
-
-    </div>
-
-    <div class="project-content">
-
-      <div class="project-meta">
-
-        <span class="project-category">
-          ${capitalize(project.category)}
-        </span>
-
-        <span class="project-year">
-          ${sanitizeHTML(project.year)}
-        </span>
-
-      </div>
-
-      <h3 class="project-title">
-        ${sanitizeHTML(project.title)}
-      </h3>
-
-      <p class="project-description">
-        ${sanitizeHTML(project.description)}
-      </p>
-
-      <div class="project-tech">
-
-        ${project.tech.map(tech => `
-
-          <span class="tech-badge">
-            ${sanitizeHTML(tech)}
-          </span>
-
-        `).join("")}
-
-      </div>
-
-      <div class="project-actions">
-
-        <a
-          href="${sanitizeHTML(project.link)}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn primary project-link"
-          data-id="${project.id}"
-          aria-label="Abrir ${sanitizeHTML(project.title)}"
-        >
-          Ver proyecto →
-        </a>
-
-      </div>
-
-    </div>
-
-  `;
-
-  /* IMAGE FALLBACK */
-
-  const image =
-    card.querySelector(
-      ".project-image"
-    );
-
-  if (
-    image &&
-    PROJECTS_CONFIG.ENABLE_IMAGE_FALLBACK
-  ) {
-
-    image.addEventListener(
-      "error",
-      () => {
-
-        image.src =
-          project.fallbackImage;
-
-      }
-    );
-
-  }
-
-  /* TRACKING */
-
-  const link =
-    card.querySelector(
-      ".project-link"
-    );
-
-  if (
-    link &&
-    PROJECTS_CONFIG.TRACK_CLICKS
-  ) {
-
-    link.addEventListener(
-      "click",
-      () =>
-        trackProjectClick(project)
-    );
-
-  }
-
-  return card;
-
-}
-
-/* =========================================
-   TRACKING
-========================================= */
-
-function trackProjectClick(project) {
-
-  projectsLog(
-    "CLICK:",
-    project.title
-  );
-
-  if (
-    typeof gtag ===
-    "function"
-  ) {
-
-    gtag(
-      "event",
-      "project_click",
-      {
-        project_name:
-          project.title,
-
-        project_category:
-          project.category
-      }
-    );
-
-  }
-
-}
-
-/* =========================================
-   FILTERS
-========================================= */
-
-function initFilters() {
-
-  const buttons =
-    document.querySelectorAll(
-      "[data-filter]"
-    );
-
-  if (!buttons.length) {
-    return;
-  }
-
-  buttons.forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        PROJECT_STATE.currentFilter =
-          button.dataset.filter;
-
-        savePreference(
-          "vb_project_filter",
-          PROJECT_STATE.currentFilter
+          },
+          { once: true }
         );
 
-        buttons.forEach(btn => {
+      });
 
-          btn.classList.remove(
-            "active"
-          );
+  }
 
-        });
+  // =========================================
+  // FILTERS
+  // =========================================
+
+  function initFilters() {
+
+    if (
+      !CONFIG.ENABLE_FILTERS
+    ) return;
+
+    const buttons =
+      $$("[data-filter]");
+
+    if (!buttons.length) return;
+
+    buttons.forEach(button => {
+
+      const filter =
+        button.dataset.filter;
+
+      if (
+        filter === STATE.filter
+      ) {
 
         button.classList.add(
           "active"
+        );
+
+      }
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          STATE.filter = filter;
+
+          storage.save(
+            "vb-filter",
+            filter
+          );
+
+          buttons.forEach(btn => {
+
+            btn.classList.remove(
+              "active"
+            );
+
+          });
+
+          button.classList.add(
+            "active"
+          );
+
+          renderProjects();
+
+        }
+      );
+
+    });
+
+  }
+
+  // =========================================
+  // SEARCH
+  // =========================================
+
+  function initSearch() {
+
+    if (
+      !CONFIG.ENABLE_SEARCH
+    ) return;
+
+    const input =
+      $("#projectSearch");
+
+    if (!input) return;
+
+    input.value = STATE.search;
+
+    input.addEventListener(
+      "input",
+
+      debounce(event => {
+
+        STATE.search =
+          event.target.value.trim();
+
+        storage.save(
+          "vb-search",
+          STATE.search
+        );
+
+        renderProjects();
+
+      }, 250)
+    );
+
+  }
+
+  // =========================================
+  // SORTING
+  // =========================================
+
+  function initSorting() {
+
+    if (
+      !CONFIG.ENABLE_SORTING
+    ) return;
+
+    const select =
+      $("#projectSort");
+
+    if (!select) return;
+
+    select.value = STATE.sort;
+
+    select.addEventListener(
+      "change",
+      event => {
+
+        STATE.sort =
+          event.target.value;
+
+        storage.save(
+          "vb-sort",
+          STATE.sort
         );
 
         renderProjects();
@@ -795,180 +843,185 @@ function initFilters() {
       }
     );
 
-  });
-
-}
-
-/* =========================================
-   SEARCH
-========================================= */
-
-function initSearch() {
-
-  const input =
-    document.getElementById(
-      "projectSearch"
-    );
-
-  if (!input) {
-    return;
   }
 
-  input.value =
-    PROJECT_STATE.currentSearch;
+  // =========================================
+  // REVEAL
+  // =========================================
 
-  input.addEventListener(
-    "input",
-    debounce(() => {
+  function initRevealAnimations() {
 
-      PROJECT_STATE.currentSearch =
-        input.value.trim();
+    if (
+      !CONFIG.ENABLE_ANIMATIONS
+    ) return;
 
-      savePreference(
-        "vb_project_search",
-        PROJECT_STATE.currentSearch
-      );
+    const elements =
+      $$(".reveal");
 
-      renderProjects();
+    if (
+      !("IntersectionObserver" in window)
+    ) {
 
-    }, 250)
-  );
+      elements.forEach(el => {
 
-}
+        el.classList.add(
+          "active"
+        );
 
-/* =========================================
-   SORTING
-========================================= */
+      });
 
-function initSorting() {
-
-  const select =
-    document.getElementById(
-      "projectSort"
-    );
-
-  if (!select) {
-    return;
-  }
-
-  select.value =
-    PROJECT_STATE.currentSort;
-
-  select.addEventListener(
-    "change",
-    () => {
-
-      PROJECT_STATE.currentSort =
-        select.value;
-
-      savePreference(
-        "vb_project_sort",
-        PROJECT_STATE.currentSort
-      );
-
-      renderProjects();
+      return;
 
     }
-  );
 
-}
+    const observer =
+      new IntersectionObserver(
 
-/* =========================================
-   REVEAL ANIMATION
-========================================= */
+        entries => {
 
-function initReveal() {
+          entries.forEach(
+            entry => {
 
-  if (
-    !PROJECTS_CONFIG.ENABLE_ANIMATIONS
-  ) {
-    return;
+              if (
+                !entry.isIntersecting
+              ) return;
+
+              entry.target.classList.add(
+                "active"
+              );
+
+              observer.unobserve(
+                entry.target
+              );
+
+            }
+          );
+
+        },
+
+        {
+          threshold:
+            CONFIG.REVEAL_THRESHOLD,
+
+          rootMargin:
+            "0px 0px -60px 0px"
+        }
+
+      );
+
+    elements.forEach(el => {
+
+      observer.observe(el);
+
+    });
+
   }
 
-  const elements =
-    document.querySelectorAll(
-      ".reveal"
-    );
+  // =========================================
+  // TRACKING
+  // =========================================
 
-  const observer =
-    new IntersectionObserver(
-      entries => {
+  function initTracking() {
 
-        entries.forEach(entry => {
+    if (
+      !CONFIG.ENABLE_TRACKING
+    ) return;
 
-          if (
-            entry.isIntersecting
-          ) {
+    $$(".project-link")
+      .forEach(link => {
 
-            entry.target.classList.add(
-              "active"
+        link.addEventListener(
+          "click",
+          () => {
+
+            const project =
+              link.dataset.project;
+
+            log(
+              "Project click:",
+              project
             );
 
-            observer.unobserve(
-              entry.target
-            );
+            if (
+              typeof window.gtag ===
+              "function"
+            ) {
+
+              window.gtag(
+                "event",
+                "project_click",
+                {
+                  project_name:
+                    project
+                }
+              );
+
+            }
 
           }
+        );
 
-        });
+      });
 
-      },
-      {
-        threshold: 0.12
-      }
-    );
+  }
 
-  elements.forEach(element => {
+  // =========================================
+  // URL HASH
+  // =========================================
 
-    observer.observe(element);
+  function initHashFilter() {
 
-  });
+    if (
+      !CONFIG.ENABLE_URL_HASH
+    ) return;
 
-}
+    const hash =
+      window.location.hash
+        .replace("#", "");
 
-/* =========================================
-   RESTORE PREFERENCES
-========================================= */
+    if (!hash) return;
 
-function restorePreferences() {
+    const exists =
+      projects.some(
+        project =>
+          project.category === hash
+      );
 
-  PROJECT_STATE.currentFilter =
-    getPreference(
-      "vb_project_filter"
-    ) || "all";
+    if (exists) {
 
-  PROJECT_STATE.currentSearch =
-    getPreference(
-      "vb_project_search"
-    ) || "";
+      STATE.filter = hash;
 
-  PROJECT_STATE.currentSort =
-    getPreference(
-      "vb_project_sort"
-    ) || "featured";
+    }
 
-}
+  }
 
-/* =========================================
-   DEBOUNCE
-========================================= */
+  // =========================================
+  // INIT
+  // =========================================
 
-function debounce(
-  callback,
-  delay = 300
-) {
+  function init() {
 
-  let timeout;
+    initHashFilter();
 
-  return (...args) => {
+    initFilters();
 
-    clearTimeout(timeout);
+    initSearch();
 
-    timeout = setTimeout(
-      () => callback(...args),
-      delay
-    );
+    initSorting();
 
-  };
+    renderProjects();
 
-}
+    log("Projects initialized");
+
+  }
+
+  // =========================================
+  // START
+  // =========================================
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    init
+  );
+
+})();
