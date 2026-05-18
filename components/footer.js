@@ -1,3 +1,8 @@
+// =========================================
+// VINICIUS BUGARIN — FOOTER SYSTEM
+// PREMIUM PERFORMANCE VERSION
+// =========================================
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // =========================================
@@ -14,7 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     whatsapp: "34662352675",
 
-    github: "https://github.com/viniciusbugarin"
+    github: "https://github.com/viniciusbugarin",
+
+    linkedin: "https://linkedin.com",
+
+    enablePrefetch: true,
+
+    enableReveal: true
 
   };
 
@@ -30,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================================
 
   const footerTemplate = `
-  
+
     <footer
       class="footer"
       role="contentinfo"
@@ -40,17 +51,45 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="footer-container">
 
         <!-- BRAND -->
-        <section class="footer-brand reveal fade">
+        <section
+          class="footer-brand reveal"
+          aria-label="Marca personal"
+        >
 
-          <h3>
-            ${CONFIG.brand}
-          </h3>
+          <a
+            href="/"
+            class="footer-logo"
+            aria-label="Inicio"
+          >
+
+            <img
+              src="/images/VB.png"
+              alt="Logo Vinicius Bugarin"
+              width="52"
+              height="52"
+              loading="lazy"
+              decoding="async"
+            >
+
+            <div>
+
+              <h3>
+                ${CONFIG.brand}
+              </h3>
+
+              <span class="footer-status">
+                Disponible para proyectos
+              </span>
+
+            </div>
+
+          </a>
 
           <p>
             Desarrollo páginas web modernas,
             automatizaciones inteligentes y
-            herramientas digitales optimizadas
-            para generar resultados reales.
+            experiencias digitales optimizadas
+            para SEO, conversión y rendimiento.
           </p>
 
           <div class="footer-badges">
@@ -69,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- NAVIGATION -->
         <nav
-          class="footer-links reveal fade"
+          class="footer-links reveal"
           aria-label="Navegación principal"
         >
 
@@ -115,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- SERVICES -->
         <nav
-          class="footer-links reveal fade"
+          class="footer-links reveal"
           aria-label="Servicios"
         >
 
@@ -155,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- CONTACT -->
         <section
-          class="footer-contact reveal fade"
+          class="footer-contact reveal"
           aria-label="Información de contacto"
         >
 
@@ -163,17 +202,64 @@ document.addEventListener("DOMContentLoaded", () => {
             Contacto
           </h4>
 
-          <p>
-            📩
+          <p class="footer-contact-item">
+
+            <span>
+              📩
+            </span>
+
             <a href="mailto:${CONFIG.email}">
               ${CONFIG.email}
             </a>
+
           </p>
 
-          <p>
-            📍 ${CONFIG.location}
+          <p class="footer-contact-item">
+
+            <span>
+              📍
+            </span>
+
+            ${CONFIG.location}
+
           </p>
 
+          <!-- SOCIAL -->
+          <div
+            class="social-links"
+            aria-label="Redes sociales"
+          >
+
+            <a
+              href="${CONFIG.github}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+            >
+              GH
+            </a>
+
+            <a
+              href="${CONFIG.linkedin}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              IN
+            </a>
+
+            <a
+              href="https://wa.me/${CONFIG.whatsapp}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+            >
+              WA
+            </a>
+
+          </div>
+
+          <!-- ACTIONS -->
           <div class="footer-actions">
 
             <a
@@ -184,23 +270,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </a>
 
             <a
-              href="https://wa.me/${CONFIG.whatsapp}"
+              href="/cv.pdf"
+              class="btn secondary small"
               target="_blank"
               rel="noopener noreferrer"
-              class="btn secondary small"
-              aria-label="WhatsApp"
             >
-              WhatsApp
-            </a>
-
-            <a
-              href="${CONFIG.github}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn secondary small"
-              aria-label="GitHub"
-            >
-              GitHub
+              Descargar CV
             </a>
 
           </div>
@@ -209,14 +284,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       </div>
 
+      <!-- DIVIDER -->
+
+      <div class="footer-divider"></div>
+
       <!-- FOOTER BOTTOM -->
 
       <div class="footer-bottom">
 
         <p>
           © ${currentYear}
-          ${CONFIG.brand}
-          · Todos los derechos reservados
+          ${CONFIG.brand}.
+          Todos los derechos reservados.
         </p>
 
         <div class="footer-mini-links">
@@ -238,6 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
     </footer>
+
   `;
 
   // =========================================
@@ -253,91 +333,221 @@ document.addEventListener("DOMContentLoaded", () => {
     footerTemplate;
 
   // =========================================
+  // ELEMENTS
+  // =========================================
+
+  const footer =
+    document.querySelector(".footer");
+
+  const internalLinks =
+    footer.querySelectorAll('a[href^="/"]');
+
+  const scrollLinks =
+    footer.querySelectorAll('a[href^="#"]');
+
+  const revealElements =
+    footer.querySelectorAll(".reveal");
+
+  // =========================================
   // SMOOTH SCROLL
   // =========================================
 
-  document
-    .querySelectorAll('footer a[href^="#"]')
-    .forEach(link => {
+  scrollLinks.forEach(link => {
 
-      link.addEventListener("click", e => {
+    link.addEventListener("click", e => {
 
-        const target =
-          document.querySelector(
-            link.getAttribute("href")
-          );
+      const targetId =
+        link.getAttribute("href");
 
-        if (!target) return;
+      const target =
+        document.querySelector(targetId);
 
-        e.preventDefault();
+      if (!target) return;
 
-        const navbar =
-          document.querySelector(".navbar");
+      e.preventDefault();
 
-        const offset =
-          navbar
-            ? navbar.offsetHeight
-            : 0;
+      const navbar =
+        document.querySelector(".navbar");
 
-        const top =
-          target.getBoundingClientRect().top +
-          window.scrollY -
-          offset;
+      const navbarHeight =
+        navbar?.offsetHeight || 0;
 
-        window.scrollTo({
-          top,
-          behavior: "smooth"
-        });
+      const targetPosition =
+        target.getBoundingClientRect().top +
+        window.scrollY -
+        navbarHeight;
+
+      window.scrollTo({
+
+        top: targetPosition,
+
+        behavior: "smooth"
 
       });
 
     });
 
+  });
+
   // =========================================
-  // PREFETCH INTERNAL LINKS
+  // PREFETCH
   // =========================================
 
-  const prefetched =
-    new Set();
+  if (CONFIG.enablePrefetch) {
 
-  document
-    .querySelectorAll('footer a[href^="/"]')
-    .forEach(link => {
+    const prefetched =
+      new Set();
 
-      function prefetch() {
+    internalLinks.forEach(link => {
+
+      const prefetchPage = () => {
 
         const href = link.href;
 
         if (
-          prefetched.has(href)
+          prefetched.has(href) ||
+          href.includes("#")
         ) return;
 
-        const preload =
+        const prefetch =
           document.createElement("link");
 
-        preload.rel = "prefetch";
+        prefetch.rel =
+          "prefetch";
 
-        preload.href = href;
+        prefetch.href =
+          href;
 
-        preload.as = "document";
+        prefetch.as =
+          "document";
 
-        document.head.appendChild(preload);
+        document.head.appendChild(
+          prefetch
+        );
 
         prefetched.add(href);
 
-      }
+      };
 
       link.addEventListener(
         "mouseenter",
-        prefetch,
+        prefetchPage,
         { once: true }
       );
 
       link.addEventListener(
         "touchstart",
-        prefetch,
+        prefetchPage,
         { once: true }
       );
+
+    });
+
+  }
+
+  // =========================================
+  // REVEAL ANIMATION
+  // =========================================
+
+  if (
+    CONFIG.enableReveal &&
+    "IntersectionObserver" in window
+  ) {
+
+    const revealObserver =
+      new IntersectionObserver(
+
+        entries => {
+
+          entries.forEach(entry => {
+
+            if (
+              entry.isIntersecting
+            ) {
+
+              entry.target.classList.add(
+                "active"
+              );
+
+              revealObserver.unobserve(
+                entry.target
+              );
+
+            }
+
+          });
+
+        },
+
+        {
+          threshold: 0.15
+        }
+
+      );
+
+    revealElements.forEach(element => {
+
+      revealObserver.observe(
+        element
+      );
+
+    });
+
+  }
+
+  // =========================================
+  // ACTIVE INTERNAL LINK
+  // =========================================
+
+  const currentPath =
+    window.location.pathname
+      .replace(/\/$/, "");
+
+  footer
+    .querySelectorAll('a[href^="/"]')
+    .forEach(link => {
+
+      const linkPath =
+        new URL(link.href)
+          .pathname
+          .replace(/\/$/, "");
+
+      if (
+        currentPath === linkPath
+      ) {
+
+        link.classList.add(
+          "active-link"
+        );
+
+        link.setAttribute(
+          "aria-current",
+          "page"
+        );
+
+      }
+
+    });
+
+  // =========================================
+  // ACCESSIBILITY
+  // =========================================
+
+  footer
+    .querySelectorAll("a")
+    .forEach(link => {
+
+      if (
+        link.hostname !==
+        window.location.hostname
+      ) {
+
+        link.setAttribute(
+          "rel",
+          "noopener noreferrer"
+        );
+
+      }
 
     });
 
